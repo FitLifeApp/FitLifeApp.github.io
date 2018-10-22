@@ -1,4 +1,4 @@
-package displayTest;
+package edu.baylor.ecs.FitLifeApp;
 
 /*
  * Program: FitLife
@@ -8,9 +8,17 @@ package displayTest;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Scanner;
 
 import javax.swing.*;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 public class WindowManager implements ActionListener {
 	private UtilDateModel model = new UtilDateModel();
@@ -123,24 +131,36 @@ public class WindowManager implements ActionListener {
 			Scanner input = new Scanner(file);
 			while (input.hasNext()) {
 				String string = input.nextLine();
+				String[] temp = new String[6];
+				
 				String[] str = string.split(",");
-				String[] temp = new String[5];
 				for (int i = 0; i < temp.length; i ++) {
 					temp[i] = str[i];
 				}
 				arr.add(temp);
+				System.out.println(temp[1]);
 				row ++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 				
-		JTable data = new JTable(row, 5);
+		JTable data = new JTable(row, 4);
 		for (int i = 0; i < data.getRowCount(); i++) {
-			for (int j = 0; j < arr.get(0).length; j++) {
-				data.setValueAt(arr.get(0)[j], i, j);
+			for (int j = 0; j < data.getColumnCount(); j++) {
+				String str = arr.get(i)[5];
+				String d = str.substring(0,10);
+				System.out.println(d);
+				if (day.toString().contains(d)) {
+					data.setValueAt(arr.get(i)[j+1], i, j);
+				}
 			}
+			//if (data.getValueAt(i, 0).equals(null)) {
+			//	
+			//	data.removeRowSelectionInterval(i, i);
+			//}
 		}
+		
 
 		
 		
