@@ -32,10 +32,6 @@ public class WindowManager implements ActionListener {
 
 		toLogIn();
 
-		/*
-		 * window = makeWindow(); window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		 * //window.pack(); window.setSize(300, 300); window.setVisible(true);
-		 */
 	}
 
 	private JFrame makeWindow() {
@@ -179,6 +175,8 @@ public class WindowManager implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login", JOptionPane.ERROR_MESSAGE);
 			}
+		} else if(e.getActionCommand().equals("Create Account...")) {
+			window = LogIn.createAcct(window, this);
 		} else if (e.getActionCommand().equals("Home")) {
 			toHome();
 			System.out.println("HOME");
