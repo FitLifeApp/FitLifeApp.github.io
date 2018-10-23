@@ -15,12 +15,11 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
-public class LogIn implements ActionListener{
+public class LogIn implements ActionListener {
 
-	static JTextField uName;		//Used to hold username inputs
-	static JPasswordField pWord;	//Used to hold password inputs
-	static JPasswordField pWord2;	//Used when creating account
-	
+	static JTextField uName; // Used to hold username inputs
+	static JPasswordField pWord; // Used to hold password inputs
+
 	static JFrame makeWindow(JFrame window, ActionListener listener) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
@@ -117,7 +116,8 @@ public class LogIn implements ActionListener{
 			String[] acct;
 			acct = scnr.nextLine().split(",");
 			if (acct.length >= 2) {
-				if (uName.getText().equals(acct[0]) && Arrays.equals(pWord.getPassword(), acct[1].toCharArray())) {
+				if (uName.getText().equals(acct[0])
+						&& Arrays.equals(pWord.getPassword(), acct[1].toCharArray())) {
 					isTrue = true;
 				}
 			}
@@ -126,93 +126,14 @@ public class LogIn implements ActionListener{
 		if (scnr != null) {
 			scnr.close();
 		}
-		
+
 		return isTrue;
 	}
-	
-	static JFrame createAcct(JFrame window, ActionListener listener) {
-		
-		// Makes log in page
-		// Was experimenting with Grid bag Layout
-		// Actually turned out pretty good
 
-		if (window != null) {
-			window.dispose();
-			// If window isn't null, meaning it came from another window, get rid of it
-		}
-		JPanel pane = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		// Make a panel for grid bag layout
 
-		JLabel uLabel = new JLabel("Username: ");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		// Have it fill the entire horizontal of the grid
-		c.weightx = 0;
-		// Make it a thinner column than others
-		c.gridx = 0;
-		c.gridy = 0;
-		// Set position
-		pane.add(uLabel, c);
-
-		uName = new JTextField();
-		c.weightx = 5;
-		// Have a wider column
-		c.gridx = 1;
-		c.gridy = 0;
-		pane.add(uName, c);
-
-		JLabel pLabel = new JLabel("Password: ");
-		c.weightx = 0;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 1;
-		pane.add(pLabel, c);
-
-		pWord = new JPasswordField();
-		c.weightx = 5;
-		c.weighty = 2;
-		c.gridx = 1;
-		c.gridy = 1;
-		pane.add(pWord, c);
-		
-		JLabel pRepeatLabel = new JLabel("Please retype password: ");
-		c.weightx = 0;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 2;
-		pane.add(pRepeatLabel, c);
-
-		pWord2 = new JPasswordField();
-		c.weightx = 5;
-		c.weighty = 2;
-		c.gridx = 1;
-		c.gridy = 2;
-		pane.add(pWord2, c);
-
-		JButton createAcct = new JButton("Create Account");
-		createAcct.addActionListener(listener);
-		c.fill = GridBagConstraints.NONE;
-		// Don't worry about filling the column
-		// If set to horizontal, all buttons would be connected
-		// I prefer a gap
-		c.weightx = 0;
-		c.weighty = 2;
-		c.gridx = 1;
-		c.gridy = 3;
-		pane.add(createAcct, c);
-
-		window = new JFrame("LogIn");
-		window.add(pane);
-		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
-		window.setVisible(true);
-
-		return window;
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 	}
 }

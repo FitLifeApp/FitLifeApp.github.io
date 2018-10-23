@@ -29,7 +29,6 @@ public class WindowManager implements ActionListener {
 	WindowManager() {
 		window = null;
 
-
 		toLogIn();
 
 	}
@@ -95,78 +94,72 @@ public class WindowManager implements ActionListener {
 	public void toCalendar() {
 		window.dispose();
 		window = makeWindow();
-		
+
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		datePanel = new JDatePanelImpl(model, p);
-		
+
 		datePanel.setShowYearButtons(true);
 		datePanel.setEnabled(true);
 		datePanel.setFocusable(true);
 		datePanel.addActionListener(this);
 
-		
 		window.add(datePanel, BorderLayout.CENTER);
 		window.pack();
-		//window.setSize((int)window.getSize().getWidth() + 50, (int)window.getSize().getHeight() + 50);
-		window.setSize((int)window.getSize().getWidth() + 100, (int)window.getSize().getHeight() + 100);
+		// window.setSize((int)window.getSize().getWidth() + 50,
+		// (int)window.getSize().getHeight() + 50);
+		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 100);
 		window.setVisible(true);
 	}
-	
-	
+
 	public void toDay(Date day) {
 		window.dispose();
 		window = makeWindow();
-		
+
 		File file = new File("workout.csv");
 		int row = 0;
-		ArrayList <String[]> arr = new ArrayList<String[]>();
+		ArrayList<String[]> arr = new ArrayList<String[]>();
 		try {
 			Scanner input = new Scanner(file);
 			while (input.hasNext()) {
 				String string = input.nextLine();
 				String[] temp = new String[6];
-				
+
 				String[] str = string.split(",");
-				for (int i = 0; i < temp.length; i ++) {
+				for (int i = 0; i < temp.length; i++) {
 					temp[i] = str[i];
 				}
 				arr.add(temp);
 				System.out.println(temp[1]);
-				row ++;
+				row++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-				
+
 		JTable data = new JTable(row, 4);
 		for (int i = 0; i < data.getRowCount(); i++) {
 			for (int j = 0; j < data.getColumnCount(); j++) {
 				String str = arr.get(i)[5];
-				String d = str.substring(0,10);
+				String d = str.substring(0, 10);
 				System.out.println(d);
 				if (day.toString().contains(d)) {
-					data.setValueAt(arr.get(i)[j+1], i, j);
+					data.setValueAt(arr.get(i)[j + 1], i, j);
 				}
 			}
-			//if (data.getValueAt(i, 0).equals(null)) {
-			//	
-			//	data.removeRowSelectionInterval(i, i);
-			//}
+			// if (data.getValueAt(i, 0).equals(null)) {
+			//
+			// data.removeRowSelectionInterval(i, i);
+			// }
 		}
-		
 
-		
-		
-		
 		window.add(data, BorderLayout.CENTER);
 		window.pack();
-		window.setSize((int)window.getSize().getWidth() + 50, (int)window.getSize().getHeight() + 50);
+		window.setSize((int) window.getSize().getWidth() + 50, (int) window.getSize().getHeight() + 50);
 		window.setVisible(true);
 	}
-	
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Log In")) {
@@ -176,7 +169,7 @@ public class WindowManager implements ActionListener {
 				JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if(e.getActionCommand().equals("Create Account...")) {
-			window = LogIn.createAcct(window, this);
+			window = AcctCreator.createAcctWindow(window, this);
 		} else if (e.getActionCommand().equals("Home")) {
 			toHome();
 			System.out.println("HOME");
@@ -193,6 +186,12 @@ public class WindowManager implements ActionListener {
 				toDay((Date)datePanel.getModel().getValue());
 			}
 			day = (Date)datePanel.getModel().getValue();
+		} else if(e.getActionCommand().equals("Create Account")) {
+			if(AcctCreator.createAcct()) {
+				toLogIn();
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation", JOptionPane.ERROR_MESSAGE);
+			}
 		} else {
 			System.err.println("Unhandled Action Command: " + e.getActionCommand());
 		}
