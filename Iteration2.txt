@@ -1,7 +1,0 @@
-implementation
-testing
-maven
-git
-GUI
-prototype 2
-all relevant diagrams
