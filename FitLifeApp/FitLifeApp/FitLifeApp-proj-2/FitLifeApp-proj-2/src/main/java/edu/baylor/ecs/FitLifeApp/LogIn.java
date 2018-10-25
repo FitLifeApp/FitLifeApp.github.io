@@ -1,8 +1,8 @@
-//package displayTest;
-
 package edu.baylor.ecs.FitLifeApp;
-
-import java.awt.Component;
+/*
+ * File:		LogIn.java
+ * Description: Handles the creation of the log in window
+ */
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -11,17 +11,41 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.*;
 
 public class LogIn {
 
-	static JTextField uName;
-	static JPasswordField pWord;
+	static private JTextField uName; // Used to hold username inputs
+	static private JPasswordField pWord; // Used to hold password inputs
 
-	static JFrame makeWindow(JFrame window, ActionListener listener) {
+	
+	//Listener used for buttons in LogIn window
+	static class LogInListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equals("Log In")) {
+				if (LogIn.validate()) {
+					WindowManager.toHome();
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else if (e.getActionCommand().equals("Create Account")) {
+				WindowManager.toAcctCreation();
+			} else if (e.getActionCommand().equals("Forgot Password")) {
+				WindowManager.toAcctCreation();
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?",
+						"Failed", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	public static JFrame makeWindow(JFrame window) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
@@ -65,8 +89,8 @@ public class LogIn {
 		c.gridy = 1;
 		pane.add(pWord, c);
 
-		JButton createAcct = new JButton("Create Account...");
-		createAcct.addActionListener(listener);
+		JButton createAcct = new JButton("Create Account");
+		createAcct.addActionListener(new LogInListener());
 		c.fill = GridBagConstraints.NONE;
 		// Don't worry about filling the column
 		// If set to horizontal, all buttons would be connected
@@ -78,7 +102,7 @@ public class LogIn {
 		pane.add(createAcct, c);
 
 		JButton lostPW = new JButton("Forgot Password");
-		lostPW.addActionListener(listener);
+		lostPW.addActionListener(new LogInListener());
 		c.weightx = 1;
 		c.weighty = 0.5;
 		c.gridx = 1;
@@ -86,7 +110,7 @@ public class LogIn {
 		pane.add(lostPW, c);
 
 		JButton logIn = new JButton("Log In");
-		logIn.addActionListener(listener);
+		logIn.addActionListener(new LogInListener());
 		c.weightx = 1;
 		c.weighty = 0.5;
 		c.gridx = 2;
@@ -96,14 +120,13 @@ public class LogIn {
 		window = new JFrame("LogIn");
 		window.add(pane);
 		window.pack();
-		window.setLocationRelativeTo(null);
 		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
 		window.setVisible(true);
 
 		return window;
 	}
 
-	static boolean validate(JFrame window) {
+	static boolean validate() {
 		BufferedReader br;
 		Scanner scnr;
 		boolean isTrue = false;
@@ -118,7 +141,7 @@ public class LogIn {
 			String[] acct;
 			acct = scnr.nextLine().split(",");
 			if (acct.length >= 2) {
-				if (uName.getText().equals(acct[0]) && pWord.getText().equals(acct[1])) {
+				if (uName.getText().equals(acct[0]) && Arrays.equals(pWord.getPassword(), acct[1].toCharArray())) {
 					isTrue = true;
 				}
 			}
@@ -127,7 +150,8 @@ public class LogIn {
 		if (scnr != null) {
 			scnr.close();
 		}
-		
+
 		return isTrue;
 	}
+
 }
