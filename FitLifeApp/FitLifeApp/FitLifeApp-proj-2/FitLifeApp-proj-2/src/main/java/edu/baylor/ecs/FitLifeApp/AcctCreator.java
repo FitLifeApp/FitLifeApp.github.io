@@ -27,6 +27,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 
 public class AcctCreator {
 
@@ -34,25 +38,24 @@ public class AcctCreator {
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
 
-	
-	
 	static class AcctCreatorListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals("Create Account")) {
-				if(AcctCreator.createAcct()) {
+			if (e.getActionCommand().equals("Create Account")) {
+				if (AcctCreator.createAcct()) {
 					WindowManager.toLogIn();
 				} else {
-					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",
+							JOptionPane.ERROR_MESSAGE);
 				}
-			}else {
-				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?",
-						"Failed", JOptionPane.ERROR_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
-	
+
 	static public JFrame makeWindow(JFrame window) {
 
 		// Makes log in page
@@ -135,45 +138,87 @@ public class AcctCreator {
 	}
 
 	static public boolean createAcct() {
-		if(!Arrays.equals(pWord.getPassword(), pWord2.getPassword())) {
+		if (!Arrays.equals(pWord.getPassword(), pWord2.getPassword())) {
 			return false;
 		}
-		
-		BufferedReader br;
+
+		int accountCount = 0;
+		BufferedReader br = null;
 		Scanner scnr = null;
 		boolean alreadyExists = false;
-		boolean noFile = false;
-		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
-			scnr = new Scanner(br);
-		} catch (FileNotFoundException e) {
-			noFile = true;
-		}
 
-		if (scnr != null) {
-			while (scnr.hasNextLine() && !alreadyExists) {
-				String[] acct;
-				acct = scnr.nextLine().split(",");
-				if (acct.length >= 2) {
-					if (uName.getText().equals(acct[0])) {
-						alreadyExists = true;
-					}
-				}
+		File accts = new File("Accounts.FIT");
+		if (accts.exists()) {
+			try {
+				br = new BufferedReader(new InputStreamReader(new FileInputStream(accts)));
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(new JFrame(), "Account file exists but not found", "Failed Creation",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+				return false;
 			}
-			scnr.close();
+
+			if (br != null) {
+				scnr = new Scanner(br);
+
+				while (scnr.hasNextLine() && !alreadyExists) {
+					String[] acct;
+					acct = scnr.nextLine().split(",");
+					if (acct.length >= 3) {
+						if (uName.getText().equals(acct[0])) {
+							alreadyExists = true;
+						}
+						try {
+							if (accountCount < Integer.parseInt(acct[2])) {
+								accountCount = Integer.parseInt(acct[2]);
+							}
+						} catch (NumberFormatException e) {
+							JOptionPane.showMessageDialog(
+									new JFrame(), "Invalid Account ID found.\nAccount Causing " + "problems has ID '"
+											+ acct[2] + "' in Accounts.FIT",
+									"Failed Creation", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+
+				}
+				scnr.close();
+			}
 		}
 		if (alreadyExists) {
 			return false;
 		}
 
+		accountCount += 1;
 		BufferedWriter bw;
 		try {
-			bw = new BufferedWriter(new FileWriter(new File("Accounts.FIT"), true));
-			bw.write("\n" + uName.getText() + "," + new String(pWord.getPassword()));
-			bw.close();
+			accts = new File("ACCT" + Integer.toString(accountCount));
+			if (!accts.exists()) {
+				//I don't know when this would fail, but it can't hurt
+
+				bw = new BufferedWriter(new FileWriter(new File("Accounts.FIT"), true));
+				bw.write("\n" + uName.getText() + ","
+						+ new String(pWord.getPassword()) + "," + Integer.toString(accountCount));
+				bw.close();
+
+				bw = new BufferedWriter(new FileWriter(accts));
+
+				JAXBContext context = JAXBContext.newInstance(Account.class);
+				Marshaller m = context.createMarshaller();
+				m.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
+				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				m.marshal(new Account(accountCount), bw);
+				//m.marshal(new Account(accountCount), System.out);
+				bw.close();
+			} else {
+				JOptionPane.showMessageDialog(
+						new JFrame(), "Account ID chosen for new file already exists. Account IDs might be misordered",
+						"Failed Creation", JOptionPane.ERROR_MESSAGE);
+			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
 		}
 
 		return true;

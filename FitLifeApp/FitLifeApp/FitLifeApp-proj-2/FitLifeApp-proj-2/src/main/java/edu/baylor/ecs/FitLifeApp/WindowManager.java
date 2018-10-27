@@ -1,4 +1,5 @@
 package edu.baylor.ecs.FitLifeApp;
+
 /*
  * File:		WindowManager.java
  * Description: Handles the base creation of windows while logged in
@@ -14,16 +15,14 @@ import java.awt.event.*;
 
 import java.util.*;
 
-public class WindowManager  {
-	//private boolean flag = false;
-	//private UtilDateModel model = new UtilDateModel();
-	//private JDatePanelImpl datePanel;
-	//private Date day = java.util.Calendar.getInstance().getTime();
-	
-	
-	
-	//---------------------------
-	//These still need to be moved into their own, but it's late and I am tired
+public class WindowManager {
+	// private boolean flag = false;
+	// private UtilDateModel model = new UtilDateModel();
+	// private JDatePanelImpl datePanel;
+	// private Date day = java.util.Calendar.getInstance().getTime();
+
+	// ---------------------------
+	// These still need to be moved into their own, but it's late and I am tired
 
 	static JPanel cards; // a panel that uses CardLayout
 
@@ -32,15 +31,14 @@ public class WindowManager  {
 	final static String ex3 = "Balance Exercise";
 	final static String ex4 = "Flexibility Exercise";
 
-	//-----------------------------------------
-	
+	// -----------------------------------------
+
 	private static JFrame window;
 	private static Account acct;
 
-/*	//I assume leftovers
-	JLabel result;
-	String currentPattern;
-*/	
+	/*
+	 * //I assume leftovers JLabel result; String currentPattern;
+	 */
 	static class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Home")) {
@@ -51,33 +49,28 @@ public class WindowManager  {
 				toLogIn();
 				System.out.println("Logged Out");
 			} else if (e.getActionCommand().equals("View Calendar")) {
-				
-				//Might get removed
-				
+
+				// Might get removed
+
 				WindowManager.toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
-				
-				//Might get removed
-				
-				/*
-				System.out.println((Date) datePanel.getModel().getValue());
-				// Call toDay if the selected day already has been selected. (or the selected
-				// day is today)
-				if (day.equals((Date) datePanel.getModel().getValue())) {
 
-					if (CalendarWindow.getFlag() == true) {
-						day = (Date) datePanel.getModel().getValue();
-						addWorkoutWindow();
-					} else {
-						toDay((Date) datePanel.getModel().getValue());
-					}
-				}
-				day = (Date) datePanel.getModel().getValue();
-				*/
-				
-				JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener", "Failed Login",
-						JOptionPane.ERROR_MESSAGE);
+				// Might get removed
+
+				/*
+				 * System.out.println((Date) datePanel.getModel().getValue()); // Call toDay if
+				 * the selected day already has been selected. (or the selected // day is today)
+				 * if (day.equals((Date) datePanel.getModel().getValue())) {
+				 * 
+				 * if (CalendarWindow.getFlag() == true) { day = (Date)
+				 * datePanel.getModel().getValue(); addWorkoutWindow(); } else { toDay((Date)
+				 * datePanel.getModel().getValue()); } } day = (Date)
+				 * datePanel.getModel().getValue();
+				 */
+
+				JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
+						"Failed Login", JOptionPane.ERROR_MESSAGE);
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
 					CalendarWindow.showAddWorkoutDialog();
@@ -93,7 +86,7 @@ public class WindowManager  {
 			}
 		}
 	}
-	
+
 	static class BasicItemListener implements ItemListener {
 
 		@Override
@@ -101,11 +94,11 @@ public class WindowManager  {
 			CardLayout cl = (CardLayout) (cards.getLayout());
 			cl.show(cards, (String) evt.getItem());
 		}
-		
+
 	}
 
 	WindowManager() {
-		acct = new Account();
+		acct = null;
 		window = null;
 		toLogIn();
 	}
@@ -172,20 +165,20 @@ public class WindowManager  {
 
 	static void toHome() {
 
-		//moved to HomePage.java
+		// moved to HomePage.java
 		window.dispose();
 		window = makeWindow();
-		
+
 		window = HomePage.makeWindow(window, acct);
 	}
 
 	public static void toLogIn() {
-		//moved to LogIn.java
+		// moved to LogIn.java
 		window = LogIn.makeWindow(window);
 	}
-	
+
 	public static void toAcctCreation() {
-		//moved to AcctCreator.java
+		// moved to AcctCreator.java
 		window = AcctCreator.makeWindow(window);
 	}
 
@@ -193,15 +186,12 @@ public class WindowManager  {
 		// window.dispose();
 		window = makeWindow();
 
-		//Moved to CalendarWindow.java
+		// Moved to CalendarWindow.java
 		window = CalendarWindow.makeWindow(window);
-		
-		
 
 	}
 
-	
-	//Not moved yet.
+	// Not moved yet.
 	public static void toDay(Date day) {
 		window.dispose();
 		window = makeWindow();
@@ -249,7 +239,7 @@ public class WindowManager  {
 		window.setVisible(true);
 	}
 
-	//Also not yet moved
+	// Also not yet moved
 	public static void addWorkoutWindow() {
 		window = new JFrame("Select a Type");
 
@@ -284,6 +274,13 @@ public class WindowManager  {
 		window.pack();
 		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 30);
 		window.setVisible(true);
+	}
+
+	public static void setAcct(Account src) {
+		// TODO Auto-generated method stub
+		System.out.println(src.toString());
+		WindowManager.acct = src;
+
 	}
 
 }
