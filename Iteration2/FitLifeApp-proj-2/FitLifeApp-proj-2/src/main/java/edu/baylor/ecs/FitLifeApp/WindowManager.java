@@ -27,7 +27,7 @@ public class WindowManager implements ActionListener, ItemListener{
 	private Date day = java.util.Calendar.getInstance().getTime();
 	JFrame window;
 	JPanel cards; //a panel that uses CardLayout
-
+	LogIn logInScreen = LogIn.getInstance();
 	final static String ex1 = "Aerobic Exercise";
 	final static String ex2 = "Strength Exercise";
 	final static String ex3 = "Balance Exercise";
@@ -214,7 +214,7 @@ public class WindowManager implements ActionListener, ItemListener{
 	}
 
 	public void toLogIn() {
-		window = LogIn.makeWindow(window,  this);
+		window = logInScreen.makeWindow(window,  this);
 	}
 
 	public void toCalendar() {
@@ -361,7 +361,7 @@ public class WindowManager implements ActionListener, ItemListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Log In")) {
-			if (LogIn.validate(window)) {
+			if (logInScreen.validate(window)) {
 				toHome();
 			}
 			else {

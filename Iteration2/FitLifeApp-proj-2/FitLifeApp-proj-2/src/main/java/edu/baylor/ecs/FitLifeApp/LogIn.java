@@ -16,12 +16,27 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
-public class LogIn {
+public final class LogIn {
 
+	private static volatile LogIn instance = null;
 	static JTextField uName;
 	static JPasswordField pWord;
+	
+	private LogIn() {}
+	
+	
+public static LogIn getInstance() {
+	if(instance == null) {
+		synchronized(LogIn.class) {
+			if(instance == null) {
+				instance = new LogIn();
+			}
+		}
+	}
+	return instance;
+}
 
-	static JFrame makeWindow(JFrame window, ActionListener listener) {
+	 JFrame makeWindow(JFrame window, ActionListener listener) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
@@ -103,7 +118,7 @@ public class LogIn {
 		return window;
 	}
 
-	static boolean validate(JFrame window) {
+	boolean validate(JFrame window) {
 		BufferedReader br;
 		Scanner scnr;
 		boolean isTrue = false;
