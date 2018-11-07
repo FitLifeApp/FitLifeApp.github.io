@@ -19,48 +19,53 @@ import javax.swing.*;
 public final class LogIn {
 
 	private static volatile LogIn instance = null;
-	static JTextField uName;
-	static JPasswordField pWord;
+	JTextField uName;
+    JPasswordField pWord;
 	
 	private LogIn() {}
 	
-	
-public static LogIn getInstance() {
-	if(instance == null) {
-		synchronized(LogIn.class) {
-			if(instance == null) {
-				instance = new LogIn();
+	/*get the one instance of this class, creating it if necessary*/
+	public static LogIn getInstance() {
+		if(instance == null) {
+			synchronized(LogIn.class) {
+				if(instance == null) {
+					instance = new LogIn();
+				}
 			}
 		}
+		return instance;
 	}
-	return instance;
-}
 
+	 // Makes log in page
+	 // Was experimenting with Grid bag Layout
+	 // Actually turned out pretty good
 	 JFrame makeWindow(JFrame window, ActionListener listener) {
-		// Makes log in page
-		// Was experimenting with Grid bag Layout
-		// Actually turned out pretty good
+		
 
+		// If window isn't null, meaning it came from another window, get rid of it
 		if (window != null) {
 			window.dispose();
-			// If window isn't null, meaning it came from another window, get rid of it
 		}
+		
+		// Make a panel for grid bag layout
 		JPanel pane = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		// Make a panel for grid bag layout
-
+		
+		// Have it fill the entire horizontal of the grid
 		JLabel uLabel = new JLabel("Username: ");
 		c.fill = GridBagConstraints.HORIZONTAL;
-		// Have it fill the entire horizontal of the grid
-		c.weightx = 0;
+		
 		// Make it a thinner column than others
+		c.weightx = 0;
 		c.gridx = 0;
 		c.gridy = 0;
+		
 		// Set position
 		pane.add(uLabel, c);
 
 		uName = new JTextField();
 		c.weightx = 1;
+		
 		// Have a wider column
 		c.gridx = 1;
 		c.gridy = 0;
@@ -83,6 +88,7 @@ public static LogIn getInstance() {
 		JButton createAcct = new JButton("Create Account...");
 		createAcct.addActionListener(listener);
 		c.fill = GridBagConstraints.NONE;
+		
 		// Don't worry about filling the column
 		// If set to horizontal, all buttons would be connected
 		// I prefer a gap
@@ -122,6 +128,7 @@ public static LogIn getInstance() {
 		BufferedReader br;
 		Scanner scnr;
 		boolean isTrue = false;
+		
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
 			scnr = new Scanner(br);
@@ -129,6 +136,7 @@ public static LogIn getInstance() {
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found", "Dialog", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
+		
 		while (scnr.hasNextLine() && !isTrue) {
 			String[] acct;
 			acct = scnr.nextLine().split(",");

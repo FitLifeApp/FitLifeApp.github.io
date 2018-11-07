@@ -20,7 +20,8 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 
-public class WindowManager implements ActionListener, ItemListener{
+/*Probably needs to be a singleton as well*/
+public final class WindowManager implements ActionListener, ItemListener{
 	private boolean flag = false;
 	private UtilDateModel model = new UtilDateModel();
 	private JDatePanelImpl datePanel;
@@ -42,10 +43,24 @@ public class WindowManager implements ActionListener, ItemListener{
 
 	JLabel result;
 	String currentPattern;
-	WindowManager() {
-		window = null;
-		toLogIn();
+	
+	private static volatile WindowManager instance = null;
+	
+	
+	private WindowManager() {}
+	
+	public static WindowManager getInstance() {
+		if(instance == null) {
+			synchronized(WindowManager.class) {
+				if(instance == null) {
+					instance = new WindowManager();
+				}
+			}
+		}
+		
+		return instance;
 	}
+	
 
 	private JFrame makeWindow() {
 		//Handles Base construction of frame
