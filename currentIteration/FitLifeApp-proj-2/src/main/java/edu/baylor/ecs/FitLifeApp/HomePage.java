@@ -20,22 +20,39 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class HomePage {
+public final class HomePage {
+	
+	private static volatile HomePage instance = null;
+	private WindowManager wm = WindowManager.getInstance();
+	
+	private HomePage() {}
+	
+	public static HomePage getInstance() {
+		if(instance == null) {
+			synchronized(HomePage.class) {
+				if(instance == null) {
+					instance = null;
+				}
+			}
+		}
+		return instance;
+	}
 
 	//Moved relevant listener code here, away from WindowManager
-	static class HomeListener implements ActionListener {
+	class HomeListener implements ActionListener {
+		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("EXERCISE")) {
 				//flag = true;
 				CalendarWindow.setFlag(true);
-				WindowManager.toCalendar();
+				wm.toCalendar();
 				System.out.println("View Cal");
 				System.out.println("Adding Workout");
 
 			} else if (e.getActionCommand().equals("Review EXERCISE")) {
-				WindowManager.toCalendar();
+				wm.toCalendar();
 				CalendarWindow.setFlag(false);
 				//flag = false;
 				System.out.println("View Cal");
@@ -49,7 +66,7 @@ public class HomePage {
 		}
 	}
 
-	static JFrame makeWindow(JFrame window, Account acct) {
+	JFrame makeWindow(JFrame window, Account acct) {
 		//Displays the home page
 		//Mostly copied and pasted from toHome function
 		//Only changes were removal of parts that I don't think did anything

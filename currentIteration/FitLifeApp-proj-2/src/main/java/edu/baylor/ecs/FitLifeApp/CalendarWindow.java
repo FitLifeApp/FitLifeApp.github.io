@@ -26,19 +26,33 @@ import org.jdatepicker.impl.UtilDateModel;
 //Might cause file problems, might cause other problems
 
 
-public class CalendarWindow {
+public final class CalendarWindow {
 	static boolean flag = false;
 	static JDatePanelImpl datePanel = null;
 	static Date day = java.util.Calendar.getInstance().getTime();
-
+	private static volatile CalendarWindow instance = null;
+	private WindowManager wm = WindowManager.getInstance();
+	
+	private CalendarWindow() {}
+	
+	public static CalendarWindow getinstance() {
+		if(instance == null) {
+			synchronized(CalendarWindow.class) {
+				if(instance == null) {
+					instance = new CalendarWindow();
+				}
+			}
+		}
+		return instance;
+	}
 	
 	//Listener for Calendar specific buttons
 	//Like the home listener, I might have missed some
 	//Because I'm not familiar with this part of the code
-	static class CalendarListener implements ActionListener {
+	class CalendarListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("View Calendar")) {
-				WindowManager.toCalendar();
+				wm.toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
 				System.out.println((Date) datePanel.getModel().getValue());
@@ -48,9 +62,9 @@ public class CalendarWindow {
 
 					if (CalendarWindow.getFlag() == true) {
 						day = (Date) datePanel.getModel().getValue();
-						WindowManager.addWorkoutWindow();
+						wm.addWorkoutWindow();
 					} else {
-						WindowManager.toDay((Date) datePanel.getModel().getValue());
+						wm.toDay((Date) datePanel.getModel().getValue());
 					}
 				}
 				day = (Date) datePanel.getModel().getValue();
@@ -94,7 +108,7 @@ public class CalendarWindow {
 		datePanel.setShowYearButtons(true);
 		datePanel.setEnabled(true);
 		datePanel.setFocusable(true);
-		datePanel.addActionListener(new CalendarListener());
+		datePanel.addActionListener(instance.new CalendarListener());
 			//This listener is larger than it needs to be because I don't know what is checked
 
 		window.add(datePanel, BorderLayout.CENTER);
@@ -117,7 +131,7 @@ public class CalendarWindow {
 		JTextField field3 = new JTextField();
 
 		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, };
-		int opt = JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		String exercise = field1.getText();
 		String duration = field2.getText();
 		String weight = field3.getText();

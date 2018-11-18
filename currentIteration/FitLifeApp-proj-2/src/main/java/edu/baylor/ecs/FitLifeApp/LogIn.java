@@ -21,28 +21,46 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-public class LogIn {
+public final class LogIn {
 
 	static private JTextField uName; // Used to hold username inputs
 	static private JPasswordField pWord; // Used to hold password inputs
+	private WindowManager wm = WindowManager.getInstance();
+	
+	/*The singleton itself*/
+	private static volatile LogIn instance = null;
+	
+	private LogIn() {}
+	
+	/*Singleton method to get or create the LogIn*/
+	public static LogIn getInstance() {
+		if(instance == null) {
+			synchronized(LogIn.class) {
+				if(instance == null) {
+					instance = new LogIn();
+				}
+			}
+		}
+		return instance;
+	}
 
 	// Listener used for buttons in LogIn window
-	static class LogInListener implements ActionListener {
+	public class LogInListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Log In")) {
-				if (LogIn.validate()) {
-					WindowManager.setAcct(LogIn.getAcct());
-					WindowManager.toHome();
+				if (instance.validate()) {
+					wm.setAcct(instance.getAcct());
+					wm.toHome();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else if (e.getActionCommand().equals("Create Account")) {
-				WindowManager.toAcctCreation();
+				wm.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
-				WindowManager.toAcctCreation();
+				wm.toAcctCreation();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
 						JOptionPane.ERROR_MESSAGE);
@@ -50,7 +68,7 @@ public class LogIn {
 		}
 	}
 
-	public static JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow(JFrame window) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
@@ -95,7 +113,7 @@ public class LogIn {
 		pane.add(pWord, c);
 
 		JButton createAcct = new JButton("Create Account");
-		createAcct.addActionListener(new LogInListener());
+		createAcct.addActionListener(instance.new LogInListener());
 		c.fill = GridBagConstraints.NONE;
 		// Don't worry about filling the column
 		// If set to horizontal, all buttons would be connected
@@ -107,7 +125,7 @@ public class LogIn {
 		pane.add(createAcct, c);
 
 		JButton lostPW = new JButton("Forgot Password");
-		lostPW.addActionListener(new LogInListener());
+		lostPW.addActionListener(instance.new LogInListener());
 		c.weightx = 1;
 		c.weighty = 0.5;
 		c.gridx = 1;
@@ -115,7 +133,7 @@ public class LogIn {
 		pane.add(lostPW, c);
 
 		JButton logIn = new JButton("Log In");
-		logIn.addActionListener(new LogInListener());
+		logIn.addActionListener(instance.new LogInListener());
 		c.weightx = 1;
 		c.weighty = 0.5;
 		c.gridx = 2;
@@ -131,7 +149,7 @@ public class LogIn {
 		return window;
 	}
 
-	static boolean validate() {
+	boolean validate() {
 		BufferedReader br;
 		Scanner scnr;
 		boolean isTrue = false;
@@ -157,7 +175,7 @@ public class LogIn {
 		return isTrue;
 	}
 
-	public static Account getAcct() {
+	public Account getAcct() {
 		File acct = new File("Accounts.FIT");
 		BufferedReader br;
 		Scanner scnr;

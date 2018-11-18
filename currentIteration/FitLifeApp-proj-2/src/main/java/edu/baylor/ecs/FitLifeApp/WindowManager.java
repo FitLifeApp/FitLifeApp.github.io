@@ -15,7 +15,7 @@ import java.awt.event.*;
 
 import java.util.*;
 
-public class WindowManager {
+public final class WindowManager {
 	// private boolean flag = false;
 	// private UtilDateModel model = new UtilDateModel();
 	// private JDatePanelImpl datePanel;
@@ -32,14 +32,39 @@ public class WindowManager {
 	final static String ex4 = "Flexibility Exercise";
 
 	// -----------------------------------------
+	private HomePage home = HomePage.getInstance();
+	private LogIn login = LogIn.getInstance();
+	
+	//-----------------------------------------
 
 	private static JFrame window;
 	private static Account acct;
+	
+	private static volatile WindowManager instance = null;
+	
+	/*singleton constructor*/
+	private WindowManager(){
+		acct = null;
+		window = null;
+		toLogIn();
+	}
+	
+	/*singleton method to create or return the WindowManager*/
+	public static WindowManager getInstance() {
+		if(instance == null) {
+			synchronized(WindowManager.class){
+				if(instance == null) {
+					instance  = new WindowManager();
+				}
+			}
+		}
+		return instance;
+	}
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
 	 */
-	static class BasicActListener implements ActionListener {
+	class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Home")) {
 				toHome();
@@ -52,7 +77,7 @@ public class WindowManager {
 
 				// Might get removed
 
-				WindowManager.toCalendar();
+				toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
 
@@ -87,7 +112,7 @@ public class WindowManager {
 		}
 	}
 
-	static class BasicItemListener implements ItemListener {
+	class BasicItemListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent evt) {
@@ -97,13 +122,7 @@ public class WindowManager {
 
 	}
 
-	WindowManager() {
-		acct = null;
-		window = null;
-		toLogIn();
-	}
-
-	private static JFrame makeWindow() {
+	private JFrame makeWindow() {
 		// Handles Base construction of frame
 		// Constructs a frame with a menu bar with various pages
 
@@ -163,26 +182,26 @@ public class WindowManager {
 		return f;
 	}
 
-	static void toHome() {
+	void toHome() {
 
 		// moved to HomePage.java
 		window.dispose();
 		window = makeWindow();
 
-		window = HomePage.makeWindow(window, acct);
+		window = home.makeWindow(window, acct);
 	}
 
-	public static void toLogIn() {
+	public void toLogIn() {
 		// moved to LogIn.java
-		window = LogIn.makeWindow(window);
+		window = login.makeWindow(window);
 	}
 
-	public static void toAcctCreation() {
+	public void toAcctCreation() {
 		// moved to AcctCreator.java
 		window = AcctCreator.makeWindow(window);
 	}
 
-	public static void toCalendar() {
+	public void toCalendar() {
 		// window.dispose();
 		window = makeWindow();
 
@@ -192,7 +211,7 @@ public class WindowManager {
 	}
 
 	// Not moved yet.
-	public static void toDay(Date day) {
+	public void toDay(Date day) {
 		window.dispose();
 		window = makeWindow();
 
@@ -211,6 +230,7 @@ public class WindowManager {
 				arr.add(temp);
 				row++;
 			}
+			input.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -240,11 +260,13 @@ public class WindowManager {
 	}
 
 	// Also not yet moved
-	public static void addWorkoutWindow() {
+	public void addWorkoutWindow() {
 		window = new JFrame("Select a Type");
 
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		JComboBox cb = new JComboBox(comboBoxItems);
 		cb.setEditable(false);
 		cb.addItemListener(new BasicItemListener());
@@ -276,7 +298,7 @@ public class WindowManager {
 		window.setVisible(true);
 	}
 
-	public static void setAcct(Account src) {
+	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		WindowManager.acct = src;

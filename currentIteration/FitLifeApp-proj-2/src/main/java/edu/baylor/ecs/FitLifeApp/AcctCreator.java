@@ -32,19 +32,34 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 
-public class AcctCreator {
+public final class AcctCreator {
 
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
+	private static volatile AcctCreator instance = null;
+	private WindowManager wm = WindowManager.getInstance();
+	
+	private AcctCreator() {}
+	
+	public static AcctCreator getinstance() {
+		if(instance == null) {
+			synchronized (AcctCreator.class) {
+				if(instance == null) {
+					instance = new AcctCreator();
+				}
+			}
+		}
+		return instance;
+	}
 
-	static class AcctCreatorListener implements ActionListener {
+	class AcctCreatorListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Create Account")) {
 				if (AcctCreator.createAcct()) {
-					WindowManager.toLogIn();
+					wm.toLogIn();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",
 							JOptionPane.ERROR_MESSAGE);
@@ -116,7 +131,7 @@ public class AcctCreator {
 		pane.add(pWord2, c);
 
 		JButton createAcct = new JButton("Create Account");
-		createAcct.addActionListener(new AcctCreatorListener());
+		createAcct.addActionListener(instance.new AcctCreatorListener());
 		c.fill = GridBagConstraints.NONE;
 		// Don't worry about filling the column
 		// If set to horizontal, all buttons would be connected
