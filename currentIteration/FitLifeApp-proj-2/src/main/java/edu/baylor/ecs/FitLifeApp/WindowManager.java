@@ -35,6 +35,8 @@ public class WindowManager {
 
 	private static JFrame window;
 	private static Account acct;
+	private static Box board = new Box(BoxLayout.Y_AXIS);
+
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
@@ -99,22 +101,26 @@ public class WindowManager {
 
 	WindowManager() {
 		acct = null;
-		window = null;
+		window = new JFrame("Welcome");
 		toLogIn();
 	}
 
-	private static JFrame makeWindow() {
+	private static JFrame makeWindow(JFrame window) {
 		// Handles Base construction of frame
 		// Constructs a frame with a menu bar with various pages
 
-		JFrame f = new JFrame("Home");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//JFrame f = new JFrame("Home");
+		window.getContentPane().removeAll();
+		window.setLayout(new BorderLayout());
+
+		//window.getContentPane().removeAll();
 		JMenuBar jmb1 = new JMenuBar();
+		jmb1.setPreferredSize(new Dimension(2000, 70));
 		jmb1.setBackground(acct.getColorBase2());
 
 		JMenu menu = new JMenu("Menu");
 		menu.setFont(new Font("Menu", Font.PLAIN, 25));
-		menu.setPreferredSize(new Dimension(70, 70));
+		menu.setPreferredSize(new Dimension(2000, 70));
 		menu.setForeground(Color.white);
 
 		JMenuItem home = new JMenuItem("Home");
@@ -142,6 +148,7 @@ public class WindowManager {
 		planWorkout.setBackground(acct.getColorBase2());
 		planWorkout.setForeground(Color.white);
 
+		menu.setMaximumSize(new Dimension(2000, 50));
 		menu.add(home);
 		menu.add(toCal);
 		menu.add(addWorkout);
@@ -156,20 +163,19 @@ public class WindowManager {
 		addWorkout.addActionListener(new BasicActListener());
 		planWorkout.addActionListener(new BasicActListener());
 
-		jmb1.add(menu, BorderLayout.CENTER);
-		// jmb1.add(logOut, BorderLayout.LINE_START);
+		jmb1.add(menu);
 
-		f.add(jmb1, BorderLayout.PAGE_START);
+		window.add(jmb1, BorderLayout.NORTH);
+		window.pack();
 		// Doesn't handle sizing page or making visible
-		return f;
+		return window;
 	}
 
 	static void toHome() {
 
 		// moved to HomePage.java
-		window.dispose();
-		window = makeWindow();
-
+		//window.dispose();
+		window = makeWindow(window );
 		window = HomePage.makeWindow(window, acct);
 	}
 
@@ -185,7 +191,9 @@ public class WindowManager {
 
 	public static void toCalendar() {
 		// window.dispose();
-		window = makeWindow();
+		//JFrame f= new JFrame("Hoi");
+
+		//window = makeWindow(window);
 
 		// Moved to CalendarWindow.java
 		window = CalendarWindow.makeWindow(window);
@@ -195,7 +203,7 @@ public class WindowManager {
 	// Not moved yet.
 	public static void toDay(Date day) {
 		window.dispose();
-		window = makeWindow();
+		window = makeWindow(window );
 
 		File file = new File("workout.csv");
 		int row = 0;

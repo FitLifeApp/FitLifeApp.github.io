@@ -1,11 +1,18 @@
 package edu.baylor.ecs.FitLifeApp;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 /*
  * File:		LogIn.java
  * Description: Handles the creation of the log in window
  */
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -37,13 +44,18 @@ public class LogIn {
 
 	static private JTextField uName; // Used to hold username inputs
 	static private JPasswordField pWord; // Used to hold password inputs
+	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private static int screenWidth = screenSize.width-100;
+	private static int screenHeight = screenSize.height-100;
+	private static Account acct = new Account();
+
 
 	// Listener used for buttons in LogIn window
 	static class LogInListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand().equals("Log In")) {
+			if (e.getActionCommand().equals("Sign In")) {
 				if (LogIn.validate()) {
 					WindowManager.setAcct(LogIn.getAcct());
 					WindowManager.toHome();
@@ -68,77 +80,110 @@ public class LogIn {
 		// Actually turned out pretty good
 
 		if (window != null) {
-			window.dispose();
+			window.getContentPane().removeAll();
+			//window.dispose();
 			// If window isn't null, meaning it came from another window, get rid of it
 		}
-		JPanel pane = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		// Make a panel for grid bag layout
+		
+		//window = new JFrame("Welcome");
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		FlowLayout flowLayout = new FlowLayout();
+		flowLayout.setAlignment(FlowLayout.CENTER);
+		
+		window.setLayout(flowLayout);
+	    
+		Box p1 = new Box(BoxLayout.Y_AXIS);
+		p1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		p1.setMaximumSize(new Dimension(2000,150));
+		
+		Box p2 = new Box(BoxLayout.Y_AXIS);
+		p2.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		p2.setMaximumSize(new Dimension(2000,150));
+		
+		Box p3 = new Box(BoxLayout.Y_AXIS);
+		p3.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		p3.setMaximumSize(new Dimension(2000,150));
+		
+		Box p4 = new Box(BoxLayout.Y_AXIS);
+		p4.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		p4.setMaximumSize(new Dimension(2000,150));
 
-		JLabel uLabel = new JLabel("Username: ");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		// Have it fill the entire horizontal of the grid
-		c.weightx = 0;
-		// Make it a thinner column than others
-		c.gridx = 0;
-		c.gridy = 0;
-		// Set position
-		pane.add(uLabel, c);
+		Box board = new Box(BoxLayout.Y_AXIS);
+		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
+		JLabel uLabel = new JLabel("Username");
+		uLabel.setFont(new Font("Username", Font.PLAIN, 20));
+		
 		uName = new JTextField();
-		c.weightx = 1;
-		// Have a wider column
-		c.gridx = 1;
-		c.gridy = 0;
-		pane.add(uName, c);
-
-		JLabel pLabel = new JLabel("Password: ");
-		c.weightx = 0;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 1;
-		pane.add(pLabel, c);
+		uName.setMaximumSize(new Dimension(2000,30));
+		uName.setFont(new Font("", Font.PLAIN, 20));
+		
+		p1.add(uLabel);
+		p1.add(uName);
+		
+		JLabel pLabel = new JLabel("Password");
+		pLabel.setFont(new Font("Password", Font.PLAIN, 20));
 
 		pWord = new JPasswordField();
-		c.weightx = 1;
-		c.weighty = 0.5;
-		c.gridx = 1;
-		c.gridy = 1;
-		pane.add(pWord, c);
+		pWord.setMaximumSize(new Dimension(2000,30));
+		pWord.setFont(new Font("", Font.PLAIN, 20));
+		
+		p2.add(pLabel);
+		p2.add(pWord);
 
 		JButton createAcct = new JButton("Create Account");
+		createAcct.setFont(new Font("Create Account", Font.PLAIN, 20));
+		createAcct.setForeground(Color.white);
+		createAcct.setBackground(new Color( 44, 62, 80 ));
+		createAcct.setMaximumSize(new Dimension(2000,50));
 		createAcct.addActionListener(new LogInListener());
-		c.fill = GridBagConstraints.NONE;
-		// Don't worry about filling the column
-		// If set to horizontal, all buttons would be connected
-		// I prefer a gap
-		c.weightx = 0;
-		c.weighty = 0.5;
-		c.gridx = 0;
-		c.gridy = 2;
-		pane.add(createAcct, c);
-
+		
 		JButton lostPW = new JButton("Forgot Password");
+		lostPW.setFont(new Font("Forgot Password", Font.PLAIN, 20));
+		lostPW.setForeground(Color.white);
+		lostPW.setBackground(new Color( 44, 62, 80 ));
+		lostPW.setMaximumSize(new Dimension(2000,50));
 		lostPW.addActionListener(new LogInListener());
-		c.weightx = 1;
-		c.weighty = 0.5;
-		c.gridx = 1;
-		c.gridy = 2;
-		pane.add(lostPW, c);
 
-		JButton logIn = new JButton("Log In");
+		JButton logIn = new JButton("Sign In");
+		logIn.setFont(new Font("Sign In", Font.PLAIN, 20));
+		logIn.setForeground(Color.white);
+		logIn.setBackground(new Color( 44, 62, 80 ));
+		logIn.setMaximumSize(new Dimension(2000,50));
 		logIn.addActionListener(new LogInListener());
-		c.weightx = 1;
-		c.weighty = 0.5;
-		c.gridx = 2;
-		c.gridy = 2;
-		pane.add(logIn, c);
+		
+		p3.add(createAcct);
+		p3.add(Box.createVerticalStrut(5));
+		p3.add(lostPW);
+		p3.add(Box.createVerticalStrut(5));
+		p3.add(logIn);
 
-		window = new JFrame("LogIn");
+		board.add(Box.createVerticalStrut(screenHeight/2-250));
+		
+		JLabel welcome = new JLabel("Welcome to FitLife");	
+		welcome.setFont(new Font("Welcome to FitLife", Font.PLAIN, 50));
+		
+		p4.add(welcome);
+				
+		board.add(p4);
+		board.add(Box.createVerticalStrut(40));
+		board.add(p1);
+		board.add(Box.createVerticalStrut(10));
+		board.add(p2);
+		board.add(Box.createVerticalStrut(10));
+		board.add(p3);
+		
+		window.add(board);
+		window.getContentPane().setBackground(new Color(234, 242, 248));
+		window.repaint();
+
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.add(pane);
 		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
+		
+		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+		window.setSize(new Dimension(screenWidth, screenHeight));
+		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 
 		return window;

@@ -6,6 +6,7 @@ package edu.baylor.ecs.FitLifeApp;
  */
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -85,6 +87,8 @@ public class CalendarWindow {
 	
 	//Copied from toCalendar
 	public static JFrame makeWindow(JFrame window) {
+		window = new JFrame("Calendar");
+		
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
@@ -97,12 +101,14 @@ public class CalendarWindow {
 		datePanel.addActionListener(new CalendarListener());
 			//This listener is larger than it needs to be because I don't know what is checked
 
-		window.add(datePanel, BorderLayout.CENTER);
-		window.pack();
+		window.add(datePanel, BorderLayout.CENTER);	
+		
+		window.setMaximumSize(new Dimension(500,250));
+		window.setPreferredSize(new Dimension(500,250));
+		window.setMinimumSize(new Dimension(500,250));
 		window.setLocationRelativeTo(null);
-		// window.setSize((int)window.getSize().getWidth() + 50,
-		// (int)window.getSize().getHeight() + 50);
-		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 100);
+		
+		window.pack();
 		window.setVisible(true);
 		
 		return window;

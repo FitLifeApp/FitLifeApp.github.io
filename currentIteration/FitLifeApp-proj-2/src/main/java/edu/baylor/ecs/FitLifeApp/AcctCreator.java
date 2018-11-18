@@ -1,5 +1,7 @@
 package edu.baylor.ecs.FitLifeApp;
 
+import java.awt.Dimension;
+
 /*
  * File:		AcctCreator.java
  * Description: Handles CreateAccount window and the actual creation of an account
@@ -7,6 +9,7 @@ package edu.baylor.ecs.FitLifeApp;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -75,7 +78,7 @@ public class AcctCreator {
 		// Actually turned out pretty good
 
 		if (window != null) {
-			window.dispose();
+			//window.dispose();
 			// If window isn't null, meaning it came from another window, get rid of it
 		}
 		JPanel pane = new JPanel(new GridBagLayout());
@@ -139,15 +142,22 @@ public class AcctCreator {
 		c.gridy = 3;
 		pane.add(createAcct, c);
 
-		window = new JFrame("LogIn");
+		window.getContentPane().removeAll();
+
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(pane);
+		window.repaint();
 		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
+		
+		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = screenSize.width-100;
+		int screenHeight = screenSize.height-100;
+		window.setSize(new Dimension(screenWidth, screenHeight));
+		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 
 		return window;
-
 	}
 
 	static public boolean createAcct() {
