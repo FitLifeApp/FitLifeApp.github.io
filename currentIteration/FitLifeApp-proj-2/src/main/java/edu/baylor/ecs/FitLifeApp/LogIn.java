@@ -10,18 +10,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.nio.file.Files;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.codec.binary.Base64;
+
 public class LogIn {
+
+	final private static String initVector = "thisis 16 chars.";
+	final private static String key = "1234567890123456";
+	// Used for encryption. Guaranteed unpredictable
 
 	static private JTextField uName; // Used to hold username inputs
 	static private JPasswordField pWord; // Used to hold password inputs
@@ -132,19 +144,38 @@ public class LogIn {
 	}
 
 	static boolean validate() {
-		BufferedReader br;
-		Scanner scnr;
-		boolean isTrue = false;
+
+		BufferedReader br = null;
+		Scanner scnr = null;
+		String fileContents = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
-			scnr = new Scanner(br);
-		} catch (FileNotFoundException e) {
+			scnr = new Scanner(br).useDelimiter("\\Z");
+			// But I say close?
+			fileContents = scnr.next();
+		} catch (FileNotFoundException e1) {
+
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found", "Dialog", JOptionPane.ERROR_MESSAGE);
+
 			return false;
+
+		} finally {
+			if (scnr != null) {
+				scnr.close();
+			}
 		}
-		while (scnr.hasNextLine() && !isTrue) {
+		
+		System.out.println("ENC LOGIN: " + fileContents);
+		fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
+		System.out.println("DEC LOGIN: " + fileContents);
+		
+		ArrayList<String> lines = new ArrayList<String>(Arrays.asList(fileContents.split("\n")));
+
+		boolean isTrue = false;
+
+		for (int i = 0; i < lines.size() && !isTrue; i++) {
 			String[] acct;
-			acct = scnr.nextLine().split(",");
+			acct = lines.get(i).split(",");
 			if (acct.length >= 2) {
 				if (uName.getText().equals(acct[0]) && Arrays.equals(pWord.getPassword(), acct[1].toCharArray())) {
 					isTrue = true;
@@ -152,29 +183,48 @@ public class LogIn {
 			}
 		}
 
-		scnr.close();
-
 		return isTrue;
+
 	}
 
 	public static Account getAcct() {
-		File acct = new File("Accounts.FIT");
-		BufferedReader br;
-		Scanner scnr;
+
 		boolean gotID = false;
 		int id = -1;
 		Account a = null;
 
+		
+		BufferedReader br = null;
+		Scanner scnr = null;
+		String fileContents = null;
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(acct)));
-			scnr = new Scanner(br);
-		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found", "Dialog", JOptionPane.ERROR_MESSAGE);
+			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
+			scnr = new Scanner(br).useDelimiter("\\Z");
+			// But I say close?
+			fileContents = scnr.next();
+		} catch (FileNotFoundException e1) {
+
+			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This shouldn't happen",
+					"Dialog", JOptionPane.ERROR_MESSAGE);
+
 			return null;
+
+		} finally {
+			if (scnr != null) {
+				scnr.close();
+			}
 		}
-		while (scnr.hasNextLine() && !gotID) {
+		
+		System.out.println("ENC getAcct: " + fileContents);
+		fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
+		System.out.println("DEC getAcct: " + fileContents);
+		
+		ArrayList<String> lines = new ArrayList<String>(Arrays.asList(fileContents.split("\n")));
+
+		
+		for(int i = 0; i < lines.size() && !gotID; i++) {
 			String[] line;
-			line = scnr.nextLine().split(",");
+			line = lines.get(i).split(",");
 			if (line.length >= 3) {
 				if (uName.getText().equals(line[0])) {
 					gotID = true;
@@ -182,25 +232,53 @@ public class LogIn {
 				}
 			}
 		}
+		
+		
 
-		scnr.close();
 
 		if (gotID && id != -1) {
-			acct = new File("ACCT" + Integer.toString(id));
+			File acct = new File("ACCT" + Integer.toString(id));
 			try {
+				
+				try {
+					br = new BufferedReader(new InputStreamReader(new FileInputStream(acct)));
+					scnr = new Scanner(br).useDelimiter("\\Z");
+					// But I say close?
+					fileContents = scnr.next();
+				} catch (FileNotFoundException e1) {
+
+					JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This "
+							+ " REALLY shouldn't happen",
+							"Dialog", JOptionPane.ERROR_MESSAGE);
+
+					return null;
+
+				} finally {
+					if (scnr != null) {
+						scnr.close();
+					}
+				}
+				
+				fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
+				StringReader strReader = new StringReader(fileContents);
+				
+				
 				JAXBContext jaxbContext = JAXBContext.newInstance(Account.class);
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				a = (Account) jaxbUnmarshaller.unmarshal(acct);
+				a = (Account) jaxbUnmarshaller.unmarshal(strReader);
+				strReader.close();
 			} catch (JAXBException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(new JFrame(), "Error unmarshalling", "Dialog", JOptionPane.ERROR_MESSAGE);
 				return null;
 			}
 		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Could not find account or no associated ID", "Dialog", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), "Could not find account or no associated ID", "Dialog",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 		return a;
+
 	}
 
 }
