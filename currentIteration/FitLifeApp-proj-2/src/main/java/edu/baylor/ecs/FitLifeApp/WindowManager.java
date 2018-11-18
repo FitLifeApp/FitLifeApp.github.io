@@ -203,11 +203,13 @@ public class WindowManager {
 	// Not moved yet.
 	public static void toDay(Date day) {
 		window.dispose();
-		window = makeWindow(window );
+		window = makeWindow();
 
 		File file = new File("workout.csv");
 		int row = 0;
 		ArrayList<String[]> arr = new ArrayList<String[]>();
+		
+		// Get all the data from the file
 		try {
 			Scanner input = new Scanner(file);
 			while (input.hasNext()) {
@@ -218,30 +220,76 @@ public class WindowManager {
 					temp[i] = str[i];
 				}
 				arr.add(temp);
-				row++;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		// Select only the data from that specific day
+		String date = day.toString();
+		String specificDay = date.substring(0, 10);
+		ArrayList<String[]> subArr = new ArrayList<String[]>();
+		for (int i = 0; i < arr.size(); i++) {
+			if (arr.get(i)[5].contains(specificDay)) {
+				subArr.add(arr.get(i));
+				row++;
+			}
+		}
+		
+		// Not use header yet
+		String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, 4);
-		for (int i = 0; i < data.getRowCount(); i++) {
+		
+		// Only add the corresponding data to the table (No more write space caused by hiding part of the data)
+		for (int i = 0; i < subArr.size(); i++) {
 			for (int j = 0; j < data.getColumnCount(); j++) {
-				String str = arr.get(i)[5];
-				String d = str.substring(0, 10);
-				System.out.println(d);
-				if (day.toString().contains(d)) {
-					data.setValueAt(arr.get(i)[j + 1], i, j);
+				data.setValueAt(subArr.get(i)[j + 1], i, j);
+			}
+		}
+		
+		// Sorter for the table
+		TableRowSorter <TableModel> sorter = new TableRowSorter <TableModel> (data.getModel());
+		data.setRowSorter(sorter);
+		sorter.setComparator(1, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		sorter.setComparator(2, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		sorter.setComparator(3, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		
+		// Add filter for user search specific data they interested
+		JPanel filter = new JPanel();
+		filter.setLayout(new FlowLayout());
+		JLabel lab = new JLabel("Enter the work out name: ");
+		filter.add(lab);
+		JTextField TF = new JTextField("");
+		TF.setPreferredSize(new Dimension(150, 30));
+		filter.add(TF);
+		JButton BF = new JButton("Search");
+		filter.add(BF);
+		BF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String str = TF.getText();
+				if (str.length() == 0) {
+					sorter.setRowFilter(null);
+				}
+				else {
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + str, 0));
 				}
 			}
-
-			// if (data.getValueAt(i, 0).equals(null)) {
-			//
-			// data.removeRowSelectionInterval(i, i);
-			// }
-		}
+		});
 
 		window.add(data, BorderLayout.CENTER);
+		
+		window.add(filter, BorderLayout.SOUTH);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setSize((int) window.getSize().getWidth() + 50, (int) window.getSize().getHeight() + 50);
