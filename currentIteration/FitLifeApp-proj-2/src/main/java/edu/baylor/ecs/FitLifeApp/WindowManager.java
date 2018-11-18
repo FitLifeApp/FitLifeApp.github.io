@@ -108,6 +108,7 @@ public class WindowManager {
 		// Constructs a frame with a menu bar with various pages
 
 		JFrame f = new JFrame("Home");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar jmb1 = new JMenuBar();
 		jmb1.setBackground(acct.getColorBase2());
 

@@ -140,6 +140,7 @@ public class AcctCreator {
 		pane.add(createAcct, c);
 
 		window = new JFrame("LogIn");
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(pane);
 		window.pack();
 		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
