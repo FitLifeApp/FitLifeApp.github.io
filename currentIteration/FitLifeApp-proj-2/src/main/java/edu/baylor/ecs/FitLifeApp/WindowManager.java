@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.event.*;
 
@@ -203,7 +205,7 @@ public class WindowManager {
 	// Not moved yet.
 	public static void toDay(Date day) {
 		window.dispose();
-		window = makeWindow();
+		window = makeWindow(window);
 
 		File file = new File("workout.csv");
 		int row = 0;
