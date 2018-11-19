@@ -26,7 +26,6 @@ import javax.xml.bind.Unmarshaller;
 
 public final class LogIn {
 
-	private WindowManager wm = WindowManager.getInstance();
 	
 	final private static String initVector = "thisis 16 chars.";
 	final private static String key = "1234567890123456";
@@ -42,39 +41,27 @@ public final class LogIn {
 	
 	
 	/*The singleton itself*/
-	private static volatile LogIn instance = null;
 	
 	private LogIn() {}
 	
-	/*Singleton method to get or create the LogIn*/
-	public static LogIn getInstance() {
-		if(instance == null) {
-			synchronized(LogIn.class) {
-				if(instance == null) {
-					instance = new LogIn();
-				}
-			}
-		}
-		return instance;
-	}
 
 	// Listener used for buttons in LogIn window
-	public class LogInListener implements ActionListener {
+	public static class LogInListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Sign In")) {
-				if (instance.validate()) {
-					wm.setAcct(instance.getAcct());
-					wm.toHome();
+				if (LogIn.validate()) {
+					WindowManager.setAcct(LogIn.getAcct());
+					WindowManager.toHome();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else if (e.getActionCommand().equals("Create Account")) {
-				wm.toAcctCreation();
+				WindowManager.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
-				wm.toAcctCreation();
+				WindowManager.toAcctCreation();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
 						JOptionPane.ERROR_MESSAGE);
@@ -82,7 +69,7 @@ public final class LogIn {
 		}
 	}
 
-	public JFrame makeWindow(JFrame window) {
+	public static JFrame makeWindow(JFrame window) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
@@ -197,7 +184,7 @@ public final class LogIn {
 		return window;
 	}
 
-	boolean validate() {
+	static boolean validate() {
 
 		BufferedReader br = null;
 		Scanner scnr = null;
@@ -241,7 +228,7 @@ public final class LogIn {
 
 	}
 
-	public Account getAcct() {
+	public static Account getAcct() {
 
 		boolean gotID = false;
 		int id = -1;

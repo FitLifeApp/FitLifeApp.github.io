@@ -35,10 +35,6 @@ public final class WindowManager {
 	final static String ex4 = "Flexibility Exercise";
 
 	// -----------------------------------------
-	private HomePage home = HomePage.getInstance();
-	private LogIn login = LogIn.getInstance();
-	private CalendarWindow calendar = CalendarWindow.getInstance();
-	private AcctCreator acctCreator = AcctCreator.getInstance();
 	
 	//-----------------------------------------
 	private static Box board = new Box(BoxLayout.Y_AXIS);
@@ -52,25 +48,15 @@ public final class WindowManager {
 	WindowManager() {
 		acct = null;
 		window = new JFrame("Welcome");
-		//toLogIn();
+		toLogIn();
 	}
 	
-	/*singleton method to create or return the WindowManager*/
-	public static WindowManager getInstance() {
-		if(instance == null) {
-			synchronized(WindowManager.class){
-				if(instance == null) {
-					instance  = new WindowManager();
-				}
-			}
-		}
-		return instance;
-	}
+	
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
 	 */
-	class BasicActListener implements ActionListener {
+	static class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Home")) {
 				toHome();
@@ -104,7 +90,7 @@ public final class WindowManager {
 						"Failed Login", JOptionPane.ERROR_MESSAGE);
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
-					calendar.showAddWorkoutDialog();
+					CalendarWindow.showAddWorkoutDialog();
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -118,7 +104,7 @@ public final class WindowManager {
 		}
 	}
 
-	class BasicItemListener implements ItemListener {
+	static class BasicItemListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent evt) {
@@ -128,7 +114,7 @@ public final class WindowManager {
 
 	}
 
-	public JFrame makeWindow(JFrame window) {
+	public static JFrame makeWindow(JFrame window) {
 		// Handles Base construction of frame
 		// Constructs a frame with a menu bar with various pages
 
@@ -194,37 +180,37 @@ public final class WindowManager {
 		return window;
 	}
 
-	void toHome() {
+	static void toHome() {
 
 		// moved to HomePage.java
 		//window.dispose();
-		window = makeWindow(window );
-		window = home.makeWindow(window, acct);
+		window = makeWindow(window);
+		window = HomePage.makeWindow(window, acct);
 	}
 
-	public void toLogIn() {
+	public static void toLogIn() {
 		// moved to LogIn.java
-		window = login.makeWindow(window);
+		window = LogIn.makeWindow(window);
 	}
 
-	public void toAcctCreation() {
+	public static void toAcctCreation() {
 		// moved to AcctCreator.java
-		window = acctCreator.makeWindow(window);
+		window = AcctCreator.makeWindow(window);
 	}
 
-	public void toCalendar() {
+	public static void toCalendar() {
 		// window.dispose();
 		//JFrame f= new JFrame("Hoi");
 
 		//window = makeWindow(window);
 
 		// Moved to CalendarWindow.java
-		window = calendar.makeWindow(window);
+		window = CalendarWindow.makeWindow(window);
 
 	}
 
 	// Not moved yet.
-	public void toDay(Date day) {
+	public static void toDay(Date day) {
 		window.dispose();
 		window = makeWindow(window);
 
@@ -320,7 +306,7 @@ public final class WindowManager {
 	}
 
 	// Also not yet moved
-	public void addWorkoutWindow() {
+	public static void addWorkoutWindow() {
 		window = new JFrame("Select a Type");
 
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
@@ -356,7 +342,7 @@ public final class WindowManager {
 		window.setVisible(true);
 	}
 
-	public void setAcct(Account src) {
+	public static void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		WindowManager.acct = src;

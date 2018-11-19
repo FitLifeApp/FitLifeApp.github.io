@@ -46,34 +46,22 @@ public final class AcctCreator {
 	// final private static String key = "1234567890123456";
 	private static byte[] key;
 	private static SecretKeySpec secretKey;
-	private WindowManager wm = WindowManager.getInstance();
 	// Used for encryption. Guaranteed unpredictable
 
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
-	private static volatile AcctCreator instance = null;
 	
 	private AcctCreator() {}
 	
-	public static AcctCreator getInstance() {
-		if(instance == null) {
-			synchronized(AcctCreator.class) {
-				if(instance == null) {
-					instance = new AcctCreator();
-				}
-			}
-		}
-		return instance;
-	}
 
-	class AcctCreatorListener implements ActionListener {
+	static class AcctCreatorListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Create Account")) {
 				if (AcctCreator.createAcct()) {
-					wm.toLogIn();
+					WindowManager.toLogIn();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",
 							JOptionPane.ERROR_MESSAGE);
@@ -85,7 +73,7 @@ public final class AcctCreator {
 		}
 	}
 
-	public JFrame makeWindow(JFrame window) {
+	public static JFrame makeWindow(JFrame window) {
 
 		// Makes log in page
 		// Was experimenting with Grid bag Layout

@@ -27,39 +27,27 @@ import javax.swing.WindowConstants;
 
 public final class HomePage {
 	
-	private static volatile HomePage instance = null;
-	private WindowManager wm = WindowManager.getInstance();
-	private CalendarWindow calendar = CalendarWindow.getInstance();
+	
 	
 	private HomePage() {}
 	
-	public static HomePage getInstance() {
-		if(instance == null) {
-			synchronized(HomePage.class) {
-				if(instance == null) {
-					instance = null;
-				}
-			}
-		}
-		return instance;
-	}
 
 	//Moved relevant listener code here, away from WindowManager
-	class HomeListener implements ActionListener {
+	static class HomeListener implements ActionListener {
 		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("EXERCISE")) {
 				//flag = true;
-				calendar.setFlag(true);
-				wm.toCalendar();
+				CalendarWindow.setFlag(true);
+				WindowManager.toCalendar();
 				System.out.println("View Cal");
 				System.out.println("Adding Workout");
 
 			} else if (e.getActionCommand().equals("Review EXERCISE")) {
-				wm.toCalendar();
-				calendar.setFlag(false);
+				WindowManager.toCalendar();
+				CalendarWindow.setFlag(false);
 				//flag = false;
 				System.out.println("View Cal");
 				System.out.println("Adding Workout");
@@ -72,7 +60,7 @@ public final class HomePage {
 		}
 	}
 
-	JFrame makeWindow(JFrame window, Account acct) {
+	static JFrame makeWindow(JFrame window, Account acct) {
 		//Displays the home page
 		//Mostly copied and pasted from toHome function
 		//Only changes were removal of parts that I don't think did anything
