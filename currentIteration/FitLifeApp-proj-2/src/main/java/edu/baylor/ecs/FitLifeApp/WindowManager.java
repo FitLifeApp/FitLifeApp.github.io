@@ -1,3 +1,4 @@
+
 package edu.baylor.ecs.FitLifeApp;
 
 /*
@@ -17,7 +18,7 @@ import java.awt.event.*;
 
 import java.util.*;
 
-public class WindowManager {
+public final class WindowManager {
 	// private boolean flag = false;
 	// private UtilDateModel model = new UtilDateModel();
 	// private JDatePanelImpl datePanel;
@@ -34,16 +35,42 @@ public class WindowManager {
 	final static String ex4 = "Flexibility Exercise";
 
 	// -----------------------------------------
-
+	private HomePage home = HomePage.getInstance();
+	private LogIn login = LogIn.getInstance();
+	private CalendarWindow calendar = CalendarWindow.getInstance();
+	private AcctCreator acctCreator = AcctCreator.getInstance();
+	
+	//-----------------------------------------
+	private static Box board = new Box(BoxLayout.Y_AXIS);
 	private static JFrame window;
 	private static Account acct;
-	private static Box board = new Box(BoxLayout.Y_AXIS);
-
+	
+	
+	private static volatile WindowManager instance = null;
+	
+	/*singleton constructor*/
+	WindowManager() {
+		acct = null;
+		window = new JFrame("Welcome");
+		//toLogIn();
+	}
+	
+	/*singleton method to create or return the WindowManager*/
+	public static WindowManager getInstance() {
+		if(instance == null) {
+			synchronized(WindowManager.class){
+				if(instance == null) {
+					instance  = new WindowManager();
+				}
+			}
+		}
+		return instance;
+	}
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
 	 */
-	static class BasicActListener implements ActionListener {
+	class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Home")) {
 				toHome();
@@ -56,7 +83,7 @@ public class WindowManager {
 
 				// Might get removed
 
-				WindowManager.toCalendar();
+				instance.toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
 
@@ -77,7 +104,7 @@ public class WindowManager {
 						"Failed Login", JOptionPane.ERROR_MESSAGE);
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
-					CalendarWindow.showAddWorkoutDialog();
+					calendar.showAddWorkoutDialog();
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -91,7 +118,7 @@ public class WindowManager {
 		}
 	}
 
-	static class BasicItemListener implements ItemListener {
+	class BasicItemListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent evt) {
@@ -101,13 +128,7 @@ public class WindowManager {
 
 	}
 
-	WindowManager() {
-		acct = null;
-		window = new JFrame("Welcome");
-		toLogIn();
-	}
-
-	private static JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow(JFrame window) {
 		// Handles Base construction of frame
 		// Constructs a frame with a menu bar with various pages
 
@@ -173,37 +194,37 @@ public class WindowManager {
 		return window;
 	}
 
-	static void toHome() {
+	void toHome() {
 
 		// moved to HomePage.java
 		//window.dispose();
 		window = makeWindow(window );
-		window = HomePage.makeWindow(window, acct);
+		window = home.makeWindow(window, acct);
 	}
 
-	public static void toLogIn() {
+	public void toLogIn() {
 		// moved to LogIn.java
-		window = LogIn.makeWindow(window);
+		window = login.makeWindow(window);
 	}
 
-	public static void toAcctCreation() {
+	public void toAcctCreation() {
 		// moved to AcctCreator.java
-		window = AcctCreator.makeWindow(window);
+		window = acctCreator.makeWindow(window);
 	}
 
-	public static void toCalendar() {
+	public void toCalendar() {
 		// window.dispose();
 		//JFrame f= new JFrame("Hoi");
 
 		//window = makeWindow(window);
 
 		// Moved to CalendarWindow.java
-		window = CalendarWindow.makeWindow(window);
+		window = calendar.makeWindow(window);
 
 	}
 
 	// Not moved yet.
-	public static void toDay(Date day) {
+	public void toDay(Date day) {
 		window.dispose();
 		window = makeWindow(window);
 
@@ -299,7 +320,7 @@ public class WindowManager {
 	}
 
 	// Also not yet moved
-	public static void addWorkoutWindow() {
+	public void addWorkoutWindow() {
 		window = new JFrame("Select a Type");
 
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
@@ -335,11 +356,10 @@ public class WindowManager {
 		window.setVisible(true);
 	}
 
-	public static void setAcct(Account src) {
+	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		WindowManager.acct = src;
 
 	}
-
 }

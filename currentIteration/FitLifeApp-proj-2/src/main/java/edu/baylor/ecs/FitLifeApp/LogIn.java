@@ -1,15 +1,9 @@
 package edu.baylor.ecs.FitLifeApp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-/*
- * File:		LogIn.java
- * Description: Handles the creation of the log in window
- */
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -17,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.Files;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
@@ -26,18 +19,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.codec.binary.Base64;
+public final class LogIn {
 
-public class LogIn {
-
+	private WindowManager wm = WindowManager.getInstance();
+	
 	final private static String initVector = "thisis 16 chars.";
 	final private static String key = "1234567890123456";
 	// Used for encryption. Guaranteed unpredictable
@@ -48,25 +38,43 @@ public class LogIn {
 	private static int screenWidth = screenSize.width-100;
 	private static int screenHeight = screenSize.height-100;
 	private static Account acct = new Account();
-
+	
+	
+	
+	/*The singleton itself*/
+	private static volatile LogIn instance = null;
+	
+	private LogIn() {}
+	
+	/*Singleton method to get or create the LogIn*/
+	public static LogIn getInstance() {
+		if(instance == null) {
+			synchronized(LogIn.class) {
+				if(instance == null) {
+					instance = new LogIn();
+				}
+			}
+		}
+		return instance;
+	}
 
 	// Listener used for buttons in LogIn window
-	static class LogInListener implements ActionListener {
+	public class LogInListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Sign In")) {
-				if (LogIn.validate()) {
-					WindowManager.setAcct(LogIn.getAcct());
-					WindowManager.toHome();
+				if (instance.validate()) {
+					wm.setAcct(instance.getAcct());
+					wm.toHome();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else if (e.getActionCommand().equals("Create Account")) {
-				WindowManager.toAcctCreation();
+				wm.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
-				WindowManager.toAcctCreation();
+				wm.toAcctCreation();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
 						JOptionPane.ERROR_MESSAGE);
@@ -74,7 +82,7 @@ public class LogIn {
 		}
 	}
 
-	public static JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow(JFrame window) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
@@ -189,7 +197,7 @@ public class LogIn {
 		return window;
 	}
 
-	static boolean validate() {
+	boolean validate() {
 
 		BufferedReader br = null;
 		Scanner scnr = null;
@@ -233,7 +241,7 @@ public class LogIn {
 
 	}
 
-	public static Account getAcct() {
+	public Account getAcct() {
 
 		boolean gotID = false;
 		int id = -1;
@@ -326,5 +334,4 @@ public class LogIn {
 		return a;
 
 	}
-
 }

@@ -1,10 +1,5 @@
 package edu.baylor.ecs.FitLifeApp;
 
-/*
- * File:		CalendarWindow.java
- * Description:	Handles calendar window creation and show workout dialog
- */
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,7 +13,6 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -28,19 +22,33 @@ import org.jdatepicker.impl.UtilDateModel;
 //Might cause file problems, might cause other problems
 
 
-public class CalendarWindow {
+public final class CalendarWindow {
 	static boolean flag = false;
 	static JDatePanelImpl datePanel = null;
 	static Date day = java.util.Calendar.getInstance().getTime();
-
+	private static volatile CalendarWindow instance = null;
+	private WindowManager wm = WindowManager.getInstance();
+	
+	private CalendarWindow() {}
+	
+	public static CalendarWindow getInstance() {
+		if(instance == null) {
+			synchronized(CalendarWindow.class) {
+				if(instance == null) {
+					instance = new CalendarWindow();
+				}
+			}
+		}
+		return instance;
+	}
 	
 	//Listener for Calendar specific buttons
 	//Like the home listener, I might have missed some
 	//Because I'm not familiar with this part of the code
-	static class CalendarListener implements ActionListener {
+	class CalendarListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("View Calendar")) {
-				WindowManager.toCalendar();
+				wm.toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
 				System.out.println((Date) datePanel.getModel().getValue());
@@ -48,17 +56,17 @@ public class CalendarWindow {
 				// day is today)
 				if (day.equals((Date) datePanel.getModel().getValue())) {
 
-					if (CalendarWindow.getFlag() == true) {
+					if (getFlag() == true) {
 						day = (Date) datePanel.getModel().getValue();
-						WindowManager.addWorkoutWindow();
+						wm.addWorkoutWindow();
 					} else {
-						WindowManager.toDay((Date) datePanel.getModel().getValue());
+						wm.toDay((Date) datePanel.getModel().getValue());
 					}
 				}
 				day = (Date) datePanel.getModel().getValue();
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
-					CalendarWindow.showAddWorkoutDialog();
+					showAddWorkoutDialog();
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -76,17 +84,17 @@ public class CalendarWindow {
 	//I'm not sure what flag does, so if it belongs somewhere else
 	//Feel free to move it
 	
-	public static boolean getFlag() {
+	public boolean getFlag() {
 		return flag;
 	}
 
-	public static void setFlag(boolean flag) {
+	public void setFlag(boolean flag) {
 		CalendarWindow.flag = flag;
 	}
 	
 	
 	//Copied from toCalendar
-	public static JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow(JFrame window) {
 		window = new JFrame("Calendar");
 		
 		Properties p = new Properties();
@@ -98,7 +106,7 @@ public class CalendarWindow {
 		datePanel.setShowYearButtons(true);
 		datePanel.setEnabled(true);
 		datePanel.setFocusable(true);
-		datePanel.addActionListener(new CalendarListener());
+		datePanel.addActionListener(this.new CalendarListener());
 			//This listener is larger than it needs to be because I don't know what is checked
 
 		window.add(datePanel, BorderLayout.CENTER);	
@@ -116,14 +124,14 @@ public class CalendarWindow {
 	
 	
 
-	public static void showAddWorkoutDialog() throws Exception {
+	public void showAddWorkoutDialog() throws Exception {
 		File file = new File("workout.csv");
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
 		JTextField field3 = new JTextField();
 
 		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, };
-		int opt = JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		String exercise = field1.getText();
 		String duration = field2.getText();
 		String weight = field3.getText();
@@ -149,3 +157,4 @@ public class CalendarWindow {
 	}
 	
 }
+

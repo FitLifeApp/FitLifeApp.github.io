@@ -1,9 +1,5 @@
 package edu.baylor.ecs.FitLifeApp;
 
-/*
- * File:			Account.java
- * Description:		Holds account details
- */
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
