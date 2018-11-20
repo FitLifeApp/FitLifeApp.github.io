@@ -153,7 +153,10 @@ public final class DatabaseController {
 		}
 	}
 	
-	
+	/*
+	 * edits a workout already existing in the workout table by the given id
+	 * Doesn't change the username
+	 * */
 	public void editWorkout(Integer id, Integer duration, String name, String type, Double userWeight, Double workoutWeight) {
 			//update the table
 			String updateTableSQL = "UPDATE Workout" + " SET duration = "  + duration.intValue() + ", name = '" + name + 
