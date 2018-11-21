@@ -3,7 +3,7 @@ package edu.baylor.ecs.FitLifeApp;
 public class Main {
 	public static void main(String[]args)  {
 
-		final WindowManager m1 = new WindowManager();
+		final WindowManager m1 = WindowManager.getInstance();
 		//toLogIn is called in the constructor
 		//Not sure if that is a good style, probably not
 		/*

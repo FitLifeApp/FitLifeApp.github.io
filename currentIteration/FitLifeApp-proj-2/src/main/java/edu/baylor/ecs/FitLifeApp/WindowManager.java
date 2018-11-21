@@ -45,12 +45,22 @@ public final class WindowManager {
 	private static volatile WindowManager instance = null;
 	
 	/*singleton constructor*/
-	WindowManager() {
+	private WindowManager() {
 		acct = null;
 		window = new JFrame("Welcome");
 		toLogIn();
 	}
 	
+	public static WindowManager getInstance() {
+		if (instance == null) {
+			synchronized(WindowManager.class) {
+				if(instance == null) {
+					instance = new WindowManager();
+				}
+			}
+		}
+		return instance;
+	}
 	
 
 	/*
@@ -75,9 +85,10 @@ public final class WindowManager {
 			} else if (e.getActionCommand().equals("View Calendar")) {
 
 				// Might get removed
-
-				instance.toCalendar();
+				WindowManager.toCalendar();
 				System.out.println("View Cal");
+				
+			//if a date is selected use joption pane	
 			} else if (e.getActionCommand().equals("Date selected")) {
 
 				// Might get removed
@@ -95,6 +106,8 @@ public final class WindowManager {
 
 				JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
 						"Failed Login", JOptionPane.ERROR_MESSAGE);
+				
+			//if the confirm button is hit show the add workout dialog
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
 					CalendarWindow.showAddWorkoutDialog();
@@ -102,6 +115,8 @@ public final class WindowManager {
 
 					e1.printStackTrace();
 				}
+				
+			//TO DO: remove code, unneeded
 			} else if (e.getActionCommand().equals("Plan Workout")) {
 				// addWorkoutWindow();
 				System.out.println("Planning Workout");
@@ -111,6 +126,7 @@ public final class WindowManager {
 		}
 	}
 
+	//state change listener
 	static class BasicItemListener implements ItemListener {
 
 		@Override
@@ -121,9 +137,12 @@ public final class WindowManager {
 
 	}
 
+	
+	//// Handles Base construction of frame
+	// Constructs a frame with a menu bar with various pages
+	// I feel like if we have this same funcmtionality 
 	public static JFrame makeWindow(JFrame window) {
-		// Handles Base construction of frame
-		// Constructs a frame with a menu bar with various pages
+		
 
 		//JFrame f = new JFrame("Home");
 		window.getContentPane().removeAll();
@@ -187,6 +206,7 @@ public final class WindowManager {
 		return window;
 	}
 
+	//sets the Jframe window to the Jframe returned by makeWindow with window passed to it
 	static void toHome() {
 
 		// moved to HomePage.java
@@ -195,16 +215,20 @@ public final class WindowManager {
 		window = HomePage.makeWindow(window, acct);
 	}
 
+	//Makes log in window
 	public static void toLogIn() {
 		// moved to LogIn.java
 		window = LogIn.makeWindow(window);
 	}
 
+	//makes account creation window
 	public static void toAcctCreation() {
 		// moved to AcctCreator.java
 		window = AcctCreator.makeWindow(window);
 	}
 
+	
+	//makes Calendar window
 	public static void toCalendar() {
 		// window.dispose();
 		//JFrame f= new JFrame("Hoi");
