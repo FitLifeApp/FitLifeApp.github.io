@@ -2,6 +2,8 @@ package edu.baylor.ecs.FitLifeApp;
 
 import org.junit.Test;
 
+import edu.baylor.ecs.FLADatabase.DatabaseController;
+
 public class DatabaseTester {
 	
 	private DatabaseController dbc = DatabaseController.getInstance();
