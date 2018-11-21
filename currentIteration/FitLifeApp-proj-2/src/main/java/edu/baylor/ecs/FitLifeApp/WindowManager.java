@@ -63,16 +63,23 @@ public final class WindowManager {
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
+	 * This seems fine but why 
 	 */
 	class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			
+			//Home button is clicked, spawn home page
 			if (e.getActionCommand().equals("Home")) {
 				toHome();
 				System.out.println("HOME");
+				
+			//if logout is selected displose of window and spawn log in screen	
 			} else if (e.getActionCommand().equals("Log Out")) {
 				window.dispose();
 				toLogIn();
 				System.out.println("Logged Out");
+				
+			//if view calendar is selected spawn calendar
 			} else if (e.getActionCommand().equals("View Calendar")) {
 
 				// Might get removed
