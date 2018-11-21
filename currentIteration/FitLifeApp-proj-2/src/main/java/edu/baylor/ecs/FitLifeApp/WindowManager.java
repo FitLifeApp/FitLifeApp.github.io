@@ -48,7 +48,6 @@ public final class WindowManager {
 	private WindowManager() {
 		acct = null;
 		window = new JFrame("Welcome");
-		toLogIn();
 	}
 	
 	public static WindowManager getInstance() {
