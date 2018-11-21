@@ -12,53 +12,35 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public final class HomePage {
+import edu.baylor.ecs.Listeners.HomeListener;
+
+public final class HomePage extends WindowManager{
 	
 	
+	private static volatile HomePage instance = null;
 	
 	private HomePage() {}
 	
-
-	//Moved relevant listener code here, away from WindowManager
-	static class HomeListener implements ActionListener {
-		
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand().equals("EXERCISE")) {
-				//flag = true;
-				CalendarWindow.setFlag(true);
-				WindowManager.toCalendar();
-				System.out.println("View Cal");
-				System.out.println("Adding Workout");
-
-			} else if (e.getActionCommand().equals("Review EXERCISE")) {
-				WindowManager.toCalendar();
-				CalendarWindow.setFlag(false);
-				//flag = false;
-				System.out.println("View Cal");
-				System.out.println("Adding Workout");
-
-			} else {
-				//If this occurs, I missed a button somewhere
-				JOptionPane.showMessageDialog(new JFrame(), "Hmm, more non-existant buttons...\nFind them all for a prize at the end!",
-						"Failed", JOptionPane.ERROR_MESSAGE);
+	public static HomePage getInstance() {
+		if(instance == null) {
+			synchronized(HomePage.class) {
+				if(instance == null) {
+					instance = new HomePage();
+				}
 			}
 		}
+		return instance;
 	}
+	
 
 	static JFrame makeWindow(JFrame window, Account acct) {
 		//Displays the home page

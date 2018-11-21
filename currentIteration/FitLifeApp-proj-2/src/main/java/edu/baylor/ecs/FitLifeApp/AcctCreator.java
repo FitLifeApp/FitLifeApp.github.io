@@ -10,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,8 +22,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
-import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,44 +32,35 @@ import javax.swing.JTextField;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import edu.baylor.ecs.Listeners.AcctCreatorListener;
 
-//import org.apache.commons.codec.binary.Base64;
-import java.util.Base64;
-
-public final class AcctCreator {
-
-	// final private static String initVector = "thisis 16 chars.";
-	// final private static String key = "1234567890123456";
-	private static byte[] key;
-	private static SecretKeySpec secretKey;
+public final class AcctCreator extends WindowManager {
 	// Used for encryption. Guaranteed unpredictable
 
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
 	
+	/*The singleton code*/
+	private static volatile AcctCreator instance = null;
+	
 	private AcctCreator() {}
 	
-
-	static class AcctCreatorListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand().equals("Create Account")) {
-				if (AcctCreator.createAcct()) {
-					WindowManager.toLogIn();
-				} else {
-					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",
-							JOptionPane.ERROR_MESSAGE);
+	public static AcctCreator getInstance() {
+		if(instance == null) {
+			synchronized(AcctCreator.class) {
+				if(instance == null) {
+					instance = new AcctCreator();
 				}
-			} else {
-				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
-						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		return instance;
 	}
+	
 
-	public static JFrame makeWindow(JFrame window) {
+	
+
+	public JFrame makeWindow(JFrame window) {
 
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
@@ -162,7 +149,7 @@ public final class AcctCreator {
 		return window;
 	}
 
-	static public boolean createAcct() {
+	public boolean createAcct() {
 
 		if (!Arrays.equals(pWord.getPassword(), pWord2.getPassword())) {
 			return false;
@@ -178,9 +165,10 @@ public final class AcctCreator {
 			fileContents = null;
 			try {
 				br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
-				scnr = new Scanner(br).useDelimiter("\\Z");
-				// But I say close?
+				scnr = new Scanner(br);
+				scnr.useDelimiter("\\Z");
 				fileContents = scnr.next();
+				scnr.close();
 			} catch (FileNotFoundException e) {
 
 				JOptionPane.showMessageDialog(new JFrame(), "Account file exists but not found", "Failed Creation",
@@ -188,10 +176,6 @@ public final class AcctCreator {
 				e.printStackTrace();
 				return false;
 
-			} finally {
-				if (scnr != null) {
-					scnr.close();
-				}
 			}
 
 			fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");

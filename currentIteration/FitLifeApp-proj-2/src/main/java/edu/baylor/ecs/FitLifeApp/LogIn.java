@@ -4,11 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,11 +20,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-public final class LogIn {
+import edu.baylor.ecs.Listeners.LoginListener;
 
-	
-	final private static String initVector = "thisis 16 chars.";
-	final private static String key = "1234567890123456";
+public final class LogIn extends WindowManager{
+
 	// Used for encryption. Guaranteed unpredictable
 
 	static private JTextField uName; // Used to hold username inputs
@@ -36,51 +31,36 @@ public final class LogIn {
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static int screenWidth = screenSize.width-100;
 	private static int screenHeight = screenSize.height-100;
-	private static Account acct = new Account();
 	
 	
-	
-	/*The singleton itself*/
+	/*The singleton code*/
+	private static volatile LogIn instance = null;
 	
 	private LogIn() {}
 	
-
-	// Listener used for buttons in LogIn window
-	public static class LogInListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand().equals("Sign In")) {
-				if (LogIn.validate()) {
-					WindowManager.setAcct(LogIn.getAcct());
-					WindowManager.toHome();
-				} else {
-					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
-							JOptionPane.ERROR_MESSAGE);
+	public static LogIn getInstance() {
+		if(instance == null) {
+			synchronized(LogIn.class) {
+				if(instance == null) {
+					instance = new LogIn();
 				}
-			} else if (e.getActionCommand().equals("Create Account")) {
-				WindowManager.toAcctCreation();
-			} else if (e.getActionCommand().equals("Forgot Password")) {
-				WindowManager.toAcctCreation();
-			} else {
-				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
-						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		return instance;
 	}
+	
 
-	public static JFrame makeWindow(JFrame window) {
+	
+	
+	public JFrame makeWindow(JFrame window) {
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
 
 		if (window != null) {
 			window.getContentPane().removeAll();
-			//window.dispose();
-			// If window isn't null, meaning it came from another window, get rid of it
 		}
 		
-		//window = new JFrame("Welcome");
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		FlowLayout flowLayout = new FlowLayout();
@@ -132,21 +112,21 @@ public final class LogIn {
 		createAcct.setForeground(Color.white);
 		createAcct.setBackground(new Color( 44, 62, 80 ));
 		createAcct.setMaximumSize(new Dimension(2000,50));
-		createAcct.addActionListener(new LogInListener());
+		createAcct.addActionListener(new LoginListener());
 		
 		JButton lostPW = new JButton("Forgot Password");
 		lostPW.setFont(new Font("Forgot Password", Font.PLAIN, 20));
 		lostPW.setForeground(Color.white);
 		lostPW.setBackground(new Color( 44, 62, 80 ));
 		lostPW.setMaximumSize(new Dimension(2000,50));
-		lostPW.addActionListener(new LogInListener());
+		lostPW.addActionListener(new LoginListener());
 
 		JButton logIn = new JButton("Sign In");
 		logIn.setFont(new Font("Sign In", Font.PLAIN, 20));
 		logIn.setForeground(Color.white);
 		logIn.setBackground(new Color( 44, 62, 80 ));
 		logIn.setMaximumSize(new Dimension(2000,50));
-		logIn.addActionListener(new LogInListener());
+		logIn.addActionListener(new LoginListener());
 		
 		p3.add(createAcct);
 		p3.add(Box.createVerticalStrut(5));
@@ -184,26 +164,22 @@ public final class LogIn {
 		return window;
 	}
 
-	static boolean validate() {
+	
+	
+	public boolean validate() {
 
 		BufferedReader br = null;
 		Scanner scnr = null;
 		String fileContents = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
-			scnr = new Scanner(br).useDelimiter("\\Z");
-			// But I say close?
+			scnr = new Scanner(br);
+			scnr.useDelimiter("\\Z");
 			fileContents = scnr.next();
+			scnr.close();
 		} catch (FileNotFoundException e1) {
-
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found", "Dialog", JOptionPane.ERROR_MESSAGE);
-
 			return false;
-
-		} finally {
-			if (scnr != null) {
-				scnr.close();
-			}
 		}
 		
 		System.out.println("ENC LOGIN: " + fileContents);
@@ -228,7 +204,9 @@ public final class LogIn {
 
 	}
 
-	public static Account getAcct() {
+	
+	
+	public Account getAcct() {
 
 		boolean gotID = false;
 		int id = -1;
@@ -240,20 +218,15 @@ public final class LogIn {
 		String fileContents = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
-			scnr = new Scanner(br).useDelimiter("\\Z");
-			// But I say close?
+			scnr = new Scanner(br);
+			scnr.useDelimiter("\\Z");
 			fileContents = scnr.next();
+			scnr.close();
 		} catch (FileNotFoundException e1) {
 
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This shouldn't happen",
 					"Dialog", JOptionPane.ERROR_MESSAGE);
-
 			return null;
-
-		} finally {
-			if (scnr != null) {
-				scnr.close();
-			}
 		}
 		
 		System.out.println("ENC getAcct: " + fileContents);
@@ -283,9 +256,10 @@ public final class LogIn {
 				
 				try {
 					br = new BufferedReader(new InputStreamReader(new FileInputStream(acct)));
-					scnr = new Scanner(br).useDelimiter("\\Z");
-					// But I say close?
+					scnr = new Scanner(br);
+					scnr.useDelimiter("\\Z");
 					fileContents = scnr.next();
+					scnr.close();
 				} catch (FileNotFoundException e1) {
 
 					JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This "
@@ -294,10 +268,6 @@ public final class LogIn {
 
 					return null;
 
-				} finally {
-					if (scnr != null) {
-						scnr.close();
-					}
 				}
 				
 				fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");

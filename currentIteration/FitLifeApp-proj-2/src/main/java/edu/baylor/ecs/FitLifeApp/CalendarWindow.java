@@ -2,8 +2,6 @@ package edu.baylor.ecs.FitLifeApp;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -17,64 +15,42 @@ import javax.swing.JTextField;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import edu.baylor.ecs.Listeners.CalendarListener;
+
 //Not sure where exactly, but there is the issue of also showing the menu when opening the calendar
 //So you could swap to another screen while looking at the calendar.
 //Might cause file problems, might cause other problems
 
 
-public final class CalendarWindow {
+public final class CalendarWindow extends WindowManager{
 	static boolean flag = false;
-	static JDatePanelImpl datePanel = null;
-	static Date day = java.util.Calendar.getInstance().getTime();
+	private  JDatePanelImpl datePanel = null;
+	private Date day = java.util.Calendar.getInstance().getTime();
 	
+
+	private static volatile CalendarWindow instance = null;
 	
 	private CalendarWindow() {}
 	
-	
-	
-	//Listener for Calendar specific buttons
-	//Like the home listener, I might have missed some
-	//Because I'm not familiar with this part of the code
-	public static class CalendarListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand().equals("View Calendar")) {
-				WindowManager.toCalendar();
-				System.out.println("View Cal");
-			} else if (e.getActionCommand().equals("Date selected")) {
-				System.out.println((Date) datePanel.getModel().getValue());
-				// Call toDay if the selected day already has been selected. (or the selected
-				// day is today)
-				if (day.equals((Date) datePanel.getModel().getValue())) {
-
-					if (getFlag() == true) {
-						day = (Date) datePanel.getModel().getValue();
-						WindowManager.addWorkoutWindow();
-					} else {
-						WindowManager.toDay((Date) datePanel.getModel().getValue());
-					}
+	public static CalendarWindow getInstance() {
+		if (instance == null) {
+			synchronized(CalendarWindow.class) {
+				if(instance == null) {
+					instance = new CalendarWindow();
 				}
-				day = (Date) datePanel.getModel().getValue();
-			} else if (e.getActionCommand().equals("Confirm")) {
-				try {
-					showAddWorkoutDialog();
-				} catch (Exception e1) {
-
-					e1.printStackTrace();
-				}
-			} else if (e.getActionCommand().equals("Plan Workout")) {
-				// addWorkoutWindow();
-				System.out.println("Planning Workout");
-			} else {
-				System.err.println("Unhandled Action Command: " + e.getActionCommand());
 			}
 		}
+		return instance;
 	}
+	
+	
+	
 	
 	//To move flag out of WindowManager, it is put here
 	//I'm not sure what flag does, so if it belongs somewhere else
 	//Feel free to move it
 	
-	public static boolean getFlag() {
+	public boolean getFlag() {
 		return flag;
 	}
 
@@ -84,22 +60,22 @@ public final class CalendarWindow {
 	
 	
 	//Copied from toCalendar
-	public static JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow(JFrame window) {
 		window = new JFrame("Calendar");
 		
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
-		datePanel = new JDatePanelImpl(new UtilDateModel(), p);
+		setDatePanel(new JDatePanelImpl(new UtilDateModel(), p));
 
-		datePanel.setShowYearButtons(true);
-		datePanel.setEnabled(true);
-		datePanel.setFocusable(true);
-		datePanel.addActionListener(new CalendarListener());
+		getDatePanel().setShowYearButtons(true);
+		getDatePanel().setEnabled(true);
+		getDatePanel().setFocusable(true);
+		getDatePanel().addActionListener(new CalendarListener());
 			//This listener is larger than it needs to be because I don't know what is checked
 
-		window.add(datePanel, BorderLayout.CENTER);	
+		window.add(getDatePanel(), BorderLayout.CENTER);	
 		
 		window.setMaximumSize(new Dimension(500,250));
 		window.setPreferredSize(new Dimension(500,250));
@@ -114,7 +90,7 @@ public final class CalendarWindow {
 	
 	
 
-	public static void showAddWorkoutDialog() throws Exception {
+	public void showAddWorkoutDialog() throws Exception {
 		File file = new File("workout.csv");
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
@@ -144,6 +120,23 @@ public final class CalendarWindow {
 			window.dispose();
 		}
 		*/
+	}
+
+	public JDatePanelImpl getDatePanel() {
+		return datePanel;
+	}
+	
+	private void setDatePanel(JDatePanelImpl jDatePanelImpl) {
+		this.datePanel = jDatePanelImpl;
+		
+	}
+	
+	public Date getDay() {
+		return day;
+	}
+
+	public void setDay(Date day) {
+		this.day = day;
 	}
 	
 }

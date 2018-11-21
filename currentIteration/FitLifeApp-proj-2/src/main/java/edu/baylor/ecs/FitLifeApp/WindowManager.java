@@ -18,14 +18,7 @@ import java.awt.event.*;
 
 import java.util.*;
 
-public final class WindowManager {
-	// private boolean flag = false;
-	// private UtilDateModel model = new UtilDateModel();
-	// private JDatePanelImpl datePanel;
-	// private Date day = java.util.Calendar.getInstance().getTime();
-
-	// ---------------------------
-	// These still need to be moved into their own, but it's late and I am tired
+	public class WindowManager {
 
 	static JPanel cards; // a panel that uses CardLayout
 
@@ -36,8 +29,11 @@ public final class WindowManager {
 
 	// -----------------------------------------
 	
+	private static LogIn login = LogIn.getInstance();
+	private static AcctCreator acctCreator = AcctCreator.getInstance();
+	private static CalendarWindow calendarWindow = CalendarWindow.getInstance();
+	
 	//-----------------------------------------
-	private static Box board = new Box(BoxLayout.Y_AXIS);
 	private static JFrame window;
 	private static Account acct;
 	
@@ -45,7 +41,7 @@ public final class WindowManager {
 	private static volatile WindowManager instance = null;
 	
 	/*singleton constructor*/
-	private WindowManager() {
+	protected WindowManager() {
 		acct = null;
 		window = new JFrame("Welcome");
 	}
@@ -66,7 +62,7 @@ public final class WindowManager {
 	 * //I assume leftovers JLabel result; String currentPattern;
 	 * This seems fine but why 
 	 */
-	static class BasicActListener implements ActionListener {
+	 class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			//Home button is clicked, spawn home page
@@ -84,24 +80,11 @@ public final class WindowManager {
 			} else if (e.getActionCommand().equals("View Calendar")) {
 
 				// Might get removed
-				WindowManager.toCalendar();
+				toCalendar();
 				System.out.println("View Cal");
 				
 			//if a date is selected use joption pane	
 			} else if (e.getActionCommand().equals("Date selected")) {
-
-				// Might get removed
-
-				/*
-				 * System.out.println((Date) datePanel.getModel().getValue()); // Call toDay if
-				 * the selected day already has been selected. (or the selected // day is today)
-				 * if (day.equals((Date) datePanel.getModel().getValue())) {
-				 * 
-				 * if (CalendarWindow.getFlag() == true) { day = (Date)
-				 * datePanel.getModel().getValue(); addWorkoutWindow(); } else { toDay((Date)
-				 * datePanel.getModel().getValue()); } } day = (Date)
-				 * datePanel.getModel().getValue();
-				 */
 
 				JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
 						"Failed Login", JOptionPane.ERROR_MESSAGE);
@@ -109,7 +92,7 @@ public final class WindowManager {
 			//if the confirm button is hit show the add workout dialog
 			} else if (e.getActionCommand().equals("Confirm")) {
 				try {
-					CalendarWindow.showAddWorkoutDialog();
+					calendarWindow.showAddWorkoutDialog();
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -139,24 +122,25 @@ public final class WindowManager {
 	
 	//// Handles Base construction of frame
 	// Constructs a frame with a menu bar with various pages
-	// I feel like if we have this same funcmtionality 
-	public static JFrame makeWindow(JFrame window) {
+	//This functionality is used by many, maybe it should just be inherited
+	public JFrame makeWindow(JFrame window) {
 		
-
-		//JFrame f = new JFrame("Home");
+		//remove everything form the content pane and set the layout
 		window.getContentPane().removeAll();
 		window.setLayout(new BorderLayout());
 
-		//window.getContentPane().removeAll();
+		//setup menubar
 		JMenuBar jmb1 = new JMenuBar();
 		jmb1.setPreferredSize(new Dimension(2000, 70));
 		jmb1.setBackground(acct.getColorBase2());
 
+		//setup menu
 		JMenu menu = new JMenu("Menu");
 		menu.setFont(new Font("Menu", Font.PLAIN, 25));
 		menu.setPreferredSize(new Dimension(2000, 70));
 		menu.setForeground(Color.white);
 
+		//setup menu items
 		JMenuItem home = new JMenuItem("Home");
 		home.setFont(new Font("Home", Font.PLAIN, 20));
 		home.setBackground(acct.getColorBase2());
@@ -182,6 +166,7 @@ public final class WindowManager {
 		planWorkout.setBackground(acct.getColorBase2());
 		planWorkout.setForeground(Color.white);
 
+		//add items to the menu
 		menu.setMaximumSize(new Dimension(2000, 50));
 		menu.add(home);
 		menu.add(toCal);
@@ -190,57 +175,49 @@ public final class WindowManager {
 		menu.add(logOut);
 
 		// Buttons to swap between pages
+		home.addActionListener(instance.new BasicActListener());
+		logOut.addActionListener(instance.new BasicActListener());
+		toCal.addActionListener(instance.new BasicActListener());
+		addWorkout.addActionListener(instance.new BasicActListener());
+		planWorkout.addActionListener(instance.new BasicActListener());
 
-		home.addActionListener(new BasicActListener());
-		logOut.addActionListener(new BasicActListener());
-		toCal.addActionListener(new BasicActListener());
-		addWorkout.addActionListener(new BasicActListener());
-		planWorkout.addActionListener(new BasicActListener());
-
+		//add the menu
 		jmb1.add(menu);
 
+		//pack the frame
 		window.add(jmb1, BorderLayout.NORTH);
 		window.pack();
+		
 		// Doesn't handle sizing page or making visible
 		return window;
 	}
 
 	//sets the Jframe window to the Jframe returned by makeWindow with window passed to it
-	static void toHome() {
-
-		// moved to HomePage.java
-		//window.dispose();
+	public void toHome() {
 		window = makeWindow(window);
 		window = HomePage.makeWindow(window, acct);
 	}
 
 	//Makes log in window
-	public static void toLogIn() {
-		// moved to LogIn.java
-		window = LogIn.makeWindow(window);
+	public void toLogIn() {
+		window = login.makeWindow(window);
 	}
 
 	//makes account creation window
-	public static void toAcctCreation() {
-		// moved to AcctCreator.java
-		window = AcctCreator.makeWindow(window);
+	public void toAcctCreation() {
+		window = acctCreator.makeWindow(window);
 	}
 
 	
 	//makes Calendar window
-	public static void toCalendar() {
-		// window.dispose();
-		//JFrame f= new JFrame("Hoi");
-
-		//window = makeWindow(window);
-
-		// Moved to CalendarWindow.java
-		window = CalendarWindow.makeWindow(window);
+	public void toCalendar() {
+		//smae stuff for calendar window
+		window = calendarWindow.makeWindow(window);
 
 	}
 
 	// Not moved yet.
-	public static void toDay(Date day) {
+	public void toDay(Date day) {
 		window.dispose();
 		window = makeWindow(window);
 
@@ -260,6 +237,7 @@ public final class WindowManager {
 				}
 				arr.add(temp);
 			}
+			input.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -348,7 +326,7 @@ public final class WindowManager {
 
 		JButton j1 = new JButton("Confirm");
 
-		j1.addActionListener(new BasicActListener());
+		j1.addActionListener(instance.new BasicActListener());
 
 		// Create the "cards".
 		JPanel card1 = new JPanel();
@@ -372,7 +350,7 @@ public final class WindowManager {
 		window.setVisible(true);
 	}
 
-	public static void setAcct(Account src) {
+	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		WindowManager.acct = src;
