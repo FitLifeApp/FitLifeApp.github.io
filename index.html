@@ -1,34 +1,327 @@
 <!DOCTYPE html>
 
-<body>
-<center>
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbQ5wrZ-FADVYmaUMSZzG2vuymlQTu8PssAK6bM0ZQl_ox0ov" style="max-width:100%" alt="Arnold Schwarzenegger">
-<p>The following link downloads the current iteration of FitLife...you're welcome.</p>
-<a class="download" href="./FitLifeApp.zip"> DOWNLOAD</a> 
-</center>
-<center>
-<audio src="./StillGettinIt.mp3" controls>	
-<embed 
-		src="./StillGettinIt.mp3"
-		width="300"
-		height="90"
-		loop="true"
-		autostart="true">
-</audio>
+<html>
 
-<p>Ben Milligan
-		Hours: 10 | 10</p>
-		
-<p>Ben Agueros
-		Hours: 21 | 20 | 5.5</p>
-		
-<p>Yufan Xu
-		Hours: 10 | 16</p>		
-		
-<p>Bo Fu
-     	        Hours: 10 | 18</p>
-<p>Ryland Beaver
-		Hours: 10 | 14 | 6</p>
-</center>
+<head>
+	<!--BOOTSTRAP-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<!--JQUERY-->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<!--POPPER.JS-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<!--BOOTSTRAP JS-->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<header class="blog-header py-3 bg-light">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+
+        	<div class="col-1 d-flex align-items-center">
+        	</div>
+          	<div class="col-3 pt-1 text-center align-items-center">
+          	<!-- UNCOMMENT TO HAVE OUR AUDIO FILE IN THE NAVBAR -->
+          	<!-- <audio src="./StillGettinIt.mp3" controls>	
+				<embed 
+						src="./StillGettinIt.mp3"
+						width="128"	
+						height="31"
+						loop="true"
+						autostart="true">
+			</audio> -->
+
+          </div>
+          <div class="col-4 text-center">
+            <a class="blog-header-logo text-dark" style="font-size:40px;">FitLife</a>
+          </div>
+          <!-- <div class="col-1 d-flex align-items-center">
+          </div> -->
+          <div class="col-2 d-flex align-items-center">
+          	<a class="btn btn-outline-primary btn-block" href="./FitLifeApp.zip" role="button">
+          		Download
+          	</a>
+          </div>
+          <div class="col-2 d-flex align-items-center">
+          </div>
+
+        </div>
+        
+    </header>
+	<hr style="margin-top:0px">
+    <main>
+
+
+    	<!-- *********************************************************************************************** -->
+  		<!-- ************************* THIS IS WHERE BIO AND YOUR NAME ARE LOCATED ************************* -->
+  		<!-- ******* GO AHEAD AND MAKE YOUR OWN LITTLE BIO IF YOU WOULD LIKE, TRY AND MAKE IT SHORT ******** -->
+  		<!-- *********************************************************************************************** -->
+    	<div class="container">
+
+		    <div class="row mb-2">
+
+		    	<!-- Benjamin Agueros -->
+		        <div class="col-md-4">
+		          <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+		            <div class="card-body d-flex flex-column align-items-start">
+		              <h3 class="mb-0">
+		                <a class="text-dark">Benjamin Agueros</a>
+		              </h3>
+		              <div class="mb-1 text-muted">Team Leader</div>
+		              <!-- THIS IS WHERE WE PUT THE HOURS FOR THE GROUP MEMBER -->
+		              <p class="card-text mb-auto">WHATEVER YOU WANNA WRITE</p>
+
+		            </div>
+		          </div>
+		        </div>
+
+		        <!-- Yufan Xu -->
+		        <div class="col-md-4">
+		          <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+		            <div class="card-body d-flex flex-column align-items-start">
+		              <h3 class="mb-0">
+		                <a class="text-dark">Yufan Xu</a>
+		              </h3>
+		              <div class="mb-1 text-muted">Developer</div>
+		              <!-- THIS IS WHERE WE PUT THE HOURS FOR THE GROUP MEMBER -->
+		              <p class="card-text mb-auto">WHATEVER YOU WANNA WRITE</p> 
+		            </div>
+		          </div>
+		        </div>
+
+		        <!-- Ben Milligan -->
+		        <div class="col-md-4">
+		          <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+		            <div class="card-body d-flex flex-column align-items-start">
+		              <h3 class="mb-0">
+		                <a class="text-dark">Ben Milligan</a>
+		              </h3>
+		              <div class="mb-1 text-muted">Developer</div>
+		              <!-- THIS IS WHERE WE PUT THE HOURS FOR THE GROUP MEMBER -->
+		              <p class="card-text mb-auto">WHATEVER YOU WANNA WRITE</p>
+		            </div>
+		          </div>
+		        </div>
+
+		    </div>
+
+		    <div class="row mb-2">
+
+		    	<!-- Ryland Beaver -->
+				<div class="col-md-4">
+		          <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+		            <div class="card-body d-flex flex-column align-items-start">
+		              <h3 class="mb-0">
+		                <a class="text-dark">Ryland Beaver</a>
+		              </h3>
+		              <div class="mb-1 text-muted">Developer</div>
+		              <!-- THIS IS WHERE WE PUT THE HOURS FOR THE GROUP MEMBER -->
+		              <p class="card-text mb-auto">A person.</p>
+		            </div>
+		          </div>
+        		</div>
+
+        		<!-- Bo Fu -->
+        		<div class="col-md-4">
+          			<div class="card flex-md-row mb-4 shadow-sm h-md-250">
+            			<div class="card-body d-flex flex-column align-items-start">
+              				<h3 class="mb-0">
+                				<a class="text-dark">Bo Fu</a>
+              				</h3>
+              				<div class="mb-1 text-muted">Developer</div>
+              				<!-- THIS IS WHERE WE PUT THE HOURS FOR THE GROUP MEMBER -->
+              				<p class="card-text mb-auto">WHATEVER YOU WANNA WRITE</p>
+            			</div>
+          			</div>
+        		</div>
+
+		    </div>
+  		</div>
+
+  		<hr>
+
+
+
+  		<!-- *********************************************************************************************** -->
+  		<!-- ************************* THIS IS WHERE ALL YOUR HOURS WILL BE LOGGED ************************* -->
+  		<!-- ******* GO AND FIND YOUR NAME AND THEN TAKE YOUR HOURS AND THEN ENTER THEM AS A PERCENT ******* -->
+  		<!-- ******* IN THE STYLE="WIDTH: __%".......THEN GO AND CHANGE THE ARIA-VALUENOW TO YOUR HOURS***** -->
+  		<!-- ******* LASTLY PLACE YOUR HOURS AS A NUMBER INSIDE THE DIV FOR THAT ITERATION AND DONE ******** -->
+  		<!-- *********************************************************************************************** -->
+  		<div class="container">
+  			<div class="col-md-12" style="text-align:center; font-size:30px;">HOURS WORKED PER ITERATION</div>
+  			<br>
+
+
+  			<!-- BENJAMIN AGUEROS -->
+  			<div class="row">
+  				<div class="col-2">
+  					BEN AGUEROS
+  				</div>
+  				<div class="col">
+  					<!-- BENJAMIN AGUEROS -->
+  					<div class="progress">
+  						<!-- ITERATION 1 -->
+  						<!-- HOURS: 21 -->
+  						<div class="progress-bar" role="progressbar" style="width: 21%" aria-valuenow="21" aria-valuemin="0" aria-valuemax="100">
+  							21
+  						</div>
+  						<!-- ITERATION 2 -->
+  						<!-- HOURS: 20 -->
+  						<div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+  							20
+  						</div>
+  						<!-- ITERATION 3 -->
+  						<!-- HOURS: 5.5 -->
+  						<div class="progress-bar bg-info" role="progressbar" style="width: 5.5%" aria-valuenow="5.5" aria-valuemin="0" aria-valuemax="100">
+  							5.5
+  						</div>
+					</div>
+  				</div>
+  			</div>
+  			<br>
+
+
+  			<!-- YUFAN XU -->
+  			<div class="row">
+  				<div class="col-2">
+  					YUFAN XU
+  				</div>
+  				<div class="col">
+  					<!-- YUFAN XU -->
+  					<div class="progress">
+  						<!-- ITERATION 1 -->
+  						<!-- HOURS: 10 -->
+  						<div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+  							10
+  						</div>
+  						<!-- ITERATION 2 -->
+  						<!-- HOURS: 16 -->
+  						<div class="progress-bar bg-success" role="progressbar" style="width: 16%" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
+  							16
+  						</div>
+  						<!-- ITERATION 3 -->
+  						<!-- HOURS: 7 -->
+  						<div class="progress-bar bg-info" role="progressbar" style="width: 7%" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100">
+  							7
+  						</div>
+					</div>
+  				</div>
+  			</div>
+  			<br>
+
+
+  			<!-- BENJAMIN MILLIGAN -->
+  			<div class="row">
+  				<div class="col-2">
+  					BEN MILLIGAN
+  				</div>
+  				<div class="col">
+  					<!-- BENJAMIN MILLIGAN -->
+  					<div class="progress">
+  						<!-- ITERATION 1 -->
+  						<!-- HOURS: 10 -->
+  						<div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+  							10
+  						</div>
+  						<!-- ITERATION 2 -->
+  						<!-- HOURS: 10 -->
+  						<div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+  							10
+  						</div>
+  						<!-- ITERATION 3 -->
+  						<!-- HOURS: 3 -->
+  						<div class="progress-bar bg-info" role="progressbar" style="width: 4%" aria-valuenow="4" aria-valuemin="0" aria-valuemax="100">
+  							4
+  						</div>
+					</div>
+  				</div>
+  			</div>
+  			<br>
+
+
+  			<!-- RYLAND BEAVER -->
+  			<div class="row">
+  				<div class="col-2">
+  					RYLAND BEAVER
+  				</div>
+  				<div class="col">
+  					<!-- RYLAND BEAVER -->
+  					<div class="progress">
+  						<!-- ITERATION 1 -->
+  						<!-- HOURS: 10 -->
+  						<div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+  							10
+  						</div>
+  						<!-- ITERATION 2 -->
+  						<!-- HOURS: 14 -->
+  						<div class="progress-bar bg-success" role="progressbar" style="width: 14%" aria-valuenow="14" aria-valuemin="0" aria-valuemax="100">
+  							14
+  						</div>
+  						<!-- ITERATION 3 -->
+  						<!-- HOURS: 13 -->
+  						<div class="progress-bar bg-info" role="progressbar" style="width: 13%" aria-valuenow="13" aria-valuemin="0" aria-valuemax="100">
+  							13
+  						</div>
+					</div>
+  				</div>
+  			</div>
+  			<br>
+
+
+  			<!-- BO FU -->
+  			<div class="row">
+  				<div class="col-2">
+  					BO FU
+  				</div>
+  				<div class="col">
+  					<!-- BO FU -->
+  					<div class="progress">
+  						<!-- ITERATION 1 -->
+  						<!-- HOURS: 10 -->
+  						<div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+  							10
+  						</div>
+  						<!-- ITERATION 2 -->
+  						<!-- HOURS: 18 -->
+  						<div class="progress-bar bg-success" role="progressbar" style="width: 18%" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">
+  							18
+  						</div>
+  						<!-- ITERATION 3 -->
+  						<!-- HOURS:  -->
+  						<div class="progress-bar bg-info" role="progressbar" style="width: 4%" aria-valuenow="4" aria-valuemin="0" aria-valuemax="100">
+  							4
+  						</div>
+					</div>
+  				</div>
+  			</div>
+  			<br>
+
+
+
+  		</div>
+
+  		<hr>
+
+  		<div class="container">
+  			<br>
+  			<div class="row">
+  				<div class="col-3">
+  				</div>
+  				<div class="col-6" style="text-align:center">
+  					<a class="btn btn-primary btn-block" href="./FitLifeApp.zip" role="button">
+  						DOWNLOAD
+  					</a>
+  				</div>
+  				<div class="col-3">
+  				</div>
+  			</div>
+  			<br>
+  			<br>
+  		</div>
+
+    </main>
+
 </body>
+
+
 </html>

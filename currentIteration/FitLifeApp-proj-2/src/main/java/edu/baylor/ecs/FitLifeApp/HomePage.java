@@ -11,35 +11,29 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public final class HomePage {
 	
-	private static volatile HomePage instance = null;
-	private WindowManager wm = WindowManager.getInstance();
+	
 	
 	private HomePage() {}
 	
-	public static HomePage getInstance() {
-		if(instance == null) {
-			synchronized(HomePage.class) {
-				if(instance == null) {
-					instance = null;
-				}
-			}
-		}
-		return instance;
-	}
 
 	//Moved relevant listener code here, away from WindowManager
-	class HomeListener implements ActionListener {
+	static class HomeListener implements ActionListener {
 		
 
 		@Override
@@ -47,12 +41,12 @@ public final class HomePage {
 			if (e.getActionCommand().equals("EXERCISE")) {
 				//flag = true;
 				CalendarWindow.setFlag(true);
-				wm.toCalendar();
+				WindowManager.toCalendar();
 				System.out.println("View Cal");
 				System.out.println("Adding Workout");
 
 			} else if (e.getActionCommand().equals("Review EXERCISE")) {
-				wm.toCalendar();
+				WindowManager.toCalendar();
 				CalendarWindow.setFlag(false);
 				//flag = false;
 				System.out.println("View Cal");
@@ -66,26 +60,27 @@ public final class HomePage {
 		}
 	}
 
-	JFrame makeWindow(JFrame window, Account acct) {
+	static JFrame makeWindow(JFrame window, Account acct) {
 		//Displays the home page
 		//Mostly copied and pasted from toHome function
 		//Only changes were removal of parts that I don't think did anything
-		//And changing syntax to allow for class cahnges
-
+		//And changing syntax to allow for class changes
+		//window.getContentPane().removeAll();
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	
+		window.setLayout(new BorderLayout());
 		FlowLayout experimentLayout = new FlowLayout();
 
-		
 		final JPanel p1 = new JPanel();
-		p1.setLayout(experimentLayout);
 		experimentLayout.setAlignment(FlowLayout.TRAILING);
+		p1.setLayout(experimentLayout);
 
 		final JPanel p2 = new JPanel();
-		p2.setLayout(new FlowLayout());
-		experimentLayout.setAlignment(FlowLayout.TRAILING);
+		p2.setLayout(experimentLayout);
 
-		JPanel board = new JPanel();
-		board.setLayout(new FlowLayout());
-
+		Box board = new Box(BoxLayout.Y_AXIS);
+		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		
 		JButton jb1 = new JButton("NUTRITION");
 		jb1.setFont(new Font("NUTRITION", Font.PLAIN, 50));
 		jb1.setBackground(acct.getColorTrim2());
@@ -146,6 +141,7 @@ public final class HomePage {
 
 		JTextField jtf1 = new JTextField("Welcome Home");
 		jtf1.setEnabled(false);
+		jtf1.setHorizontalAlignment(JTextField.CENTER);
 		jtf1.setFont(new Font("Welcome Home", Font.PLAIN, 30));
 		jtf1.setBackground(acct.getColorBase2());
 
@@ -154,20 +150,28 @@ public final class HomePage {
 		jpt.setBackground(acct.getColorBase2());
 		jpt.add(jtf1, BorderLayout.CENTER);
 
-		board.add(p1, BorderLayout.CENTER);
-		board.add(p2, BorderLayout.AFTER_LINE_ENDS);
+		board.add(Box.createVerticalStrut(200));
+		board.add(p1);
+		board.add(p2);
+		
+		JPanel fp = new JPanel();
+		fp.add(board);
+		fp.setBackground(acct.getColorTrim1());
 
-		board.setBackground(acct.getColorTrim1());
-		window.add(board, BorderLayout.CENTER);
-		window.add(jpt, BorderLayout.SOUTH);
-
-		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 500, (int) window.getSize().getHeight() + 600);
-		// Testing for window sizes.
-		// In my opinion, just saying pack makes it too compact
+		window.add(fp, BorderLayout.CENTER);
+		window.add(jtf1, BorderLayout.SOUTH);
+		
+		window.repaint();
+		//window.pack();
+		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = screenSize.width-100;
+		int screenHeight = screenSize.height-100;
+		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-		
+
 		return window;
 	}
 }
+

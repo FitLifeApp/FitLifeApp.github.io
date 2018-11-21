@@ -1,14 +1,20 @@
 package edu.baylor.ecs.FitLifeApp;
 
-/*
- * File:			Account.java
- * Description:		Holds account details
- */
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -153,5 +159,34 @@ public class Account {
 		}
 
 		return s;
+	}
+
+	public void save() {
+		BufferedWriter bw;
+		try {
+			File acct = new File("ACCT" + Integer.toString(this.fileID));
+			// this would fail, but it can't hurt
+
+			bw = new BufferedWriter(new FileWriter(acct));
+
+			String marshed = null;
+			StringWriter strWriter = new StringWriter();
+
+			JAXBContext context = JAXBContext.newInstance(Account.class);
+			Marshaller m = context.createMarshaller();
+			m.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			m.marshal(this, strWriter);
+			// m.marshal(new Account(accountCount), System.out);
+			marshed = AcctCipher.encrypt(strWriter.toString(), "UnGuEsSaBlEkEyke");
+			bw.write(marshed);
+
+			bw.close();
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 }

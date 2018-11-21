@@ -1,3 +1,4 @@
+
 package edu.baylor.ecs.FitLifeApp;
 
 /*
@@ -10,6 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.event.*;
 
@@ -32,40 +35,29 @@ public final class WindowManager {
 	final static String ex4 = "Flexibility Exercise";
 
 	// -----------------------------------------
-	private HomePage home = HomePage.getInstance();
-	private LogIn login = LogIn.getInstance();
 	
 	//-----------------------------------------
-
+	private static Box board = new Box(BoxLayout.Y_AXIS);
 	private static JFrame window;
 	private static Account acct;
+	
 	
 	private static volatile WindowManager instance = null;
 	
 	/*singleton constructor*/
-	private WindowManager(){
+	WindowManager() {
 		acct = null;
-		window = null;
+		window = new JFrame("Welcome");
 		toLogIn();
 	}
 	
-	/*singleton method to create or return the WindowManager*/
-	public static WindowManager getInstance() {
-		if(instance == null) {
-			synchronized(WindowManager.class){
-				if(instance == null) {
-					instance  = new WindowManager();
-				}
-			}
-		}
-		return instance;
-	}
+	
 
 	/*
 	 * //I assume leftovers JLabel result; String currentPattern;
 	 * This seems fine but why 
 	 */
-	class BasicActListener implements ActionListener {
+	static class BasicActListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			//Home button is clicked, spawn home page
@@ -84,7 +76,7 @@ public final class WindowManager {
 
 				// Might get removed
 
-				toCalendar();
+				instance.toCalendar();
 				System.out.println("View Cal");
 			} else if (e.getActionCommand().equals("Date selected")) {
 
@@ -119,7 +111,7 @@ public final class WindowManager {
 		}
 	}
 
-	class BasicItemListener implements ItemListener {
+	static class BasicItemListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent evt) {
@@ -129,17 +121,22 @@ public final class WindowManager {
 
 	}
 
-	private JFrame makeWindow() {
+	public static JFrame makeWindow(JFrame window) {
 		// Handles Base construction of frame
 		// Constructs a frame with a menu bar with various pages
 
-		JFrame f = new JFrame("Home");
+		//JFrame f = new JFrame("Home");
+		window.getContentPane().removeAll();
+		window.setLayout(new BorderLayout());
+
+		//window.getContentPane().removeAll();
 		JMenuBar jmb1 = new JMenuBar();
+		jmb1.setPreferredSize(new Dimension(2000, 70));
 		jmb1.setBackground(acct.getColorBase2());
 
 		JMenu menu = new JMenu("Menu");
 		menu.setFont(new Font("Menu", Font.PLAIN, 25));
-		menu.setPreferredSize(new Dimension(70, 70));
+		menu.setPreferredSize(new Dimension(2000, 70));
 		menu.setForeground(Color.white);
 
 		JMenuItem home = new JMenuItem("Home");
@@ -167,6 +164,7 @@ public final class WindowManager {
 		planWorkout.setBackground(acct.getColorBase2());
 		planWorkout.setForeground(Color.white);
 
+		menu.setMaximumSize(new Dimension(2000, 50));
 		menu.add(home);
 		menu.add(toCal);
 		menu.add(addWorkout);
@@ -181,36 +179,37 @@ public final class WindowManager {
 		addWorkout.addActionListener(new BasicActListener());
 		planWorkout.addActionListener(new BasicActListener());
 
-		jmb1.add(menu, BorderLayout.CENTER);
-		// jmb1.add(logOut, BorderLayout.LINE_START);
+		jmb1.add(menu);
 
-		f.add(jmb1, BorderLayout.PAGE_START);
+		window.add(jmb1, BorderLayout.NORTH);
+		window.pack();
 		// Doesn't handle sizing page or making visible
-		return f;
+		return window;
 	}
 
-	void toHome() {
+	static void toHome() {
 
 		// moved to HomePage.java
-		window.dispose();
-		window = makeWindow();
-
-		window = home.makeWindow(window, acct);
+		//window.dispose();
+		window = makeWindow(window);
+		window = HomePage.makeWindow(window, acct);
 	}
 
-	public void toLogIn() {
+	public static void toLogIn() {
 		// moved to LogIn.java
-		window = login.makeWindow(window);
+		window = LogIn.makeWindow(window);
 	}
 
-	public void toAcctCreation() {
+	public static void toAcctCreation() {
 		// moved to AcctCreator.java
 		window = AcctCreator.makeWindow(window);
 	}
 
-	public void toCalendar() {
+	public static void toCalendar() {
 		// window.dispose();
-		window = makeWindow();
+		//JFrame f= new JFrame("Hoi");
+
+		//window = makeWindow(window);
 
 		// Moved to CalendarWindow.java
 		window = CalendarWindow.makeWindow(window);
@@ -218,13 +217,15 @@ public final class WindowManager {
 	}
 
 	// Not moved yet.
-	public void toDay(Date day) {
+	public static void toDay(Date day) {
 		window.dispose();
-		window = makeWindow();
+		window = makeWindow(window);
 
 		File file = new File("workout.csv");
 		int row = 0;
 		ArrayList<String[]> arr = new ArrayList<String[]>();
+		
+		// Get all the data from the file
 		try {
 			Scanner input = new Scanner(file);
 			while (input.hasNext()) {
@@ -235,31 +236,76 @@ public final class WindowManager {
 					temp[i] = str[i];
 				}
 				arr.add(temp);
-				row++;
 			}
-			input.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		// Select only the data from that specific day
+		String date = day.toString();
+		String specificDay = date.substring(0, 10);
+		ArrayList<String[]> subArr = new ArrayList<String[]>();
+		for (int i = 0; i < arr.size(); i++) {
+			if (arr.get(i)[5].contains(specificDay)) {
+				subArr.add(arr.get(i));
+				row++;
+			}
+		}
+		
+		// Not use header yet
+		String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, 4);
-		for (int i = 0; i < data.getRowCount(); i++) {
+		
+		// Only add the corresponding data to the table (No more write space caused by hiding part of the data)
+		for (int i = 0; i < subArr.size(); i++) {
 			for (int j = 0; j < data.getColumnCount(); j++) {
-				String str = arr.get(i)[5];
-				String d = str.substring(0, 10);
-				System.out.println(d);
-				if (day.toString().contains(d)) {
-					data.setValueAt(arr.get(i)[j + 1], i, j);
+				data.setValueAt(subArr.get(i)[j + 1], i, j);
+			}
+		}
+		
+		// Sorter for the table
+		TableRowSorter <TableModel> sorter = new TableRowSorter <TableModel> (data.getModel());
+		data.setRowSorter(sorter);
+		sorter.setComparator(1, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		sorter.setComparator(2, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		sorter.setComparator(3, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return Integer.parseInt(o1) - Integer.parseInt(o2);
+			}
+		});
+		
+		// Add filter for user search specific data they interested
+		JPanel filter = new JPanel();
+		filter.setLayout(new FlowLayout());
+		JLabel lab = new JLabel("Enter the work out name: ");
+		filter.add(lab);
+		JTextField TF = new JTextField("");
+		TF.setPreferredSize(new Dimension(150, 30));
+		filter.add(TF);
+		JButton BF = new JButton("Search");
+		filter.add(BF);
+		BF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String str = TF.getText();
+				if (str.length() == 0) {
+					sorter.setRowFilter(null);
+				}
+				else {
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + str, 0));
 				}
 			}
-
-			// if (data.getValueAt(i, 0).equals(null)) {
-			//
-			// data.removeRowSelectionInterval(i, i);
-			// }
-		}
+		});
 
 		window.add(data, BorderLayout.CENTER);
+		
+		window.add(filter, BorderLayout.SOUTH);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setSize((int) window.getSize().getWidth() + 50, (int) window.getSize().getHeight() + 50);
@@ -267,13 +313,11 @@ public final class WindowManager {
 	}
 
 	// Also not yet moved
-	public void addWorkoutWindow() {
+	public static void addWorkoutWindow() {
 		window = new JFrame("Select a Type");
 
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
-		
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		JComboBox cb = new JComboBox(comboBoxItems);
 		cb.setEditable(false);
 		cb.addItemListener(new BasicItemListener());
@@ -305,11 +349,10 @@ public final class WindowManager {
 		window.setVisible(true);
 	}
 
-	public void setAcct(Account src) {
+	public static void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		WindowManager.acct = src;
 
 	}
-
 }

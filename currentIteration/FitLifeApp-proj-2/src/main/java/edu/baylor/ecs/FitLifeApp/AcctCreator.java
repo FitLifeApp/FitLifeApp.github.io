@@ -1,5 +1,7 @@
 package edu.baylor.ecs.FitLifeApp;
 
+import java.awt.Dimension;
+
 /*
  * File:		AcctCreator.java
  * Description: Handles CreateAccount window and the actual creation of an account
@@ -7,6 +9,7 @@ package edu.baylor.ecs.FitLifeApp;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -17,9 +20,12 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,35 +37,31 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+//import org.apache.commons.codec.binary.Base64;
+import java.util.Base64;
 
 public final class AcctCreator {
+
+	// final private static String initVector = "thisis 16 chars.";
+	// final private static String key = "1234567890123456";
+	private static byte[] key;
+	private static SecretKeySpec secretKey;
+	// Used for encryption. Guaranteed unpredictable
 
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
-	private static volatile AcctCreator instance = null;
-	private WindowManager wm = WindowManager.getInstance();
 	
 	private AcctCreator() {}
 	
-	public static AcctCreator getinstance() {
-		if(instance == null) {
-			synchronized (AcctCreator.class) {
-				if(instance == null) {
-					instance = new AcctCreator();
-				}
-			}
-		}
-		return instance;
-	}
 
-	class AcctCreatorListener implements ActionListener {
+	static class AcctCreatorListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Create Account")) {
 				if (AcctCreator.createAcct()) {
-					wm.toLogIn();
+					WindowManager.toLogIn();
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",
 							JOptionPane.ERROR_MESSAGE);
@@ -71,14 +73,14 @@ public final class AcctCreator {
 		}
 	}
 
-	static public JFrame makeWindow(JFrame window) {
+	public static JFrame makeWindow(JFrame window) {
 
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
 
 		if (window != null) {
-			window.dispose();
+			//window.dispose();
 			// If window isn't null, meaning it came from another window, get rid of it
 		}
 		JPanel pane = new JPanel(new GridBagLayout());
@@ -131,7 +133,7 @@ public final class AcctCreator {
 		pane.add(pWord2, c);
 
 		JButton createAcct = new JButton("Create Account");
-		createAcct.addActionListener(instance.new AcctCreatorListener());
+		createAcct.addActionListener(new AcctCreatorListener());
 		c.fill = GridBagConstraints.NONE;
 		// Don't worry about filling the column
 		// If set to horizontal, all buttons would be connected
@@ -142,95 +144,128 @@ public final class AcctCreator {
 		c.gridy = 3;
 		pane.add(createAcct, c);
 
-		window = new JFrame("LogIn");
+		window.getContentPane().removeAll();
+
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(pane);
+		window.repaint();
 		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 80, (int) window.getSize().getHeight() + 20);
+		
+		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = screenSize.width-100;
+		int screenHeight = screenSize.height-100;
+		window.setSize(new Dimension(screenWidth, screenHeight));
+		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 
 		return window;
-
 	}
 
 	static public boolean createAcct() {
+
 		if (!Arrays.equals(pWord.getPassword(), pWord2.getPassword())) {
 			return false;
 		}
 
-		int accountCount = 0;
-		BufferedReader br = null;
-		Scanner scnr = null;
 		boolean alreadyExists = false;
-
+		int accountCount = 0;
+		String fileContents = "";
 		File accts = new File("Accounts.FIT");
 		if (accts.exists()) {
+			BufferedReader br = null;
+			Scanner scnr = null;
+			fileContents = null;
 			try {
-				br = new BufferedReader(new InputStreamReader(new FileInputStream(accts)));
+				br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
+				scnr = new Scanner(br).useDelimiter("\\Z");
+				// But I say close?
+				fileContents = scnr.next();
 			} catch (FileNotFoundException e) {
+
 				JOptionPane.showMessageDialog(new JFrame(), "Account file exists but not found", "Failed Creation",
 						JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 				return false;
-			}
 
-			if (br != null) {
-				scnr = new Scanner(br);
-
-				while (scnr.hasNextLine() && !alreadyExists) {
-					String[] acct;
-					acct = scnr.nextLine().split(",");
-					if (acct.length >= 3) {
-						if (uName.getText().equals(acct[0])) {
-							alreadyExists = true;
-						}
-						try {
-							if (accountCount < Integer.parseInt(acct[2])) {
-								accountCount = Integer.parseInt(acct[2]);
-							}
-						} catch (NumberFormatException e) {
-							JOptionPane.showMessageDialog(
-									new JFrame(), "Invalid Account ID found.\nAccount Causing " + "problems has ID '"
-											+ acct[2] + "' in Accounts.FIT",
-									"Failed Creation", JOptionPane.ERROR_MESSAGE);
-						}
-					}
-
+			} finally {
+				if (scnr != null) {
+					scnr.close();
 				}
-				scnr.close();
 			}
+
+			fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
+
+			ArrayList<String> lines = new ArrayList<String>(Arrays.asList(fileContents.split("\n")));
+
+			for (int i = 0; i < lines.size() && !alreadyExists; i++) {
+				String[] acct;
+				acct = lines.get(i).split(",");
+				if (acct.length >= 3) {
+					if (uName.getText().equals(acct[0])) {
+						alreadyExists = true;
+					}
+					try {
+						if (accountCount < Integer.parseInt(acct[2])) {
+							accountCount = Integer.parseInt(acct[2]);
+						}
+					} catch (NumberFormatException e) {
+						JOptionPane
+								.showMessageDialog(
+										new JFrame(), "Invalid Account ID found.\nAccount Causing "
+												+ "problems has ID '" + acct[2] + "' in Accounts.FIT",
+										"Failed Creation", JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+				}
+			}
+
 		}
+
 		if (alreadyExists) {
 			return false;
 		}
 
 		accountCount += 1;
+
+		fileContents += "\n" + uName.getText() + "," + new String(pWord.getPassword()) + ","
+				+ Integer.toString(accountCount);
+		//System.out.println("PlainText acctCreator: " + fileContents);
+		fileContents = AcctCipher.encrypt(fileContents, "UnGuEsSaBlEkEyke");
+		//System.out.println("encrypted acctCreator: " + fileContents);
 		BufferedWriter bw;
 		try {
 			accts = new File("ACCT" + Integer.toString(accountCount));
-			if (!accts.exists()) {
-				//I don't know when this would fail, but it can't hurt
+			if (!accts.exists()) { // I don't know when
+				// this would fail, but it can't hurt
 
-				bw = new BufferedWriter(new FileWriter(new File("Accounts.FIT"), true));
-				bw.write("\n" + uName.getText() + ","
-						+ new String(pWord.getPassword()) + "," + Integer.toString(accountCount));
+				bw = new BufferedWriter(new FileWriter(new File("Accounts.FIT")));
+				bw.write(fileContents);
 				bw.close();
 
 				bw = new BufferedWriter(new FileWriter(accts));
+
+				String marshed = null;
+				StringWriter strWriter = new StringWriter();
 
 				JAXBContext context = JAXBContext.newInstance(Account.class);
 				Marshaller m = context.createMarshaller();
 				m.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-				m.marshal(new Account(accountCount), bw);
-				//m.marshal(new Account(accountCount), System.out);
+				m.marshal(new Account(accountCount), strWriter);
+				// m.marshal(new Account(accountCount), System.out);
+				System.out.println(strWriter.toString());
+				marshed = AcctCipher.encrypt(strWriter.toString(), "UnGuEsSaBlEkEyke");
+				bw.write(marshed);
+
+				System.out.println(marshed);
 				bw.close();
 			} else {
-				JOptionPane.showMessageDialog(
-						new JFrame(), "Account ID chosen for new file already exists. Account IDs might be misordered",
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Account ID chosen for new file already exists. Account IDs might be misordered",
 						"Failed Creation", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (JAXBException e) {
 			e.printStackTrace();
