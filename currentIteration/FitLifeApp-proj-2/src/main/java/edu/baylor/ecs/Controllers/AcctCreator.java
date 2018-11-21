@@ -1,12 +1,6 @@
-package edu.baylor.ecs.FitLifeApp;
+package edu.baylor.ecs.Controllers;
 
 import java.awt.Dimension;
-
-/*
- * File:		AcctCreator.java
- * Description: Handles CreateAccount window and the actual creation of an account
- */
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -32,6 +26,9 @@ import javax.swing.JTextField;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.FitLifeApp.AcctCipher;
 import edu.baylor.ecs.Listeners.AcctCreatorListener;
 
 public final class AcctCreator extends WindowManager {

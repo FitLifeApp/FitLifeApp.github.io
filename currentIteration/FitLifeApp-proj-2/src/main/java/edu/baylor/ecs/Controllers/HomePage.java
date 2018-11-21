@@ -1,9 +1,5 @@
-package edu.baylor.ecs.FitLifeApp;
+package edu.baylor.ecs.Controllers;
 
-/*
- * File:		HomePage.java
- * Description: Handles the creation of the home page
- */
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,16 +13,22 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.Listeners.BasicActListener;
 import edu.baylor.ecs.Listeners.HomeListener;
 
 public final class HomePage extends WindowManager{
 	
 	
 	private static volatile HomePage instance = null;
+	private JFrame window;
 	
 	private HomePage() {}
 	
@@ -42,17 +44,72 @@ public final class HomePage extends WindowManager{
 	}
 	
 
-	static JFrame makeWindow(JFrame window, Account acct) {
-		//Displays the home page
-		//Mostly copied and pasted from toHome function
-		//Only changes were removal of parts that I don't think did anything
-		//And changing syntax to allow for class changes
-		//window.getContentPane().removeAll();
+	public void makeWindow(Account acct) {
+		window = new JFrame();
+		
+		//setup the window
+		window.getContentPane().removeAll();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	
 		window.setLayout(new BorderLayout());
 		FlowLayout experimentLayout = new FlowLayout();
+		
+		//setup menubar
+		JMenuBar jmb1 = new JMenuBar();
+		jmb1.setPreferredSize(new Dimension(2000, 70));
+		jmb1.setBackground(acct.getColorBase2());
 
+		//setup menu
+		JMenu menu = new JMenu("Menu");
+		menu.setFont(new Font("Menu", Font.PLAIN, 25));
+		menu.setPreferredSize(new Dimension(2000, 70));
+		menu.setForeground(Color.white);
+
+		//setup menu items
+		JMenuItem home = new JMenuItem("Home");
+		home.setFont(new Font("Home", Font.PLAIN, 20));
+		home.setBackground(acct.getColorBase2());
+		home.setForeground(Color.white);
+
+		JMenuItem logOut = new JMenuItem("Log Out");
+		logOut.setFont(new Font("Log Out", Font.PLAIN, 20));
+		logOut.setBackground(acct.getColorBase2());
+		logOut.setForeground(Color.white);
+
+		JMenuItem toCal = new JMenuItem("View Calendar");
+		toCal.setFont(new Font("View Calendar", Font.PLAIN, 20));
+		toCal.setBackground(acct.getColorBase2());
+		toCal.setForeground(Color.white);
+
+		JMenuItem addWorkout = new JMenuItem("Add Workout");
+		addWorkout.setFont(new Font("Add Workout", Font.PLAIN, 20));
+		addWorkout.setBackground(acct.getColorBase2());
+		addWorkout.setForeground(Color.white);
+
+		JMenuItem planWorkout = new JMenuItem("Plan Workout");
+		planWorkout.setFont(new Font("Plan Workout", Font.PLAIN, 20));
+		planWorkout.setBackground(acct.getColorBase2());
+		planWorkout.setForeground(Color.white);
+
+		//add items to the menu
+		menu.setMaximumSize(new Dimension(2000, 50));
+		menu.add(home);
+		menu.add(toCal);
+		menu.add(addWorkout);
+		menu.add(planWorkout);
+		menu.add(logOut);
+
+		// Buttons to swap between pages
+		home.addActionListener(new BasicActListener());
+		logOut.addActionListener(new BasicActListener());
+		toCal.addActionListener(new BasicActListener());
+		addWorkout.addActionListener(new BasicActListener());
+		planWorkout.addActionListener(new BasicActListener());
+
+		//add the menu
+		jmb1.add(menu);
+		window.add(jmb1, BorderLayout.NORTH);
+
+		//add panels
 		final JPanel p1 = new JPanel();
 		experimentLayout.setAlignment(FlowLayout.TRAILING);
 		p1.setLayout(experimentLayout);
@@ -60,9 +117,11 @@ public final class HomePage extends WindowManager{
 		final JPanel p2 = new JPanel();
 		p2.setLayout(experimentLayout);
 
+		//create layout
 		Box board = new Box(BoxLayout.Y_AXIS);
 		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		
+		//add buttons
 		JButton jb1 = new JButton("NUTRITION");
 		jb1.setFont(new Font("NUTRITION", Font.PLAIN, 50));
 		jb1.setBackground(acct.getColorTrim2());
@@ -99,6 +158,7 @@ public final class HomePage extends WindowManager{
 		jb6.setForeground(Color.WHITE);
 		jb6.addActionListener(new HomeListener());
 
+		//set sizes of buttons
 		jb1.setPreferredSize(new Dimension(400, 400));
 		jb2.setPreferredSize(new Dimension(400, 400));
 		jb3.setPreferredSize(new Dimension(400, 400));
@@ -118,9 +178,9 @@ public final class HomePage extends WindowManager{
 
 		// Left to right component orientation is selected by default
 		p1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-
 		p2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
+		
 		JTextField jtf1 = new JTextField("Welcome Home");
 		jtf1.setEnabled(false);
 		jtf1.setHorizontalAlignment(JTextField.CENTER);
@@ -144,7 +204,9 @@ public final class HomePage extends WindowManager{
 		window.add(jtf1, BorderLayout.SOUTH);
 		
 		window.repaint();
-		//window.pack();
+		window.pack();
+		
+		
 		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int screenWidth = screenSize.width-100;
@@ -152,8 +214,7 @@ public final class HomePage extends WindowManager{
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-
-		return window;
 	}
+	
 }
 

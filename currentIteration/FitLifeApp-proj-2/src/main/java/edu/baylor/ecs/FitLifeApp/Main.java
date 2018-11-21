@@ -1,5 +1,7 @@
 package edu.baylor.ecs.FitLifeApp;
 
+import edu.baylor.ecs.Controllers.WindowManager;
+
 public class Main {
 	public static void main(String[]args)  {
 

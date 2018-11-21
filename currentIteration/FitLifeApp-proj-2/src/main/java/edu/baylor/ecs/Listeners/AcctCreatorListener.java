@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import edu.baylor.ecs.FitLifeApp.AcctCreator;
+import edu.baylor.ecs.Controllers.AcctCreator;
 
 public class AcctCreatorListener implements ActionListener {
 

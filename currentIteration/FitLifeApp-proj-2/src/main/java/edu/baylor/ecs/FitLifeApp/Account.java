@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -135,7 +133,7 @@ public class Account {
 		 */
 	}
 
-	Account(int fID) {
+	public Account(int fID) {
 		this();
 		this.fileID = fID;
 	}

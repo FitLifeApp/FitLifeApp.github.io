@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import edu.baylor.ecs.FitLifeApp.CalendarWindow;
-import edu.baylor.ecs.FitLifeApp.HomePage;
+import edu.baylor.ecs.Controllers.CalendarWindow;
+import edu.baylor.ecs.Controllers.HomePage;
 
 public class HomeListener implements ActionListener {
 	

@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
-import edu.baylor.ecs.FitLifeApp.CalendarWindow;
-import edu.baylor.ecs.FitLifeApp.WindowManager;
+import edu.baylor.ecs.Controllers.CalendarWindow;
 
 	//Listener for Calendar specific buttons
 	//Like the home listener, I might have missed some
 	//Because I'm not familiar with this part of the code
 	public class CalendarListener implements ActionListener {
+		
 		CalendarWindow calendarWindow = CalendarWindow.getInstance();
 		
 		public void actionPerformed(ActionEvent e) {
@@ -25,7 +25,7 @@ import edu.baylor.ecs.FitLifeApp.WindowManager;
 
 					if (calendarWindow.getFlag() == true) {
 						calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-						WindowManager.addWorkoutWindow();
+						calendarWindow.addWorkoutWindow();
 					} else {
 						calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 					}

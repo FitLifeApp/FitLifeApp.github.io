@@ -1,4 +1,4 @@
-package edu.baylor.ecs.FitLifeApp;
+package edu.baylor.ecs.Controllers;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,18 +20,20 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.FitLifeApp.AcctCipher;
 import edu.baylor.ecs.Listeners.LoginListener;
 
 public final class LogIn extends WindowManager{
 
 	// Used for encryption. Guaranteed unpredictable
 
-	static private JTextField uName; // Used to hold username inputs
-	static private JPasswordField pWord; // Used to hold password inputs
-	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private static int screenWidth = screenSize.width-100;
-	private static int screenHeight = screenSize.height-100;
-	
+	private JTextField uName; // Used to hold username inputs
+	private JPasswordField pWord; // Used to hold password inputs
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private int screenWidth = screenSize.width-100;
+	private int screenHeight = screenSize.height-100;
+	private JFrame window;
 	
 	/*The singleton code*/
 	private static volatile LogIn instance = null;
@@ -49,25 +51,19 @@ public final class LogIn extends WindowManager{
 		return instance;
 	}
 	
-
 	
-	
-	public JFrame makeWindow(JFrame window) {
-		// Makes log in page
-		// Was experimenting with Grid bag Layout
-		// Actually turned out pretty good
-
-		if (window != null) {
-			window.getContentPane().removeAll();
-		}
+	//Makes the login window
+	public JFrame makeWindow() {
 		
+		window = new JFrame();
+		
+		//Set layout and close operation
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
 		FlowLayout flowLayout = new FlowLayout();
 		flowLayout.setAlignment(FlowLayout.CENTER);
-		
 		window.setLayout(flowLayout);
 	    
+		//Create boxes
 		Box p1 = new Box(BoxLayout.Y_AXIS);
 		p1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		p1.setMaximumSize(new Dimension(2000,150));
@@ -87,6 +83,7 @@ public final class LogIn extends WindowManager{
 		Box board = new Box(BoxLayout.Y_AXIS);
 		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
+		//Create labels
 		JLabel uLabel = new JLabel("Username");
 		uLabel.setFont(new Font("Username", Font.PLAIN, 20));
 		
@@ -107,6 +104,7 @@ public final class LogIn extends WindowManager{
 		p2.add(pLabel);
 		p2.add(pWord);
 
+		//create buttons
 		JButton createAcct = new JButton("Create Account");
 		createAcct.setFont(new Font("Create Account", Font.PLAIN, 20));
 		createAcct.setForeground(Color.white);
@@ -128,6 +126,7 @@ public final class LogIn extends WindowManager{
 		logIn.setMaximumSize(new Dimension(2000,50));
 		logIn.addActionListener(new LoginListener());
 		
+		//add buttons
 		p3.add(createAcct);
 		p3.add(Box.createVerticalStrut(5));
 		p3.add(lostPW);
@@ -136,11 +135,12 @@ public final class LogIn extends WindowManager{
 
 		board.add(Box.createVerticalStrut(screenHeight/2-250));
 		
+		//create and add label
 		JLabel welcome = new JLabel("Welcome to FitLife");	
 		welcome.setFont(new Font("Welcome to FitLife", Font.PLAIN, 50));
-		
 		p4.add(welcome);
-				
+		
+		//add boxes
 		board.add(p4);
 		board.add(Box.createVerticalStrut(40));
 		board.add(p1);
@@ -149,23 +149,28 @@ public final class LogIn extends WindowManager{
 		board.add(Box.createVerticalStrut(10));
 		board.add(p3);
 		
+		//add the board
 		window.add(board);
 		window.getContentPane().setBackground(new Color(234, 242, 248));
 		window.repaint();
 
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); <---- this was already done
 		window.pack();
 		
 		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-
 		return window;
 	}
 
+	//Destroys the login window
+	public void destroyWindow() {
+		window.dispose();
+	}
 	
 	
+	//Validates the accounts existence
 	public boolean validate() {
 
 		BufferedReader br = null;
@@ -201,7 +206,6 @@ public final class LogIn extends WindowManager{
 		}
 
 		return isTrue;
-
 	}
 
 	

@@ -1,5 +1,5 @@
 
-package edu.baylor.ecs.FitLifeApp;
+package edu.baylor.ecs.Controllers;
 
 /*
  * File:		WindowManager.java
@@ -14,28 +14,33 @@ import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.Listeners.BasicActListener;
+
 import java.awt.event.*;
 
 import java.util.*;
 
 	public class WindowManager {
 
-	static JPanel cards; // a panel that uses CardLayout
+	JPanel cards; // a panel that uses CardLayout
 
-	final static String ex1 = "Aerobic Exercise";
-	final static String ex2 = "Strength Exercise";
-	final static String ex3 = "Balance Exercise";
-	final static String ex4 = "Flexibility Exercise";
+	final String ex1 = "Aerobic Exercise";
+	final String ex2 = "Strength Exercise";
+	final String ex3 = "Balance Exercise";
+	final String ex4 = "Flexibility Exercise";
 
 	// -----------------------------------------
 	
 	private static LogIn login = LogIn.getInstance();
 	private static AcctCreator acctCreator = AcctCreator.getInstance();
 	private static CalendarWindow calendarWindow = CalendarWindow.getInstance();
+	private static HomePage home = HomePage.getInstance();
 	
 	//-----------------------------------------
-	private static JFrame window;
-	private static Account acct;
+	private JFrame window;
+
+	private Account acct;
 	
 	
 	private static volatile WindowManager instance = null;
@@ -58,58 +63,8 @@ import java.util.*;
 	}
 	
 
-	/*
-	 * //I assume leftovers JLabel result; String currentPattern;
-	 * This seems fine but why 
-	 */
-	 class BasicActListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			
-			//Home button is clicked, spawn home page
-			if (e.getActionCommand().equals("Home")) {
-				toHome();
-				System.out.println("HOME");
-				
-			//if logout is selected displose of window and spawn log in screen	
-			} else if (e.getActionCommand().equals("Log Out")) {
-				window.dispose();
-				toLogIn();
-				System.out.println("Logged Out");
-				
-			//if view calendar is selected spawn calendar
-			} else if (e.getActionCommand().equals("View Calendar")) {
-
-				// Might get removed
-				toCalendar();
-				System.out.println("View Cal");
-				
-			//if a date is selected use joption pane	
-			} else if (e.getActionCommand().equals("Date selected")) {
-
-				JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
-						"Failed Login", JOptionPane.ERROR_MESSAGE);
-				
-			//if the confirm button is hit show the add workout dialog
-			} else if (e.getActionCommand().equals("Confirm")) {
-				try {
-					calendarWindow.showAddWorkoutDialog();
-				} catch (Exception e1) {
-
-					e1.printStackTrace();
-				}
-				
-			//TO DO: remove code, unneeded
-			} else if (e.getActionCommand().equals("Plan Workout")) {
-				// addWorkoutWindow();
-				System.out.println("Planning Workout");
-			} else {
-				System.err.println("Unhandled Action Command: " + e.getActionCommand());
-			}
-		}
-	}
-
 	//state change listener
-	static class BasicItemListener implements ItemListener {
+	class BasicItemListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent evt) {
@@ -123,84 +78,16 @@ import java.util.*;
 	//// Handles Base construction of frame
 	// Constructs a frame with a menu bar with various pages
 	//This functionality is used by many, maybe it should just be inherited
-	public JFrame makeWindow(JFrame window) {
-		
-		//remove everything form the content pane and set the layout
-		window.getContentPane().removeAll();
-		window.setLayout(new BorderLayout());
-
-		//setup menubar
-		JMenuBar jmb1 = new JMenuBar();
-		jmb1.setPreferredSize(new Dimension(2000, 70));
-		jmb1.setBackground(acct.getColorBase2());
-
-		//setup menu
-		JMenu menu = new JMenu("Menu");
-		menu.setFont(new Font("Menu", Font.PLAIN, 25));
-		menu.setPreferredSize(new Dimension(2000, 70));
-		menu.setForeground(Color.white);
-
-		//setup menu items
-		JMenuItem home = new JMenuItem("Home");
-		home.setFont(new Font("Home", Font.PLAIN, 20));
-		home.setBackground(acct.getColorBase2());
-		home.setForeground(Color.white);
-
-		JMenuItem logOut = new JMenuItem("Log Out");
-		logOut.setFont(new Font("Log Out", Font.PLAIN, 20));
-		logOut.setBackground(acct.getColorBase2());
-		logOut.setForeground(Color.white);
-
-		JMenuItem toCal = new JMenuItem("View Calendar");
-		toCal.setFont(new Font("View Calendar", Font.PLAIN, 20));
-		toCal.setBackground(acct.getColorBase2());
-		toCal.setForeground(Color.white);
-
-		JMenuItem addWorkout = new JMenuItem("Add Workout");
-		addWorkout.setFont(new Font("Add Workout", Font.PLAIN, 20));
-		addWorkout.setBackground(acct.getColorBase2());
-		addWorkout.setForeground(Color.white);
-
-		JMenuItem planWorkout = new JMenuItem("Plan Workout");
-		planWorkout.setFont(new Font("Plan Workout", Font.PLAIN, 20));
-		planWorkout.setBackground(acct.getColorBase2());
-		planWorkout.setForeground(Color.white);
-
-		//add items to the menu
-		menu.setMaximumSize(new Dimension(2000, 50));
-		menu.add(home);
-		menu.add(toCal);
-		menu.add(addWorkout);
-		menu.add(planWorkout);
-		menu.add(logOut);
-
-		// Buttons to swap between pages
-		home.addActionListener(instance.new BasicActListener());
-		logOut.addActionListener(instance.new BasicActListener());
-		toCal.addActionListener(instance.new BasicActListener());
-		addWorkout.addActionListener(instance.new BasicActListener());
-		planWorkout.addActionListener(instance.new BasicActListener());
-
-		//add the menu
-		jmb1.add(menu);
-
-		//pack the frame
-		window.add(jmb1, BorderLayout.NORTH);
-		window.pack();
-		
-		// Doesn't handle sizing page or making visible
-		return window;
-	}
+	
 
 	//sets the Jframe window to the Jframe returned by makeWindow with window passed to it
 	public void toHome() {
-		window = makeWindow(window);
-		window = HomePage.makeWindow(window, acct);
+		home.makeWindow(acct);
 	}
 
 	//Makes log in window
 	public void toLogIn() {
-		window = login.makeWindow(window);
+		login.makeWindow();
 	}
 
 	//makes account creation window
@@ -211,15 +98,14 @@ import java.util.*;
 	
 	//makes Calendar window
 	public void toCalendar() {
-		//smae stuff for calendar window
-		window = calendarWindow.makeWindow(window);
+		//same stuff for calendar window
+		calendarWindow.makeWindow();
 
 	}
 
 	// Not moved yet.
 	public void toDay(Date day) {
 		window.dispose();
-		window = makeWindow(window);
 
 		File file = new File("workout.csv");
 		int row = 0;
@@ -253,7 +139,7 @@ import java.util.*;
 		}
 		
 		// Not use header yet
-		String header[] = {"Name","Your weight","Lift weight","Duration"};
+		//String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, 4);
 		
 		// Only add the corresponding data to the table (No more write space caused by hiding part of the data)
@@ -314,11 +200,12 @@ import java.util.*;
 	}
 
 	// Also not yet moved
-	public static void addWorkoutWindow() {
-		window = new JFrame("Select a Type");
+	public void addWorkoutWindow() {
+		this.window = new JFrame("Select a Type");
 
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
 		cb.setEditable(false);
 		cb.addItemListener(new BasicItemListener());
@@ -326,7 +213,7 @@ import java.util.*;
 
 		JButton j1 = new JButton("Confirm");
 
-		j1.addActionListener(instance.new BasicActListener());
+		j1.addActionListener(new BasicActListener());
 
 		// Create the "cards".
 		JPanel card1 = new JPanel();
@@ -353,7 +240,18 @@ import java.util.*;
 	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
-		WindowManager.acct = src;
+		acct = src;
 
 	}
+	
+	
+	public CalendarWindow getCalendarWindow() {
+		return calendarWindow;
+	}
+	
+	public JFrame getWindow() {
+		return window;
+	}
+	
+	
 }

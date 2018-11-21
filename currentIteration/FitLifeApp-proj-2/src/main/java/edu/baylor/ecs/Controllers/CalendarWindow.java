@@ -1,4 +1,4 @@
-package edu.baylor.ecs.FitLifeApp;
+package edu.baylor.ecs.Controllers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,7 +26,7 @@ public final class CalendarWindow extends WindowManager{
 	static boolean flag = false;
 	private  JDatePanelImpl datePanel = null;
 	private Date day = java.util.Calendar.getInstance().getTime();
-	
+	private JFrame window = null;
 
 	private static volatile CalendarWindow instance = null;
 	
@@ -60,7 +60,8 @@ public final class CalendarWindow extends WindowManager{
 	
 	
 	//Copied from toCalendar
-	public JFrame makeWindow(JFrame window) {
+	public JFrame makeWindow() {
+		
 		window = new JFrame("Calendar");
 		
 		Properties p = new Properties();
@@ -84,8 +85,8 @@ public final class CalendarWindow extends WindowManager{
 		
 		window.pack();
 		window.setVisible(true);
-		
 		return window;
+		
 	}
 	
 	
