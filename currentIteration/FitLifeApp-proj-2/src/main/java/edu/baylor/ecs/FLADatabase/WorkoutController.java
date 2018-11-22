@@ -1,8 +1,11 @@
 package edu.baylor.ecs.FLADatabase;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 //make singleton
 public final class WorkoutController extends DatabaseController{
@@ -99,5 +102,37 @@ public final class WorkoutController extends DatabaseController{
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+	
+	/* This function selects all records from the meal table	
+	 * 
+	 */
+	public void selectAll() {
+		String deleteTableSQL = "SELECT * FROM Workout";
+		try ( Connection dbConnection = getDBConnection();
+			  Statement statement = dbConnection.createStatement();){
+			
+			System.out.println(deleteTableSQL);
+			ResultSet rs = statement.executeQuery(deleteTableSQL);
+			System.out.println("Record selected from Workout table!");
+			
+			//loops through and return as a list of strings
+			List<String[]> row = new ArrayList<String[]>();
+			if(rs.next() == false) {
+				System.out.println("Result set is empty in java.");
+			}else {
+				do {
+					
+					
+					
+				}while(rs.next());
+			}
+			
+			
+			
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 }

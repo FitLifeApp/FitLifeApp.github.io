@@ -87,7 +87,6 @@ public final class MealController extends DatabaseController {
 	 * Deletes a record from the Meal table specified by its id
 	 * */
 	public void delete(Integer id) {
-		
 		String deleteTableSQL = "DELETE FROM Meal WHERE id = " + id.intValue();
 		try ( Connection dbConnection = getDBConnection();
 				Statement statement = dbConnection.createStatement();){
@@ -100,5 +99,10 @@ public final class MealController extends DatabaseController {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	
+	/* This function selects all records from the meal table	
+	 * 
+	 */
 	
 }
