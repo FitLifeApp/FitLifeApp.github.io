@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.baylor.ecs.FitLifeApp.Workout;
+
 //make singleton
 public final class WorkoutController extends DatabaseController{
 	 private static volatile WorkoutController instance = null;
@@ -104,11 +106,27 @@ public final class WorkoutController extends DatabaseController{
 	}
 	
 	
-	/* This function selects all records from the meal table	
+	public void deleteAll() {
+		String deleteTableSQL = "DELETE FROM Workout";
+		try ( Connection dbConnection = getDBConnection();
+				Statement statement = dbConnection.createStatement();){
+		
+			System.out.println(deleteTableSQL);
+			statement.execute(deleteTableSQL);
+			System.out.println("All Records deleted from Workout table!");
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	
+	/* This function selects all records from the Workout table	
 	 * 
 	 */
-	public void selectAll() {
+	public List<Workout> selectAll() {
 		String deleteTableSQL = "SELECT * FROM Workout";
+		List<Workout> row = new ArrayList<Workout>();
 		try ( Connection dbConnection = getDBConnection();
 			  Statement statement = dbConnection.createStatement();){
 			
@@ -117,22 +135,38 @@ public final class WorkoutController extends DatabaseController{
 			System.out.println("Record selected from Workout table!");
 			
 			//loops through and return as a list of strings
-			List<String[]> row = new ArrayList<String[]>();
 			if(rs.next() == false) {
-				System.out.println("Result set is empty in java.");
+				System.out.print("No results from Workout table");
 			}else {
 				do {
+					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 
+							Integer.valueOf(rs.getInt("duration")), rs.getString("name"), 
+							rs.getString("type"), Double.valueOf(rs.getDouble("userWeight")), 
+							Double.valueOf(rs.getDouble("workoutWeight")));
 					
-					
-					
-				}while(rs.next());
+					row.add(aWorkout);
+				}while(rs.next());	
 			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return row;
+	}
+	
+	public void dropTable(){
+		String dropTableSQL = "DROP TABLE Workout";
+		try ( Connection dbConnection = getDBConnection();
+			  Statement statement = dbConnection.createStatement();){
 			
-			
-			
+			System.out.println(dropTableSQL);
+			statement.execute(dropTableSQL);
+			System.out.println("Dropped Workout table!");
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+		
 	}
+
 }

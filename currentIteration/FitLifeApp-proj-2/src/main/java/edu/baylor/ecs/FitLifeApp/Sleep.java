@@ -1,47 +1,61 @@
 package edu.baylor.ecs.FitLifeApp;
 
-public class Sleep extends LogItem{
-	private int id;
-	private int duration;
-	private int rating;
-	private int startTime;
+import java.sql.Time;
+
+public class Sleep{
+	private Integer id;
+	private Double duration;
+	private Integer rating;
+	private Time startTime;
 	
-	public Sleep(int duration, int rating, int startTime) {
-		setId(LogItem.count++);
+	
+	public Sleep() {
+		
+	}
+	
+	public Sleep(Double duration, Integer rating, Time startTime) {
 		setDuration(duration);
 		setRating(rating);
 		setStartTime(startTime);
 	}
 	
-	public int getId() {
+	
+	public Sleep(Integer logid, Double duration, Integer rating, Time startTime) {
+		setId(logid);
+		setDuration(duration);
+		setRating(rating);
+		setStartTime(startTime);
+	}
+	
+	public Integer getId() {
 		return id;
 	}
 
-	private void setId(int id) {
+	private void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getDuration() {
+	public Double getDuration() {
 		return duration;
 	}
 
-	private void setDuration(int duration) {
+	private void setDuration(Double duration) {
 		this.duration = duration;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 
-	private void setRating(int rating) {
+	private void setRating(Integer rating) {
 		this.rating = rating;
 	}
 
-	public int getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
 
-	private void setStartTime(int startTime) {
+	private void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
 	
