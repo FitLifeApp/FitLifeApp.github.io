@@ -42,7 +42,7 @@ public class AddWorkoutWindow extends WindowManager {
 
 	public JFrame makeWindow() {
 
-		window = new JFrame("Calendar");
+		window = new JFrame("New Workout");
 
 		FlowLayout flowLayout = new FlowLayout();
 		flowLayout.setAlignment(FlowLayout.CENTER);
