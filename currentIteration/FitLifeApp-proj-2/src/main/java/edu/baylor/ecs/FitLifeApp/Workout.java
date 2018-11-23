@@ -7,9 +7,7 @@ public class Workout extends LogItem {
 	private int userWeight;
 	private int workoutWeights;
 	private int id;
-	
-	
-	
+
 	public Workout(int duration, String name, String type, int userWeight, int workoutWeights) {
 		setId(LogItem.count++);
 		setDuration(duration);

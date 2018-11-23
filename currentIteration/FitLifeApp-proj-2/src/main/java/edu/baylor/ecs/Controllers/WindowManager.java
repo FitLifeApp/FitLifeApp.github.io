@@ -34,11 +34,17 @@ import java.util.*;
 	
 	private static LogIn login = LogIn.getInstance();
 	private static AcctCreator acctCreator = AcctCreator.getInstance();
+	private static AddWorkoutWindow addWorkoutWindow = AddWorkoutWindow.getInstance();
+	public AddWorkoutWindow getAddWorkoutWindow() {
+		return addWorkoutWindow;
+	}
+
 	private static CalendarWindow calendarWindow = CalendarWindow.getInstance();
 	private static HomePage home = HomePage.getInstance();
 	
 	//-----------------------------------------
 	private JFrame window;
+	private JFrame workoutWindow  = new JFrame("New Workout");
 
 	private Account acct;
 	
@@ -92,7 +98,7 @@ import java.util.*;
 
 	//makes account creation window
 	public void toAcctCreation() {
-		window = acctCreator.makeWindow(window);
+		acctCreator.makeWindow();
 	}
 
 	
@@ -199,51 +205,12 @@ import java.util.*;
 		window.setVisible(true);
 	}
 
-	// Also not yet moved
-	public void addWorkoutWindow() {
-		this.window = new JFrame("Select a Type");
-
-		JPanel comboBoxPane = new JPanel(); // use FlowLayout
-		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		JComboBox cb = new JComboBox(comboBoxItems);
-		cb.setEditable(false);
-		cb.addItemListener(new BasicItemListener());
-		comboBoxPane.add(cb);
-
-		JButton j1 = new JButton("Confirm");
-
-		j1.addActionListener(new BasicActListener());
-
-		// Create the "cards".
-		JPanel card1 = new JPanel();
-		card1.add(j1);
-
-		// Create the panel that contains the "cards".
-		cards = new JPanel(new CardLayout());
-		cards.add(card1, ex1);
-		cards.add(card1, ex2);
-		cards.add(card1, ex3);
-		cards.add(card1, ex4);
-
-		window.getContentPane().add(comboBoxPane, BorderLayout.PAGE_START);
-		window.getContentPane().add(cards, BorderLayout.CENTER);
-
-		window.setLocationRelativeTo(null);
-
-		// Display the window.
-		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 30);
-		window.setVisible(true);
-	}
-
 	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		acct = src;
 
-	}
-	
+	}	
 	
 	public CalendarWindow getCalendarWindow() {
 		return calendarWindow;
@@ -253,5 +220,7 @@ import java.util.*;
 		return window;
 	}
 	
-	
+	public void destroyWindow() {
+		window.dispose();
+	}
 }

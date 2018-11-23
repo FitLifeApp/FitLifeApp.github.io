@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
+import edu.baylor.ecs.Controllers.AddWorkoutWindow;
 import edu.baylor.ecs.Controllers.CalendarWindow;
 
 	//Listener for Calendar specific buttons
@@ -12,6 +13,7 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 	public class CalendarListener implements ActionListener {
 		
 		CalendarWindow calendarWindow = CalendarWindow.getInstance();
+		AddWorkoutWindow workoutWindow = AddWorkoutWindow.getInstance();
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("View Calendar")) {
@@ -25,20 +27,24 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 
 					if (calendarWindow.getFlag() == true) {
 						calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-						calendarWindow.addWorkoutWindow();
+						workoutWindow.makeWindow();
+						
 					} else {
 						calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 					}
 				}
 				calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 			} else if (e.getActionCommand().equals("Confirm")) {
+				System.out.println("Confirmed");
 				try {
 					calendarWindow.showAddWorkoutDialog();
 				} catch (Exception e1) {
-
 					e1.printStackTrace();
 				}
+			} else if (e.getActionCommand().equals("Cancel")) {
+				calendarWindow.destroyWindow();
 			} else if (e.getActionCommand().equals("Plan Workout")) {
+			
 				// addWorkoutWindow();
 				System.out.println("Planning Workout");
 			} else {

@@ -24,9 +24,7 @@ import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.Listeners.BasicActListener;
 import edu.baylor.ecs.Listeners.HomeListener;
 
-public final class HomePage extends WindowManager{
-	
-	
+public final class HomePage extends WindowManager{	
 	private static volatile HomePage instance = null;
 	private JFrame window;
 	
@@ -42,13 +40,11 @@ public final class HomePage extends WindowManager{
 		}
 		return instance;
 	}
-	
 
 	public void makeWindow(Account acct) {
-		window = new JFrame();
+		window = new JFrame("Home");
 		
 		//setup the window
-		window.getContentPane().removeAll();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		FlowLayout experimentLayout = new FlowLayout();
@@ -202,10 +198,7 @@ public final class HomePage extends WindowManager{
 
 		window.add(fp, BorderLayout.CENTER);
 		window.add(jtf1, BorderLayout.SOUTH);
-		
-		window.repaint();
 		window.pack();
-		
 		
 		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

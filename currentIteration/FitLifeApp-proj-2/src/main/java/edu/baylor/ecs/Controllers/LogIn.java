@@ -51,11 +51,10 @@ public final class LogIn extends WindowManager{
 		return instance;
 	}
 	
-	
 	//Makes the login window
 	public JFrame makeWindow() {
 		
-		window = new JFrame();
+		window = new JFrame("Welcome");
 		
 		//Set layout and close operation
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -64,21 +63,21 @@ public final class LogIn extends WindowManager{
 		window.setLayout(flowLayout);
 	    
 		//Create boxes
-		Box p1 = new Box(BoxLayout.Y_AXIS);
-		p1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		p1.setMaximumSize(new Dimension(2000,150));
+		Box b1 = new Box(BoxLayout.Y_AXIS);
+		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b1.setMaximumSize(new Dimension(2000,150));
 		
-		Box p2 = new Box(BoxLayout.Y_AXIS);
-		p2.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		p2.setMaximumSize(new Dimension(2000,150));
+		Box b2 = new Box(BoxLayout.Y_AXIS);
+		b2.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b2.setMaximumSize(new Dimension(2000,150));
 		
-		Box p3 = new Box(BoxLayout.Y_AXIS);
-		p3.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		p3.setMaximumSize(new Dimension(2000,150));
+		Box b3 = new Box(BoxLayout.Y_AXIS);
+		b3.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b3.setMaximumSize(new Dimension(2000,150));
 		
-		Box p4 = new Box(BoxLayout.Y_AXIS);
-		p4.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		p4.setMaximumSize(new Dimension(2000,150));
+		Box b4 = new Box(BoxLayout.Y_AXIS);
+		b4.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b4.setMaximumSize(new Dimension(2000,150));
 
 		Box board = new Box(BoxLayout.Y_AXIS);
 		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -91,8 +90,8 @@ public final class LogIn extends WindowManager{
 		uName.setMaximumSize(new Dimension(2000,30));
 		uName.setFont(new Font("", Font.PLAIN, 20));
 		
-		p1.add(uLabel);
-		p1.add(uName);
+		b1.add(uLabel);
+		b1.add(uName);
 		
 		JLabel pLabel = new JLabel("Password");
 		pLabel.setFont(new Font("Password", Font.PLAIN, 20));
@@ -101,8 +100,8 @@ public final class LogIn extends WindowManager{
 		pWord.setMaximumSize(new Dimension(2000,30));
 		pWord.setFont(new Font("", Font.PLAIN, 20));
 		
-		p2.add(pLabel);
-		p2.add(pWord);
+		b2.add(pLabel);
+		b2.add(pWord);
 
 		//create buttons
 		JButton createAcct = new JButton("Create Account");
@@ -127,27 +126,27 @@ public final class LogIn extends WindowManager{
 		logIn.addActionListener(new LoginListener());
 		
 		//add buttons
-		p3.add(createAcct);
-		p3.add(Box.createVerticalStrut(5));
-		p3.add(lostPW);
-		p3.add(Box.createVerticalStrut(5));
-		p3.add(logIn);
+		b3.add(createAcct);
+		b3.add(Box.createVerticalStrut(5));
+		b3.add(lostPW);
+		b3.add(Box.createVerticalStrut(5));
+		b3.add(logIn);
 
 		board.add(Box.createVerticalStrut(screenHeight/2-250));
 		
 		//create and add label
 		JLabel welcome = new JLabel("Welcome to FitLife");	
 		welcome.setFont(new Font("Welcome to FitLife", Font.PLAIN, 50));
-		p4.add(welcome);
+		b4.add(welcome);
 		
 		//add boxes
-		board.add(p4);
+		board.add(b4);
 		board.add(Box.createVerticalStrut(40));
-		board.add(p1);
+		board.add(b1);
 		board.add(Box.createVerticalStrut(10));
-		board.add(p2);
+		board.add(b2);
 		board.add(Box.createVerticalStrut(10));
-		board.add(p3);
+		board.add(b3);
 		
 		//add the board
 		window.add(board);
@@ -161,6 +160,7 @@ public final class LogIn extends WindowManager{
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
+		
 		return window;
 	}
 
@@ -250,9 +250,6 @@ public final class LogIn extends WindowManager{
 				}
 			}
 		}
-		
-		
-
 
 		if (gotID && id != -1) {
 			File acct = new File("ACCT" + Integer.toString(id));

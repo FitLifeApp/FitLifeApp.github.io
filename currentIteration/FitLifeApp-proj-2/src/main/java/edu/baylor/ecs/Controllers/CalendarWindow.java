@@ -42,11 +42,7 @@ public final class CalendarWindow extends WindowManager{
 		}
 		return instance;
 	}
-	
-	
-	
-	
-	//To move flag out of WindowManager, it is put here
+//To move flag out of WindowManager, it is put here
 	//I'm not sure what flag does, so if it belongs somewhere else
 	//Feel free to move it
 	
@@ -88,8 +84,7 @@ public final class CalendarWindow extends WindowManager{
 		return window;
 		
 	}
-	
-	
+
 
 	public void showAddWorkoutDialog() throws Exception {
 		File file = new File("workout.csv");
@@ -98,7 +93,7 @@ public final class CalendarWindow extends WindowManager{
 		JTextField field3 = new JTextField();
 
 		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, };
-		JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JOptionPane.showConfirmDialog(new JFrame(), message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		String exercise = field1.getText();
 		String duration = field2.getText();
 		String weight = field3.getText();
@@ -110,10 +105,6 @@ public final class CalendarWindow extends WindowManager{
 		w.close();
 		p.close();
 
-		
-
-
-		
 		//I have no idea what this is for
 		//Strictly speaking, I have no idea how most of this works
 		/*
@@ -122,6 +113,11 @@ public final class CalendarWindow extends WindowManager{
 		}
 		*/
 	}
+	
+	public void destroyWindow() {
+		window.dispose();
+	}
+
 
 	public JDatePanelImpl getDatePanel() {
 		return datePanel;

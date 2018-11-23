@@ -47,12 +47,14 @@ public /*
 			try {
 				wm.getCalendarWindow().showAddWorkoutDialog();
 			} catch (Exception e1) {
-
 				e1.printStackTrace();
 			}
 			
 		//TO DO: remove code, unneeded
-		} else if (e.getActionCommand().equals("Plan Workout")) {
+		} else if (e.getActionCommand().equals("Cancel")) {
+			wm.getAddWorkoutWindow().destroyWindow();
+			System.out.println("Canceled");
+		}  else if (e.getActionCommand().equals("Plan Workout")) {
 			// addWorkoutWindow();
 			System.out.println("Planning Workout");
 		} else {

@@ -1,8 +1,10 @@
 package edu.baylor.ecs.Listeners;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -21,12 +23,16 @@ import edu.baylor.ecs.Controllers.LogIn;
 					login.destroyWindow();
 					login.toHome();
 				} else {
-					JOptionPane.showMessageDialog(new JFrame(), "Incorrect Username/Password", "Failed Login",
+					JFrame loginError = new JFrame();
+					
+					JOptionPane.showMessageDialog(loginError, "Incorrect Username/Password", "Failed Login",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else if (e.getActionCommand().equals("Create Account")) {
+				login.destroyWindow();
 				login.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
+				login.destroyWindow();
 				login.toAcctCreation();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
