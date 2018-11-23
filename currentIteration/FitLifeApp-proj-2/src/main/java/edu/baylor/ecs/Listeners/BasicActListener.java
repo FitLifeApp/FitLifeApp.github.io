@@ -45,7 +45,9 @@ public /*
 		//if the confirm button is hit show the add workout dialog
 		} else if (e.getActionCommand().equals("Confirm")) {
 			try {
-				wm.getCalendarWindow().showAddWorkoutDialog();
+				wm.getAddWorkoutWindow().destroyWindow();
+				if (wm.getCalendarWindow().showAddWorkoutDialog() == true) {
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

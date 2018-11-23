@@ -27,6 +27,7 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 
 					if (calendarWindow.getFlag() == true) {
 						calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
+						calendarWindow.destroyWindow();
 						workoutWindow.makeWindow();
 						
 					} else {
@@ -34,19 +35,6 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 					}
 				}
 				calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-			} else if (e.getActionCommand().equals("Confirm")) {
-				System.out.println("Confirmed");
-				try {
-					calendarWindow.showAddWorkoutDialog();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			} else if (e.getActionCommand().equals("Cancel")) {
-				calendarWindow.destroyWindow();
-			} else if (e.getActionCommand().equals("Plan Workout")) {
-			
-				// addWorkoutWindow();
-				System.out.println("Planning Workout");
 			} else {
 				System.err.println("Unhandled Action Command: " + e.getActionCommand());
 			}
