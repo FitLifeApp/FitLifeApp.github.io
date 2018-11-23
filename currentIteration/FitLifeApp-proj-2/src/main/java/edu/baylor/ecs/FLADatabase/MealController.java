@@ -1,8 +1,13 @@
 package edu.baylor.ecs.FLADatabase;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.baylor.ecs.FitLifeApp.Meal;
 
 //make singleton
 public final class MealController extends DatabaseController {
@@ -101,8 +106,69 @@ public final class MealController extends DatabaseController {
 	}
 	
 	
+	public void deleteAll() {
+		String deleteTableSQL = "DELETE FROM Meal";
+		try ( Connection dbConnection = getDBConnection();
+				Statement statement = dbConnection.createStatement();){
+		
+			System.out.println(deleteTableSQL);
+			statement.execute(deleteTableSQL);
+			System.out.println("All Records deleted from Meal table!");
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	
+	
 	/* This function selects all records from the meal table	
 	 * 
 	 */
+	public List<Meal> selectAll() {
+		String deleteTableSQL = "SELECT * FROM Meal";
+		List<Meal> row = new ArrayList<Meal>();
+		try ( Connection dbConnection = getDBConnection();
+			  Statement statement = dbConnection.createStatement();){
+			
+			System.out.println(deleteTableSQL);
+			ResultSet rs = statement.executeQuery(deleteTableSQL);
+			System.out.println("Record selected from Meal table!");
+			
+			//loops through and return as a list of strings
+			if(rs.next() == false) {
+				System.out.print("No results from Meal table");
+			}else {
+				do {
+					Meal aMeal= new Meal(Integer.valueOf(rs.getInt("id")), Integer.valueOf(rs.getInt("carbs")), Integer.valueOf(rs.getString("fat")), 
+							Integer.valueOf(rs.getString("hydration")), rs.getString("name"), Integer.valueOf(rs.getInt("protein")));
+					
+					row.add(aMeal);
+				}while(rs.next());	
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return row;
+	}
+	
+	
+	public void dropTable(){
+		String dropTableSQL = "DROP TABLE Meal";
+		try ( Connection dbConnection = getDBConnection();
+			  Statement statement = dbConnection.createStatement();){
+			
+			System.out.println(dropTableSQL);
+			statement.execute(dropTableSQL);
+			System.out.println("Dropped Meal table!");
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	
 	
 }

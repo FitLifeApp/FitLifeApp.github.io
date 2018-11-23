@@ -1,17 +1,20 @@
 package edu.baylor.ecs.FitLifeApp;
 
-public class Workout extends LogItem {
-	private int duration;
-	private String name;
-	private String type;
-	private int userWeight;
-	private int workoutWeights;
-	private int id;
+public class Workout{
+	private Integer duration = null;
+	private String name = null;
+	private String type = null;
+	private Double userWeight = null;
+	private Double workoutWeights = null;
+	private Integer id = null; 
 	
 	
+	public Workout() {
+		
+	}
 	
-	public Workout(int duration, String name, String type, int userWeight, int workoutWeights) {
-		setId(LogItem.count++);
+	public Workout(Integer logid, Integer duration, String name, String type, Double userWeight, Double workoutWeights) {
+		setId(logid);
 		setDuration(duration);
 		setName(name);
 		setType(type);
@@ -19,24 +22,31 @@ public class Workout extends LogItem {
 		setWorkoutWeights(workoutWeights);
 	}
 	
+	public Workout(int duration, String name, String type, Double userWeight, Double workoutWeights) {
+		setDuration(duration);
+		setName(name);
+		setType(type);
+		setUserWeight(userWeight);
+		setWorkoutWeights(workoutWeights);
+	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
 
-	private void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 
-	public int getDuration() {
+	public Integer getDuration() {
 		return duration;
 	}
 
 
 
-	private void setDuration(int duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 
@@ -48,7 +58,7 @@ public class Workout extends LogItem {
 
 
 
-	private void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -60,31 +70,31 @@ public class Workout extends LogItem {
 
 
 
-	private void setType(String type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
 
 
-	public int getUserWeight() {
+	public Double getUserWeight() {
 		return userWeight;
 	}
 
 
 
-	private void setUserWeight(int userWeight) {
+	public void setUserWeight(Double userWeight) {
 		this.userWeight = userWeight;
 	}
 
 
 
-	public int getWorkoutWeights() {
+	public Double getWorkoutWeights() {
 		return workoutWeights;
 	}
 
 
 
-	private void setWorkoutWeights(int workoutWeights) {
+	public void setWorkoutWeights(Double workoutWeights) {
 		this.workoutWeights = workoutWeights;
 	}
 	

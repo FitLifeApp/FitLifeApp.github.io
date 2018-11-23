@@ -1,37 +1,37 @@
 package edu.baylor.ecs.FitLifeApp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Meal extends LogItem {
-	private int id;
-	private int calories;
-	private int carbs;
-	private String entre;
-	private int fat;
-	private int hydration;
-	private String name;
-	private int protein;
-	private List<String> sides;
+public class Meal {
+	private Integer id = null;
+	private Integer calories = null;
+	private Integer carbs = null;
+	private Integer fat = null;
+	private Integer hydration = null;
+	private String name = null;
+	private Integer protein = null;
 	
-	
+	public Meal() {
+		
+	}
 
-	public Meal(int carbs, String entre, int fat, int hydration, String name, int protein, String ...sides) {
-		setId(LogItem.count++);
+	public Meal(Integer logid, Integer carbs, Integer fat, Integer hydration, String name, Integer protein) {
+		setId(logid);
 		setCarbs(carbs);
-		setEntre(entre);
 		setFat(fat);
 		setHydration(hydration);
 		setName(name);
 		setProtein(protein);
-		this.sides = new ArrayList<String>();
 		
-		List<String> s = new ArrayList<String>();
-		for(String x : sides) {
-			s.add(x);
-		}
+		/*calculate calories*/
+		setCalories((fat) * 9 + (carbs * 4) + (protein * 4));
 		
-		setSides(s);
+	}
+	
+	public Meal(Integer carbs, Integer fat, Integer hydration, String name, Integer protein) {
+		setCarbs(carbs);
+		setFat(fat);
+		setHydration(hydration);
+		setName(name);
+		setProtein(protein);
 		
 		/*calculate calories*/
 		setCalories((fat) * 9 + (carbs * 4) + (protein * 4));
@@ -39,7 +39,7 @@ public class Meal extends LogItem {
 	}
 	
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	
@@ -47,7 +47,7 @@ public class Meal extends LogItem {
 		this.id = id;
 	}
 	
-	public int getCalories() {
+	public Integer getCalories() {
 		return calories;
 	}
 
@@ -57,7 +57,7 @@ public class Meal extends LogItem {
 	}
 
 
-	public int getCarbs() {
+	public Integer getCarbs() {
 		return carbs;
 	}
 
@@ -67,17 +67,7 @@ public class Meal extends LogItem {
 	}
 
 
-	public String getEntre() {
-		return entre;
-	}
-
-
-	private void setEntre(String entre) {
-		this.entre = entre;
-	}
-
-
-	public int getFat() {
+	public Integer getFat() {
 		return fat;
 	}
 
@@ -87,7 +77,7 @@ public class Meal extends LogItem {
 	}
 
 
-	public int getHydration() {
+	public Integer getHydration() {
 		return hydration;
 	}
 
@@ -107,23 +97,13 @@ public class Meal extends LogItem {
 	}
 
 
-	public int getProtein() {
+	public Integer getProtein() {
 		return protein;
 	}
 
 
-	private void setProtein(int protein) {
+	private void setProtein(Integer protein) {
 		this.protein = protein;
-	}
-
-
-	public List<String> getSides() {
-		return sides;
-	}
-
-
-	private void setSides(List<String> sides) {
-		this.sides = sides;
 	}
 
 	
