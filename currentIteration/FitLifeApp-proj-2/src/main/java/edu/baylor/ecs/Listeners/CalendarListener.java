@@ -57,20 +57,14 @@ public class CalendarListener implements ActionListener {
 								e1.printStackTrace();
 							}
 					}
+					
+				//we're in review mode	
 				} else {
 
 					calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 				}
 			}
 			calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-		} else if (e.getActionCommand().equals("Confirm")) {
-
-			try {
-				calendarWindow.showAddWorkoutDialog();
-			} catch (Exception e1) {
-
-				e1.printStackTrace();
-			}
 		} else if (e.getActionCommand().equals("Plan Workout")) {
 
 			// addWorkoutWindow();
