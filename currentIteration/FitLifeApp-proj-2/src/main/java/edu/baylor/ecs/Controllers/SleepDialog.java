@@ -42,29 +42,30 @@ public final class SleepDialog {
 		JTextField field3 = new JTextField();
 
 		Object[] message = { "Duration", field1, "Rating", field2, "Start Time", field3 };
-		JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 
-		// Creates a sleep which can use the add method of SleepController to enter it
-		// into the database
-		// We need to store the username somewhere though
-		// Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
-		// Integer.valueOf(field2.getText()), Time.valueOf(field3.getText()));
-
-		Double duration = Double.valueOf(field1.getText());
-		Integer rating = Integer.valueOf(field2.getText());
-		Time startTime = Time.valueOf(field3.getText());
-
-		FileWriter w = new FileWriter(file, true);
-		PrintWriter p = new PrintWriter(w);
-
-		p.write("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
-				+ day.toString() + "\n");
-		System.out.println("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
-				+ day.toString() + "\n");
-
-		w.close();
-		p.close();
-
+		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
+			// Creates a sleep which can use the add method of SleepController to enter it
+			// into the database
+			// We need to store the username somewhere though
+			// Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
+			// Integer.valueOf(field2.getText()), Time.valueOf(field3.getText()));
+	
+			Double duration = Double.valueOf(field1.getText());
+			Integer rating = Integer.valueOf(field2.getText());
+			Time startTime = Time.valueOf(field3.getText());
+	
+			FileWriter w = new FileWriter(file, true);
+			PrintWriter p = new PrintWriter(w);
+	
+			p.write("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
+					+ day.toString() + "\n");
+			System.out.println("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
+					+ day.toString() + "\n");
+	
+			w.close();
+			p.close();
+		}
 	}
 
 }
