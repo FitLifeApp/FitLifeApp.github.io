@@ -50,9 +50,11 @@ public final class WorkoutController extends DatabaseController{
 	
 	/* Inserts a record into the Workout table
 	 * */
-	public void add(String username, Integer duration, String name, String type, Double userWeight, Double workoutWeight) {
+	public void add(String username, Workout aWorkout) {
 		String insertTableSQL = "INSERT INTO Workout" + "(userName, duration, name, type, userWeight, workoutWeight) " + "VALUES"
-				+ "('"+ username + "'," + duration.intValue() + ",'" + name + "','" + type + "'," + userWeight.doubleValue() + "," + workoutWeight.doubleValue() + ")";
+				+ "('"+ username + "'," + aWorkout.getDuration().intValue() + ",'" + aWorkout.getName() + "','" + aWorkout.getType() + 
+				"'," + aWorkout.getUserWeight().doubleValue() + "," + aWorkout.getWorkoutWeights().doubleValue() + ")";
+		
 		try (Connection dbConnection = getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			

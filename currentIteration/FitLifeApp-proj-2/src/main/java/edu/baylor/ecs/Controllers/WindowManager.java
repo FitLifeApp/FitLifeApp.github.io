@@ -180,8 +180,7 @@ import java.util.*;
 		// TODO Auto-generated method stub
 		System.out.println(src.toString());
 		acct = src;
-
-	}	
+	}
 	
 	public CalendarWindow getCalendarWindow() {
 		return calendarWindow;

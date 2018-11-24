@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.baylor.ecs.FLADatabase.WorkoutController;
+import edu.baylor.ecs.FitLifeApp.Workout;
 import edu.baylor.ecs.Listeners.WorkoutDialogListener;
 
 public final class WorkoutDialog {
@@ -28,6 +30,8 @@ public final class WorkoutDialog {
 	private final String ex3 = "Balance Exercise";
 	private final String ex4 = "Flexibility Exercise";
 	private Date day;
+	private String type = null;
+	private WorkoutController wc = WorkoutController.getInstance();
 	
 	private WorkoutDialog(){}
 	
@@ -63,6 +67,7 @@ public final class WorkoutDialog {
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
+		type = String.valueOf(cb.getSelectedItem());
 		cb.setEditable(false);
 		cb.addItemListener(new BasicItemListener());
 		comboBoxPane.add(cb);
@@ -101,13 +106,20 @@ public final class WorkoutDialog {
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
 		JTextField field3 = new JTextField();
+		JTextField field4 = new JTextField();
 
-		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, };
+		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, "Weight Used", field4};
 		JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		
+		//Creates a workout which can use the add method or WorkoutController to enter it into the database
+		//We need to store the username somewhere though
+		//Workout aWorkout = new Workout(Integer.valueOf(field2.getText()), field1.getText(), type, Double.valueOf(field3.getText()), Double.valueOf(field4.getText()));
+		
+		
 		String exercise = field1.getText();
-		String duration = field2.getText();
+		Integer duration = Integer.valueOf(field2.getText());
 		String weight = field3.getText();
+		//Integer weightUsed = Integer.valueOf(field4.getText()); 
 		
 		FileWriter w = new FileWriter(file, true);
 		PrintWriter p = new PrintWriter(w);
