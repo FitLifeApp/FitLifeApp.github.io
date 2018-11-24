@@ -24,12 +24,6 @@ public /*
 			System.out.println("HOME");
 			
 		//if logout is selected displose of window and spawn log in screen	
-		} else if (e.getActionCommand().equals("Log Out")) {
-			wm.getWindow().dispose();
-			wm.toLogIn();
-			System.out.println("Logged Out");
-			
-		//if view calendar is selected spawn calendar
 		} else if (e.getActionCommand().equals("View Calendar")) {
 
 			// Might get removed

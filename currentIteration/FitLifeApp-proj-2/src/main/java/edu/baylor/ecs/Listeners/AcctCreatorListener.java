@@ -16,6 +16,7 @@ public class AcctCreatorListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Create Account")) {
 			if (acct.createAcct()) {
+				acct.destroy();
 				acct.toLogIn();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Account Creation Failed", "Failed Creation",

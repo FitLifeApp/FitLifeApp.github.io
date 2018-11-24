@@ -25,6 +25,7 @@ import edu.baylor.ecs.Controllers.LogIn;
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else if (e.getActionCommand().equals("Create Account")) {
+				login.destroyWindow();
 				login.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
 				login.toAcctCreation();

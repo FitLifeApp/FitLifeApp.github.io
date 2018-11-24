@@ -27,6 +27,11 @@ public class HomeListener implements ActionListener {
 			System.out.println("View Cal");
 			System.out.println("Reviewing Workout");
 
+		} else if (e.getActionCommand().equals("Log Out")) {
+			home.destory();
+			home.toLogIn();
+			System.out.println("Logged Out");
+		//if view calendar is selected spawn calendar
 		} else {
 			//If this occurs, I missed a button somewhere
 			JOptionPane.showMessageDialog(new JFrame(), "Hmm, more non-existant buttons...\nFind them all for a prize at the end!",

@@ -9,15 +9,11 @@ package edu.baylor.ecs.Controllers;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import edu.baylor.ecs.FitLifeApp.Account;
-
 import java.awt.event.*;
-
 import java.util.*;
 
 	public class WindowManager {
@@ -54,9 +50,6 @@ import java.util.*;
 		return instance;
 	}
 	
-
-	
-
 	
 	//// Handles Base construction of frame
 	// Constructs a frame with a menu bar with various pages
@@ -75,7 +68,7 @@ import java.util.*;
 
 	//makes account creation window
 	public void toAcctCreation() {
-		window = acctCreator.makeWindow(window);
+		acctCreator.makeWindow();
 	}
 
 	

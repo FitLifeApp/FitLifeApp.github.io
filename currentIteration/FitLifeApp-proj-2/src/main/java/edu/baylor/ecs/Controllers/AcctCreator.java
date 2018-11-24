@@ -37,6 +37,7 @@ public final class AcctCreator extends WindowManager {
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
+	private JFrame window = null;
 	
 	/*The singleton code*/
 	private static volatile AcctCreator instance = null;
@@ -57,16 +58,20 @@ public final class AcctCreator extends WindowManager {
 
 	
 
-	public JFrame makeWindow(JFrame window) {
+	public void makeWindow() {
 
 		// Makes log in page
 		// Was experimenting with Grid bag Layout
 		// Actually turned out pretty good
-
+		
 		if (window != null) {
 			//window.dispose();
 			// If window isn't null, meaning it came from another window, get rid of it
 		}
+		
+		window = new JFrame("Create Account"); 
+		
+		
 		JPanel pane = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		// Make a panel for grid bag layout
@@ -142,8 +147,6 @@ public final class AcctCreator extends WindowManager {
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-
-		return window;
 	}
 
 	public boolean createAcct() {
@@ -254,4 +257,11 @@ public final class AcctCreator extends WindowManager {
 
 		return true;
 	}
+	
+	public void destroy() {
+		window.dispose();
+	}
+	
+	
+	
 }

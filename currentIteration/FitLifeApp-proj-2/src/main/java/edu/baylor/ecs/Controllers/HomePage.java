@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import edu.baylor.ecs.FitLifeApp.Account;
-import edu.baylor.ecs.Listeners.BasicActListener;
 import edu.baylor.ecs.Listeners.HomeListener;
 
 public final class HomePage extends WindowManager{
@@ -99,11 +98,11 @@ public final class HomePage extends WindowManager{
 		menu.add(logOut);
 
 		// Buttons to swap between pages
-		home.addActionListener(new BasicActListener());
-		logOut.addActionListener(new BasicActListener());
-		toCal.addActionListener(new BasicActListener());
-		addWorkout.addActionListener(new BasicActListener());
-		planWorkout.addActionListener(new BasicActListener());
+		home.addActionListener(new HomeListener());
+		logOut.addActionListener(new HomeListener());
+		toCal.addActionListener(new HomeListener());
+		addWorkout.addActionListener(new HomeListener());
+		planWorkout.addActionListener(new HomeListener());
 
 		//add the menu
 		jmb1.add(menu);
@@ -214,6 +213,10 @@ public final class HomePage extends WindowManager{
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
+	}
+	
+	public void destory() {
+		window.dispose();
 	}
 	
 }
