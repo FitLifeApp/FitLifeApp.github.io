@@ -9,34 +9,34 @@ import javax.swing.JOptionPane;
 import edu.baylor.ecs.Controllers.WindowManager;
 
 public /*
- * //I assume leftovers JLabel result; String currentPattern;
- * This seems fine but why 
- */
- class BasicActListener implements ActionListener {
-	
+		 * //I assume leftovers JLabel result; String currentPattern; This seems fine
+		 * but why
+		 */
+class BasicActListener implements ActionListener {
+
 	WindowManager wm = WindowManager.getInstance();
-	
+
 	public void actionPerformed(ActionEvent e) {
-		
-		//Home button is clicked, spawn home page
+
+		// Home button is clicked, spawn home page
 		if (e.getActionCommand().equals("Home")) {
 			wm.toHome();
 			System.out.println("HOME");
-			
-		//if logout is selected displose of window and spawn log in screen	
+
+			// if logout is selected displose of window and spawn log in screen
 		} else if (e.getActionCommand().equals("View Calendar")) {
 
 			// Might get removed
 			wm.toCalendar();
 			System.out.println("View Cal");
-			
-		//if a date is selected use joption pane	
+
+			// if a date is selected use joption pane
 		} else if (e.getActionCommand().equals("Date selected")) {
 
 			JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
 					"Failed Login", JOptionPane.ERROR_MESSAGE);
-			
-		//if the confirm button is hit show the add workout dialog
+
+			// if the confirm button is hit show the add workout dialog
 		} else if (e.getActionCommand().equals("Plan Workout")) {
 			// addWorkoutWindow();
 			System.out.println("Planning Workout");

@@ -2,31 +2,29 @@ package edu.baylor.ecs.FitLifeApp;
 
 import java.sql.Time;
 
-public class Sleep{
+public class Sleep {
 	private Integer id;
 	private Double duration;
 	private Integer rating;
 	private Time startTime;
-	
-	
+
 	public Sleep() {
-		
+
 	}
-	
+
 	public Sleep(Double duration, Integer rating, Time startTime) {
 		setDuration(duration);
 		setRating(rating);
 		setStartTime(startTime);
 	}
-	
-	
+
 	public Sleep(Integer logid, Double duration, Integer rating, Time startTime) {
 		setId(logid);
 		setDuration(duration);
 		setRating(rating);
 		setStartTime(startTime);
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -58,6 +56,5 @@ public class Sleep{
 	private void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
-	
-	
+
 }

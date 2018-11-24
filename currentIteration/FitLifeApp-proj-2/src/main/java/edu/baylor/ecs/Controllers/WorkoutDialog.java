@@ -22,6 +22,7 @@ import edu.baylor.ecs.FitLifeApp.Workout;
 import edu.baylor.ecs.Listeners.WorkoutDialogListener;
 
 public final class WorkoutDialog {
+
 	private static volatile WorkoutDialog instance = null;
 	private JFrame window = null;
 	private JPanel cards;
@@ -32,37 +33,37 @@ public final class WorkoutDialog {
 	private Date day;
 	private String type = null;
 	private WorkoutController wc = WorkoutController.getInstance();
-	
-	private WorkoutDialog(){}
-	
+
+	private WorkoutDialog() {
+	}
+
 	public static WorkoutDialog getInstance() {
-		if(instance == null) {
-			synchronized(WorkoutDialog.class) {
-				if(instance == null) {
+		if (instance == null) {
+			synchronized (WorkoutDialog.class) {
+				if (instance == null) {
 					instance = new WorkoutDialog();
 				}
 			}
 		}
 		return instance;
 	}
-	
-	
-	//state change listener
-		class BasicItemListener implements ItemListener {
 
-			@Override
-			public void itemStateChanged(ItemEvent evt) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
-				cl.show(cards, (String) evt.getItem());
-			}
+	// state change listener
+	class BasicItemListener implements ItemListener {
 
+		@Override
+		public void itemStateChanged(ItemEvent evt) {
+			CardLayout cl = (CardLayout) (cards.getLayout());
+			cl.show(cards, (String) evt.getItem());
 		}
-	
-	public void addWorkout(Date day) throws Exception{
-		
+
+	}
+
+	public void addWorkout(Date day) throws Exception {
+
 		window = new JFrame("Select a Type");
 		this.day = day;
-		
+
 		JPanel comboBoxPane = new JPanel(); // use FlowLayout
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -97,43 +98,46 @@ public final class WorkoutDialog {
 		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 30);
 		window.setVisible(true);
 	}
-	
+
 	public void addWorkoutDialog() throws IOException {
-		
+
 		window = new JFrame();
-		
+
 		File file = new File("workout.csv");
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
 		JTextField field3 = new JTextField();
 		JTextField field4 = new JTextField();
 
-		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, "Weight Used", field4};
+		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, "Weight Used",
+				field4 };
 		JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
-		
-		//Creates a workout which can use the add method or WorkoutController to enter it into the database
-		//We need to store the username somewhere though
-		//Workout aWorkout = new Workout(Integer.valueOf(field2.getText()), field1.getText(), type, Double.valueOf(field3.getText()), Double.valueOf(field4.getText()));
-		
-		
+
+		// Creates a workout which can use the add method or WorkoutController to enter
+		// it into the database
+		// We need to store the username somewhere though
+		// Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
+		// field1.getText(), type, Double.valueOf(field3.getText()),
+		// Double.valueOf(field4.getText()));
+
 		String exercise = field1.getText();
 		Integer duration = Integer.valueOf(field2.getText());
 		String weight = field3.getText();
-		//Integer weightUsed = Integer.valueOf(field4.getText()); 
-		
+		// Integer weightUsed = Integer.valueOf(field4.getText());
+
 		FileWriter w = new FileWriter(file, true);
 		PrintWriter p = new PrintWriter(w);
-		
+
 		p.write("fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
 		System.out.println(
 				"fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
-		
+
 		w.close();
 		p.close();
 	}
-	
-	public void destroy(){
+
+	public void destroy() {
 		window.dispose();
 	}
-	
+
 }

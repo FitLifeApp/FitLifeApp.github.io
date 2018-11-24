@@ -17,24 +17,28 @@ import edu.baylor.ecs.Listeners.CalendarListener;
 //Might cause file problems, might cause other problems
 
 
-public final class CalendarWindow extends WindowManager{
+public final class CalendarController extends WindowManager{
+	
 	static boolean flag = false;
 	private  JDatePanelImpl datePanel = null;
 	private Date day = java.util.Calendar.getInstance().getTime();
 	private JFrame window = null;
+	private static Integer mode = null;
 	private static final WorkoutDialog addworkout = WorkoutDialog.getInstance();
+	private static final SleepDialog addSleep = SleepDialog.getInstance();
+	private static final NutritionDialog addMeal = NutritionDialog.getInstance();
+	
+	private static volatile CalendarController instance = null;
+	
+	private CalendarController() {}
 	
 	
-
-	private static volatile CalendarWindow instance = null;
 	
-	private CalendarWindow() {}
-	
-	public static CalendarWindow getInstance() {
+	public static CalendarController getInstance() {
 		if (instance == null) {
-			synchronized(CalendarWindow.class) {
+			synchronized(CalendarController.class) {
 				if(instance == null) {
-					instance = new CalendarWindow();
+					instance = new CalendarController();
 				}
 			}
 		}
@@ -47,7 +51,7 @@ public final class CalendarWindow extends WindowManager{
 	}
 
 	public static void setFlag(boolean flag) {
-		CalendarWindow.flag = flag;
+		CalendarController.flag = flag;
 	}
 	
 	
@@ -87,6 +91,14 @@ public final class CalendarWindow extends WindowManager{
 	public void showAddWorkoutDialog() throws Exception {
 		addworkout.addWorkout(day);
 	}
+	
+	public void showAddSleepDialog() throws Exception {
+		addSleep.addSleep(day);
+	}
+	
+	public void showAddMealDialog() throws Exception {
+		addMeal.addMeal(day);
+	}
 
 	public JDatePanelImpl getDatePanel() {
 		return datePanel;
@@ -109,5 +121,12 @@ public final class CalendarWindow extends WindowManager{
 		return addworkout;
 	}
 	
+	public Integer getMode() {
+		return mode;
+	}
+
+	public static void setMode(Integer m) {
+		mode = m;
+	}
 }
 

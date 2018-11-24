@@ -1,6 +1,5 @@
 package edu.baylor.ecs.Controllers;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -23,47 +22,46 @@ import javax.swing.WindowConstants;
 import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.Listeners.HomeListener;
 
-public final class HomePage extends WindowManager{
-	
-	
-	private static volatile HomePage instance = null;
+public final class HomePageController extends WindowManager {
+
+	private static volatile HomePageController instance = null;
 	private JFrame window;
-	
-	private HomePage() {}
-	
-	public static HomePage getInstance() {
-		if(instance == null) {
-			synchronized(HomePage.class) {
-				if(instance == null) {
-					instance = new HomePage();
+
+	private HomePageController() {
+	}
+
+	public static HomePageController getInstance() {
+		if (instance == null) {
+			synchronized (HomePageController.class) {
+				if (instance == null) {
+					instance = new HomePageController();
 				}
 			}
 		}
 		return instance;
 	}
-	
 
 	public void makeWindow(Account acct) {
 		window = new JFrame();
-		
-		//setup the window
+
+		// setup the window
 		window.getContentPane().removeAll();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		FlowLayout experimentLayout = new FlowLayout();
-		
-		//setup menubar
+
+		// setup menubar
 		JMenuBar jmb1 = new JMenuBar();
 		jmb1.setPreferredSize(new Dimension(2000, 70));
 		jmb1.setBackground(acct.getColorBase2());
 
-		//setup menu
+		// setup menu
 		JMenu menu = new JMenu("Menu");
 		menu.setFont(new Font("Menu", Font.PLAIN, 25));
 		menu.setPreferredSize(new Dimension(2000, 70));
 		menu.setForeground(Color.white);
 
-		//setup menu items
+		// setup menu items
 		JMenuItem home = new JMenuItem("Home");
 		home.setFont(new Font("Home", Font.PLAIN, 20));
 		home.setBackground(acct.getColorBase2());
@@ -89,7 +87,7 @@ public final class HomePage extends WindowManager{
 		planWorkout.setBackground(acct.getColorBase2());
 		planWorkout.setForeground(Color.white);
 
-		//add items to the menu
+		// add items to the menu
 		menu.setMaximumSize(new Dimension(2000, 50));
 		menu.add(home);
 		menu.add(toCal);
@@ -104,11 +102,11 @@ public final class HomePage extends WindowManager{
 		addWorkout.addActionListener(new HomeListener());
 		planWorkout.addActionListener(new HomeListener());
 
-		//add the menu
+		// add the menu
 		jmb1.add(menu);
 		window.add(jmb1, BorderLayout.NORTH);
 
-		//add panels
+		// add panels
 		final JPanel p1 = new JPanel();
 		experimentLayout.setAlignment(FlowLayout.TRAILING);
 		p1.setLayout(experimentLayout);
@@ -116,11 +114,11 @@ public final class HomePage extends WindowManager{
 		final JPanel p2 = new JPanel();
 		p2.setLayout(experimentLayout);
 
-		//create layout
+		// create layout
 		Box board = new Box(BoxLayout.Y_AXIS);
 		board.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		
-		//add buttons
+
+		// add buttons
 		JButton jb1 = new JButton("NUTRITION");
 		jb1.setFont(new Font("NUTRITION", Font.PLAIN, 50));
 		jb1.setBackground(acct.getColorTrim2());
@@ -157,7 +155,7 @@ public final class HomePage extends WindowManager{
 		jb6.setForeground(Color.WHITE);
 		jb6.addActionListener(new HomeListener());
 
-		//set sizes of buttons
+		// set sizes of buttons
 		jb1.setPreferredSize(new Dimension(400, 400));
 		jb2.setPreferredSize(new Dimension(400, 400));
 		jb3.setPreferredSize(new Dimension(400, 400));
@@ -179,7 +177,6 @@ public final class HomePage extends WindowManager{
 		p1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		p2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
-		
 		JTextField jtf1 = new JTextField("Welcome Home");
 		jtf1.setEnabled(false);
 		jtf1.setHorizontalAlignment(JTextField.CENTER);
@@ -194,30 +191,29 @@ public final class HomePage extends WindowManager{
 		board.add(Box.createVerticalStrut(200));
 		board.add(p1);
 		board.add(p2);
-		
+
 		JPanel fp = new JPanel();
 		fp.add(board);
 		fp.setBackground(acct.getColorTrim1());
 
 		window.add(fp, BorderLayout.CENTER);
 		window.add(jtf1, BorderLayout.SOUTH);
-		
+
 		window.repaint();
 		window.pack();
-		
-		
-		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+
+		// set screen size and make the window spawn in the middle of the screen,
+		// regardless the monitor resolution
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = screenSize.width-100;
-		int screenHeight = screenSize.height-100;
+		int screenWidth = screenSize.width - 100;
+		int screenHeight = screenSize.height - 100;
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
-	
+
 	public void destory() {
 		window.dispose();
 	}
-	
-}
 
+}

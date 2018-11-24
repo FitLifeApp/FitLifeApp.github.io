@@ -6,13 +6,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import edu.baylor.ecs.Controllers.LogIn;
+import edu.baylor.ecs.Controllers.LogInController;
 
 //Listener used for buttons in LogIn window
 	//maybe this can be removed to another class
 	//can this just bubble up?
 	public class LoginListener implements ActionListener {
-		LogIn login = LogIn.getInstance();
+		LogInController login = LogInController.getInstance();
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Sign In")) {

@@ -16,65 +16,62 @@ import edu.baylor.ecs.FitLifeApp.Account;
 import java.awt.event.*;
 import java.util.*;
 
-	public class WindowManager {
+public class WindowManager {
 
 	// -----------------------------------------
-	
-	private static final LogIn login = LogIn.getInstance();
+
+	private static final LogInController login = LogInController.getInstance();
 	private static final AcctCreator acctCreator = AcctCreator.getInstance();
-	private static final CalendarWindow calendarWindow = CalendarWindow.getInstance();
-	private static final HomePage home = HomePage.getInstance();
-	
-	//-----------------------------------------
+	private static final CalendarController calendarWindow = CalendarController.getInstance();
+	private static final HomePageController home = HomePageController.getInstance();
+
+	// -----------------------------------------
 	private JFrame window;
 
 	private Account acct;
-	
-	
+
 	private static volatile WindowManager instance = null;
-	
-	/*singleton constructor*/
+
+	/* singleton constructor */
 	protected WindowManager() {
 		acct = null;
 		window = new JFrame("Welcome");
 	}
-	
+
 	public static WindowManager getInstance() {
 		if (instance == null) {
-			synchronized(WindowManager.class) {
-				if(instance == null) {
+			synchronized (WindowManager.class) {
+				if (instance == null) {
 					instance = new WindowManager();
 				}
 			}
 		}
 		return instance;
 	}
-	
-	
+
 	//// Handles Base construction of frame
 	// Constructs a frame with a menu bar with various pages
-	//This functionality is used by many, maybe it should just be inherited
-	
+	// This functionality is used by many, maybe it should just be inherited
 
-	//sets the Jframe window to the Jframe returned by makeWindow with window passed to it
+	// sets the Jframe window to the Jframe returned by makeWindow with window
+	// passed to it
 	public void toHome() {
 		home.makeWindow(acct);
 	}
 
-	//Makes log in window
+	// Makes log in window
 	public void toLogIn() {
 		login.makeWindow();
 	}
 
-	//makes account creation window
+	// makes account creation window
 	public void toAcctCreation() {
 		acctCreator.makeWindow();
 	}
 
-	
-	//makes Calendar window
+	// makes Calendar window
 	public void toCalendar() {
-		//same stuff for calendar window
+		// same stuff for calendar window
 		calendarWindow.makeWindow();
 
 	}
@@ -86,7 +83,7 @@ import java.util.*;
 		File file = new File("workout.csv");
 		int row = 0;
 		ArrayList<String[]> arr = new ArrayList<String[]>();
-		
+
 		// Get all the data from the file
 		try {
 			Scanner input = new Scanner(file);
@@ -113,20 +110,21 @@ import java.util.*;
 				row++;
 			}
 		}
-		
+
 		// Not use header yet
-		//String header[] = {"Name","Your weight","Lift weight","Duration"};
+		// String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, 4);
-		
-		// Only add the corresponding data to the table (No more write space caused by hiding part of the data)
+
+		// Only add the corresponding data to the table (No more write space caused by
+		// hiding part of the data)
 		for (int i = 0; i < subArr.size(); i++) {
 			for (int j = 0; j < data.getColumnCount(); j++) {
 				data.setValueAt(subArr.get(i)[j + 1], i, j);
 			}
 		}
-		
+
 		// Sorter for the table
-		TableRowSorter <TableModel> sorter = new TableRowSorter <TableModel> (data.getModel());
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(data.getModel());
 		data.setRowSorter(sorter);
 		sorter.setComparator(1, new Comparator<String>() {
 			public int compare(String o1, String o2) {
@@ -143,7 +141,7 @@ import java.util.*;
 				return Integer.parseInt(o1) - Integer.parseInt(o2);
 			}
 		});
-		
+
 		// Add filter for user search specific data they interested
 		JPanel filter = new JPanel();
 		filter.setLayout(new FlowLayout());
@@ -159,15 +157,14 @@ import java.util.*;
 				String str = TF.getText();
 				if (str.length() == 0) {
 					sorter.setRowFilter(null);
-				}
-				else {
+				} else {
 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + str, 0));
 				}
 			}
 		});
 
 		window.add(data, BorderLayout.CENTER);
-		
+
 		window.add(filter, BorderLayout.SOUTH);
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -177,7 +174,7 @@ import java.util.*;
 
 	// Also not yet moved
 	public void addWorkoutWindow() {
-		
+
 	}
 
 	public void setAcct(Account src) {
@@ -185,14 +182,13 @@ import java.util.*;
 		System.out.println(src.toString());
 		acct = src;
 	}
-	
-	public CalendarWindow getCalendarWindow() {
+
+	public CalendarController getCalendarWindow() {
 		return calendarWindow;
 	}
-	
+
 	public JFrame getWindow() {
 		return window;
 	}
-	
-	
+
 }
