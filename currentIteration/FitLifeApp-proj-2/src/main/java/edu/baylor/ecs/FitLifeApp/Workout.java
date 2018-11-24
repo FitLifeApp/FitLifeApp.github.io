@@ -22,7 +22,7 @@ public class Workout{
 		setWorkoutWeights(workoutWeights);
 	}
 	
-	public Workout(int duration, String name, String type, Double userWeight, Double workoutWeights) {
+	public Workout(Integer duration, String name, String type, Double userWeight, Double workoutWeights) {
 		setDuration(duration);
 		setName(name);
 		setType(type);

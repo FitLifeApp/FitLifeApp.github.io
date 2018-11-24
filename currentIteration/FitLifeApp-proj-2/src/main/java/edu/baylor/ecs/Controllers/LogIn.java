@@ -34,7 +34,6 @@ public final class LogIn extends WindowManager{
 	private int screenWidth = screenSize.width-100;
 	private int screenHeight = screenSize.height-100;
 	private JFrame window;
-	private AcctCreator accCreator = AcctCreator.getInstance();
 	
 	/*The singleton code*/
 	private static volatile LogIn instance = null;
