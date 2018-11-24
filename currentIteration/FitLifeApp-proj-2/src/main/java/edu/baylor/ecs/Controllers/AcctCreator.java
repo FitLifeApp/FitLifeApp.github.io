@@ -1,9 +1,6 @@
 package edu.baylor.ecs.Controllers;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -19,11 +16,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,7 +30,6 @@ import javax.xml.bind.Marshaller;
 import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.AcctCipher;
 import edu.baylor.ecs.Listeners.AcctCreatorListener;
-import edu.baylor.ecs.Listeners.LoginListener;
 
 public final class AcctCreator extends WindowManager {
 	// Used for encryption. Guaranteed unpredictable
@@ -45,16 +37,13 @@ public final class AcctCreator extends WindowManager {
 	static JTextField uName; // Used to hold username inputs
 	static JPasswordField pWord; // Used to hold password inputs
 	static JPasswordField pWord2; // Used when creating account
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int screenWidth = screenSize.width-100;
-	private int screenHeight = screenSize.height-100;
-	private JFrame window;
-
+	private JFrame window = null;
+	
 	/*The singleton code*/
 	private static volatile AcctCreator instance = null;
-
+	
 	private AcctCreator() {}
-
+	
 	public static AcctCreator getInstance() {
 		if(instance == null) {
 			synchronized(AcctCreator.class) {
@@ -65,89 +54,101 @@ public final class AcctCreator extends WindowManager {
 		}
 		return instance;
 	}
+	
 
-	public JFrame makeWindow() {
+	
 
-		window = new JFrame("Create Account");
+	public void makeWindow() {
 
-		FlowLayout flowLayout = new FlowLayout();
-		flowLayout.setAlignment(FlowLayout.CENTER);
-		window.setLayout(flowLayout);
+		// Makes log in page
+		// Was experimenting with Grid bag Layout
+		// Actually turned out pretty good
+		
+		if (window != null) {
+			//window.dispose();
+			// If window isn't null, meaning it came from another window, get rid of it
+		}
+		
+		window = new JFrame("Create Account"); 
+		
+		
+		JPanel pane = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		// Make a panel for grid bag layout
 
-		Box b1 = new Box(BoxLayout.Y_AXIS);
-		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-		b1.setMaximumSize(new Dimension(2000,150));
+		JLabel uLabel = new JLabel("Username: ");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		// Have it fill the entire horizontal of the grid
+		c.weightx = 0;
+		// Make it a thinner column than others
+		c.gridx = 0;
+		c.gridy = 0;
+		// Set position
+		pane.add(uLabel, c);
 
-		JLabel createLabel = new JLabel("Create Your Account");	
-		createLabel.setFont(new Font("Welcome to FitLife", Font.PLAIN, 50));
-
-		JLabel uLabel = new JLabel("Username");
-		uLabel.setFont(new Font("Username", Font.PLAIN, 20));
 		uName = new JTextField();
-		uName.setMaximumSize(new Dimension(2000,30));
-		uName.setFont(new Font("", Font.PLAIN, 20));
+		c.weightx = 5;
+		// Have a wider column
+		c.gridx = 1;
+		c.gridy = 0;
+		pane.add(uName, c);
 
-		JLabel pLabel = new JLabel("Password");
-		pLabel.setFont(new Font("Password", Font.PLAIN, 20));
+		JLabel pLabel = new JLabel("Password: ");
+		c.weightx = 0;
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 1;
+		pane.add(pLabel, c);
+
 		pWord = new JPasswordField();
-		pWord.setMaximumSize(new Dimension(2000,30));
-		pWord.setFont(new Font("", Font.PLAIN, 20));
+		c.weightx = 5;
+		c.weighty = 2;
+		c.gridx = 1;
+		c.gridy = 1;
+		pane.add(pWord, c);
 
-		JLabel pRepeatLabel = new JLabel("Please re-type password");
-		pRepeatLabel.setFont(new Font("Please re-type password", Font.PLAIN, 20));
+		JLabel pRepeatLabel = new JLabel("Please retype password: ");
+		c.weightx = 0;
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 2;
+		pane.add(pRepeatLabel, c);
+
 		pWord2 = new JPasswordField();
-		pWord2.setMaximumSize(new Dimension(2000,30));
-		pWord2.setFont(new Font("", Font.PLAIN, 20));
+		c.weightx = 5;
+		c.weighty = 2;
+		c.gridx = 1;
+		c.gridy = 2;
+		pane.add(pWord2, c);
 
 		JButton createAcct = new JButton("Create Account");
-		createAcct.setFont(new Font("Create Account", Font.PLAIN, 20));
-		createAcct.setForeground(Color.white);
-		createAcct.setBackground(new Color( 44, 62, 80 ));
-		createAcct.setMaximumSize(new Dimension(2000,150));
 		createAcct.addActionListener(new AcctCreatorListener());
+		c.fill = GridBagConstraints.NONE;
+		// Don't worry about filling the column
+		// If set to horizontal, all buttons would be connected
+		// I prefer a gap
+		c.weightx = 0;
+		c.weighty = 2;
+		c.gridx = 1;
+		c.gridy = 3;
+		pane.add(createAcct, c);
 
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setFont(new Font("Cancel", Font.PLAIN, 20));
-		cancelButton.setForeground(Color.white);
-		cancelButton.setBackground(new Color( 44, 62, 80 ));
-		cancelButton.setMaximumSize(new Dimension(2000,150));
-		cancelButton.addActionListener(new AcctCreatorListener());
+		window.getContentPane().removeAll();
 
-		b1.add(Box.createVerticalStrut(screenHeight/2-250));
-		b1.add(createLabel);
-		b1.add(Box.createVerticalStrut(40));
-		b1.add(uLabel);
-		b1.add(uName);
-		b1.add(Box.createVerticalStrut(10));
-		b1.add(pLabel);
-		b1.add(pWord);
-		b1.add(Box.createVerticalStrut(10));
-		b1.add(pRepeatLabel);
-		b1.add(pWord2);
-		b1.add(Box.createVerticalStrut(10));
-		b1.add(createAcct);
-		b1.add(Box.createVerticalStrut(10));
-		b1.add(cancelButton);
-
-		window.add(b1);
-
-		window.getContentPane().setBackground(new Color(234, 242, 248));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.add(pane);
+		window.repaint();
 		window.pack();
-
+		
 		//set screen size and make the window spawn in the middle of the screen, regardless the monitor resolution
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int screenWidth = screenSize.width-100;
+		int screenHeight = screenSize.height-100;
 		window.setSize(new Dimension(screenWidth, screenHeight));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-
-		return window;
 	}
 
-	//Destroys the login window
-	public void destroyWindow() {
-		window.dispose();
-	}
-	
 	public boolean createAcct() {
 
 		if (!Arrays.equals(pWord.getPassword(), pWord2.getPassword())) {
@@ -194,9 +195,9 @@ public final class AcctCreator extends WindowManager {
 						}
 					} catch (NumberFormatException e) {
 						JOptionPane
-						.showMessageDialog(
-								new JFrame(), "Invalid Account ID found.\nAccount Causing "
-										+ "problems has ID '" + acct[2] + "' in Accounts.FIT",
+								.showMessageDialog(
+										new JFrame(), "Invalid Account ID found.\nAccount Causing "
+												+ "problems has ID '" + acct[2] + "' in Accounts.FIT",
 										"Failed Creation", JOptionPane.ERROR_MESSAGE);
 						return false;
 					}
@@ -256,4 +257,11 @@ public final class AcctCreator extends WindowManager {
 
 		return true;
 	}
+	
+	public void destroy() {
+		window.dispose();
+	}
+	
+	
+	
 }

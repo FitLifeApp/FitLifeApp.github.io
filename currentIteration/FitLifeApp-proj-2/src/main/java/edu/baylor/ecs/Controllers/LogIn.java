@@ -34,6 +34,7 @@ public final class LogIn extends WindowManager{
 	private int screenWidth = screenSize.width-100;
 	private int screenHeight = screenSize.height-100;
 	private JFrame window;
+	private AcctCreator accCreator = AcctCreator.getInstance();
 	
 	/*The singleton code*/
 	private static volatile LogIn instance = null;
@@ -164,11 +165,6 @@ public final class LogIn extends WindowManager{
 		return window;
 	}
 
-	//Destroys the login window
-	public void destroyWindow() {
-		window.dispose();
-	}
-	
 	
 	//Validates the accounts existence
 	public boolean validate() {
@@ -292,4 +288,11 @@ public final class LogIn extends WindowManager{
 		return a;
 
 	}
+	
+	//Destroys the login window
+	public void destroyWindow() {
+			window.dispose();
+	}
+	
+	
 }
