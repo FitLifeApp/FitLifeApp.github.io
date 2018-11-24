@@ -3,8 +3,6 @@ package edu.baylor.ecs.Listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
-
-import edu.baylor.ecs.Controllers.AddWorkoutWindow;
 import edu.baylor.ecs.Controllers.CalendarWindow;
 
 	//Listener for Calendar specific buttons
@@ -13,7 +11,7 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 	public class CalendarListener implements ActionListener {
 		
 		CalendarWindow calendarWindow = CalendarWindow.getInstance();
-		AddWorkoutWindow workoutWindow = AddWorkoutWindow.getInstance();
+		
 		
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("View Calendar")) {
@@ -27,9 +25,12 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 
 					if (calendarWindow.getFlag() == true) {
 						calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-						calendarWindow.destroyWindow();
-						workoutWindow.makeWindow();
-						
+						try {
+							calendarWindow.showAddWorkoutDialog();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} else {
 						calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 					}

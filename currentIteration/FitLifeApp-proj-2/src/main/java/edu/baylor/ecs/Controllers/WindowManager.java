@@ -15,7 +15,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import edu.baylor.ecs.FitLifeApp.Account;
-import edu.baylor.ecs.Listeners.BasicActListener;
 
 import java.awt.event.*;
 
@@ -23,28 +22,16 @@ import java.util.*;
 
 	public class WindowManager {
 
-	JPanel cards; // a panel that uses CardLayout
-
-	final String ex1 = "Aerobic Exercise";
-	final String ex2 = "Strength Exercise";
-	final String ex3 = "Balance Exercise";
-	final String ex4 = "Flexibility Exercise";
-
 	// -----------------------------------------
 	
-	private static LogIn login = LogIn.getInstance();
-	private static AcctCreator acctCreator = AcctCreator.getInstance();
-	private static AddWorkoutWindow addWorkoutWindow = AddWorkoutWindow.getInstance();
-	public AddWorkoutWindow getAddWorkoutWindow() {
-		return addWorkoutWindow;
-	}
 
-	private static CalendarWindow calendarWindow = CalendarWindow.getInstance();
-	private static HomePage home = HomePage.getInstance();
+	private static final LogIn login = LogIn.getInstance();
+	private static final AcctCreator acctCreator = AcctCreator.getInstance();
+	private static final CalendarWindow calendarWindow = CalendarWindow.getInstance();
+	private static final HomePage home = HomePage.getInstance();
 	
 	//-----------------------------------------
 	private JFrame window;
-	private JFrame workoutWindow  = new JFrame("New Workout");
 
 	private Account acct;
 	
@@ -69,16 +56,7 @@ import java.util.*;
 	}
 	
 
-	//state change listener
-	class BasicItemListener implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent evt) {
-			CardLayout cl = (CardLayout) (cards.getLayout());
-			cl.show(cards, (String) evt.getItem());
-		}
-
-	}
+	
 
 	
 	//// Handles Base construction of frame

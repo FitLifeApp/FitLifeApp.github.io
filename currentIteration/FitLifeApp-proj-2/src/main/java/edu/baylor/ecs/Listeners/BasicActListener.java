@@ -42,21 +42,7 @@ public /*
 			JOptionPane.showMessageDialog(new JFrame(), "\"Date Selected\" in WindowManager/BasicActListener",
 					"Failed Login", JOptionPane.ERROR_MESSAGE);
 			
-		//if the confirm button is hit show the add workout dialog
-		} else if (e.getActionCommand().equals("Confirm")) {
-			try {
-				wm.getAddWorkoutWindow().destroyWindow();
-				if (wm.getCalendarWindow().showAddWorkoutDialog() == true) {
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			
-		//TO DO: remove code, unneeded
-		} else if (e.getActionCommand().equals("Cancel")) {
-			wm.getAddWorkoutWindow().destroyWindow();
-			System.out.println("Canceled");
-		}  else if (e.getActionCommand().equals("Plan Workout")) {
+		} else if (e.getActionCommand().equals("Plan Workout")) {
 			// addWorkoutWindow();
 			System.out.println("Planning Workout");
 		} else {

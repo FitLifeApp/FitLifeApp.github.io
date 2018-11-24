@@ -12,6 +12,7 @@ fu,Sprints,160,150,120,Wed Nov 21 13:43:51 CST 2018
 fu,,160,,,Wed Nov 21 13:43:51 CST 2018
 fu,Sprints,160,160,120,Wed Nov 21 13:56:11 CST 2018
 fu,Sprints,160,150,120,Wed Nov 21 14:14:31 CST 2018
+<<<<<<< HEAD
 fu,2,160,2,2,Thu Nov 22 19:51:01 CST 2018
 fu,,160,,,Thu Nov 22 21:23:19 CST 2018
 fu,,160,,,Thu Nov 22 21:26:28 CST 2018
@@ -78,3 +79,13 @@ fu,,160,,,Thu Nov 22 23:43:18 CST 2018
 fu,,160,,,Thu Nov 22 23:49:14 CST 2018
 fu,,160,,,Thu Nov 22 23:50:06 CST 2018
 fu,,160,,,Thu Nov 22 23:50:36 CST 2018
+=======
+fu,Bench Press,160,150,600,Fri Nov 23 17:38:11 CST 2018
+fu,Sprints,160,120,20,Fri Nov 23 17:47:01 CST 2018
+fu,sprints,160,150,120,Fri Nov 23 17:51:18 CST 2018
+fu,test,160,160,20,Fri Nov 23 17:53:01 CST 2018
+fu,test,160,17,120,Fri Nov 23 17:59:27 CST 2018
+fu,test,160,160,130,Fri Nov 23 18:13:10 CST 2018
+fu,test,160,150,120,Fri Nov 23 21:10:11 CST 2018
+>>>>>>> BenAgueros2
+fu,,160,,,Fri Nov 23 21:25:59 CST 2018
