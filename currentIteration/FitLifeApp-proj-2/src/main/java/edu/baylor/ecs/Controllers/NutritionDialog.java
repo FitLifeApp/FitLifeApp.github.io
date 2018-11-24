@@ -10,8 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import edu.baylor.ecs.FitLifeApp.Meal;
-
 public class NutritionDialog {
 	private static volatile NutritionDialog instance = null;
 	private JFrame window;	
@@ -44,34 +42,33 @@ public class NutritionDialog {
 		JTextField field5 = new JTextField();
 
 		Object[] message = { "Name", field1, "Carbs", field2, "Fat", field3, "Protein", field4, "Hydration", field5};
-		JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 
-		
-		
+		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
 
-		String name = field1.getText();
-		Integer carbs = Integer.valueOf(field2.getText());
-		Integer fat = Integer.valueOf(field3.getText());
-		Integer protein = Integer.valueOf(field4.getText());
-		Integer hydration = Integer.valueOf(field5.getText());
-		
-		// Creates a meal which can use the add method of NutritionController to enter it
-		// into the database
-		// We need to store the username somewhere though
-		//Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
-		
-
-		FileWriter w = new FileWriter(file, true);
-		PrintWriter p = new PrintWriter(w);
-
-		p.write("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
-				+ protein.toString() + "," + hydration.toString() +"\n");
-		System.out.println("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
-				+ protein.toString() + "," + hydration.toString() +"\n");
-
-		w.close();
-		p.close();
-
+			String name = field1.getText();
+			Integer carbs = Integer.valueOf(field2.getText());
+			Integer fat = Integer.valueOf(field3.getText());
+			Integer protein = Integer.valueOf(field4.getText());
+			Integer hydration = Integer.valueOf(field5.getText());
+			
+			// Creates a meal which can use the add method of NutritionController to enter it
+			// into the database
+			// We need to store the username somewhere though
+			//Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
+			
+	
+			FileWriter w = new FileWriter(file, true);
+			PrintWriter p = new PrintWriter(w);
+	
+			p.write("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
+					+ protein.toString() + "," + hydration.toString() +"\n");
+			System.out.println("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
+					+ protein.toString() + "," + hydration.toString() +"\n");
+	
+			w.close();
+			p.close();
+		}
 	}
 	
 	

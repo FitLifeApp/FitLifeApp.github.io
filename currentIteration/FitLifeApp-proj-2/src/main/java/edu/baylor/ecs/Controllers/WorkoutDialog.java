@@ -111,29 +111,30 @@ public final class WorkoutDialog {
 
 		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, "Weight Used",
 				field4 };
-		JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
-
-		// Creates a workout which can use the add method or WorkoutController to enter
-		// it into the database
-		// We need to store the username somewhere though
-		// Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
-		// field1.getText(), type, Double.valueOf(field3.getText()),
-		// Double.valueOf(field4.getText()));
-
-		String exercise = field1.getText();
-		Integer duration = Integer.valueOf(field2.getText());
-		String weight = field3.getText();
-		// Integer weightUsed = Integer.valueOf(field4.getText());
-
-		FileWriter w = new FileWriter(file, true);
-		PrintWriter p = new PrintWriter(w);
-
-		p.write("fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
-		System.out.println(
-				"fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
-
-		w.close();
-		p.close();
+		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
+			// Creates a workout which can use the add method or WorkoutController to enter
+			// it into the database
+			// We need to store the username somewhere though
+			// Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
+			// field1.getText(), type, Double.valueOf(field3.getText()),
+			// Double.valueOf(field4.getText()));
+	
+			String exercise = field1.getText();
+			Integer duration = Integer.valueOf(field2.getText());
+			String weight = field3.getText();
+			// Integer weightUsed = Integer.valueOf(field4.getText());
+	
+			FileWriter w = new FileWriter(file, true);
+			PrintWriter p = new PrintWriter(w);
+	
+			p.write("fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
+			System.out.println(
+					"fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
+	
+			w.close();
+			p.close();
+		}
 	}
 
 	public void destroy() {
