@@ -43,15 +43,6 @@ public /*
 					"Failed Login", JOptionPane.ERROR_MESSAGE);
 			
 		//if the confirm button is hit show the add workout dialog
-		} else if (e.getActionCommand().equals("Confirm")) {
-			try {
-				wm.getCalendarWindow().showAddWorkoutDialog();
-			} catch (Exception e1) {
-
-				e1.printStackTrace();
-			}
-			
-		//TO DO: remove code, unneeded
 		} else if (e.getActionCommand().equals("Plan Workout")) {
 			// addWorkoutWindow();
 			System.out.println("Planning Workout");

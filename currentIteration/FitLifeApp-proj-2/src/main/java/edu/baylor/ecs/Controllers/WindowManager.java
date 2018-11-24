@@ -15,7 +15,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import edu.baylor.ecs.FitLifeApp.Account;
-import edu.baylor.ecs.Listeners.BasicActListener;
 
 import java.awt.event.*;
 
@@ -23,19 +22,12 @@ import java.util.*;
 
 	public class WindowManager {
 
-	JPanel cards; // a panel that uses CardLayout
-
-	final String ex1 = "Aerobic Exercise";
-	final String ex2 = "Strength Exercise";
-	final String ex3 = "Balance Exercise";
-	final String ex4 = "Flexibility Exercise";
-
 	// -----------------------------------------
 	
-	private static LogIn login = LogIn.getInstance();
-	private static AcctCreator acctCreator = AcctCreator.getInstance();
-	private static CalendarWindow calendarWindow = CalendarWindow.getInstance();
-	private static HomePage home = HomePage.getInstance();
+	private static final LogIn login = LogIn.getInstance();
+	private static final AcctCreator acctCreator = AcctCreator.getInstance();
+	private static final CalendarWindow calendarWindow = CalendarWindow.getInstance();
+	private static final HomePage home = HomePage.getInstance();
 	
 	//-----------------------------------------
 	private JFrame window;
@@ -63,16 +55,7 @@ import java.util.*;
 	}
 	
 
-	//state change listener
-	class BasicItemListener implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent evt) {
-			CardLayout cl = (CardLayout) (cards.getLayout());
-			cl.show(cards, (String) evt.getItem());
-		}
-
-	}
+	
 
 	
 	//// Handles Base construction of frame
@@ -201,40 +184,7 @@ import java.util.*;
 
 	// Also not yet moved
 	public void addWorkoutWindow() {
-		this.window = new JFrame("Select a Type");
-
-		JPanel comboBoxPane = new JPanel(); // use FlowLayout
-		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		JComboBox cb = new JComboBox(comboBoxItems);
-		cb.setEditable(false);
-		cb.addItemListener(new BasicItemListener());
-		comboBoxPane.add(cb);
-
-		JButton j1 = new JButton("Confirm");
-
-		j1.addActionListener(new BasicActListener());
-
-		// Create the "cards".
-		JPanel card1 = new JPanel();
-		card1.add(j1);
-
-		// Create the panel that contains the "cards".
-		cards = new JPanel(new CardLayout());
-		cards.add(card1, ex1);
-		cards.add(card1, ex2);
-		cards.add(card1, ex3);
-		cards.add(card1, ex4);
-
-		window.getContentPane().add(comboBoxPane, BorderLayout.PAGE_START);
-		window.getContentPane().add(cards, BorderLayout.CENTER);
-
-		window.setLocationRelativeTo(null);
-
-		// Display the window.
-		window.pack();
-		window.setSize((int) window.getSize().getWidth() + 100, (int) window.getSize().getHeight() + 30);
-		window.setVisible(true);
+		
 	}
 
 	public void setAcct(Account src) {

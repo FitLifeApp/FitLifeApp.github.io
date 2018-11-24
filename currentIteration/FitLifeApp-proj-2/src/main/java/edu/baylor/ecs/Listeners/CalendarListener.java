@@ -25,7 +25,12 @@ import edu.baylor.ecs.Controllers.CalendarWindow;
 
 					if (calendarWindow.getFlag() == true) {
 						calendarWindow.setDay((Date) calendarWindow.getDatePanel().getModel().getValue());
-						calendarWindow.addWorkoutWindow();
+						try {
+							calendarWindow.showAddWorkoutDialog();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					} else {
 						calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 					}

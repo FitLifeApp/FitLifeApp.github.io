@@ -2,15 +2,10 @@ package edu.baylor.ecs.Controllers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Properties;
-
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -27,6 +22,9 @@ public final class CalendarWindow extends WindowManager{
 	private  JDatePanelImpl datePanel = null;
 	private Date day = java.util.Calendar.getInstance().getTime();
 	private JFrame window = null;
+	private static final WorkoutDialog addworkout = WorkoutDialog.getInstance();
+	
+	
 
 	private static volatile CalendarWindow instance = null;
 	
@@ -44,12 +42,6 @@ public final class CalendarWindow extends WindowManager{
 	}
 	
 	
-	
-	
-	//To move flag out of WindowManager, it is put here
-	//I'm not sure what flag does, so if it belongs somewhere else
-	//Feel free to move it
-	
 	public boolean getFlag() {
 		return flag;
 	}
@@ -60,7 +52,10 @@ public final class CalendarWindow extends WindowManager{
 	
 	
 	//Copied from toCalendar
-	public JFrame makeWindow() {
+	public void makeWindow() {
+		if(window != null) {
+			window.dispose();
+		}
 		
 		window = new JFrame("Calendar");
 		
@@ -85,42 +80,12 @@ public final class CalendarWindow extends WindowManager{
 		
 		window.pack();
 		window.setVisible(true);
-		return window;
-		
 	}
 	
 	
 
 	public void showAddWorkoutDialog() throws Exception {
-		File file = new File("workout.csv");
-		JTextField field1 = new JTextField();
-		JTextField field2 = new JTextField();
-		JTextField field3 = new JTextField();
-
-		Object[] message = { "Name of Workout", field1, "Duration", field2, "Your Weight", field3, };
-		JOptionPane.showConfirmDialog(null, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
-		String exercise = field1.getText();
-		String duration = field2.getText();
-		String weight = field3.getText();
-		FileWriter w = new FileWriter(file, true);
-		PrintWriter p = new PrintWriter(w);
-		p.write("fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
-		System.out.println(
-				"fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
-		w.close();
-		p.close();
-
-		
-
-
-		
-		//I have no idea what this is for
-		//Strictly speaking, I have no idea how most of this works
-		/*
-		if (opt == JOptionPane.OK_OPTION) {
-			window.dispose();
-		}
-		*/
+		addworkout.addWorkout(day);
 	}
 
 	public JDatePanelImpl getDatePanel() {
@@ -138,6 +103,10 @@ public final class CalendarWindow extends WindowManager{
 
 	public void setDay(Date day) {
 		this.day = day;
+	}
+	
+	public WorkoutDialog getAddworkout() {
+		return addworkout;
 	}
 	
 }

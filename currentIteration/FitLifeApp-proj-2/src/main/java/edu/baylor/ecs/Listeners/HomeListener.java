@@ -16,18 +16,16 @@ public class HomeListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		HomePage home = HomePage.getInstance();
 		if (e.getActionCommand().equals("EXERCISE")) {
-			//flag = true;
 			CalendarWindow.setFlag(true);
 			home.toCalendar();
 			System.out.println("View Cal");
 			System.out.println("Adding Workout");
 
 		} else if (e.getActionCommand().equals("Review EXERCISE")) {
-			home.toCalendar();
 			CalendarWindow.setFlag(false);
-			//flag = false;
+			home.toCalendar();
 			System.out.println("View Cal");
-			System.out.println("Adding Workout");
+			System.out.println("Reviewing Workout");
 
 		} else {
 			//If this occurs, I missed a button somewhere
