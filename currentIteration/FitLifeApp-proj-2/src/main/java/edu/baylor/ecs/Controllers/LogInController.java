@@ -24,7 +24,7 @@ import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.AcctCipher;
 import edu.baylor.ecs.Listeners.LoginListener;
 
-public final class LogIn extends WindowManager{
+public final class LogInController extends WindowManager{
 
 	// Used for encryption. Guaranteed unpredictable
 
@@ -36,15 +36,15 @@ public final class LogIn extends WindowManager{
 	private JFrame window;
 	
 	/*The singleton code*/
-	private static volatile LogIn instance = null;
+	private static volatile LogInController instance = null;
 	
-	private LogIn() {}
+	private LogInController() {}
 	
-	public static LogIn getInstance() {
+	public static LogInController getInstance() {
 		if(instance == null) {
-			synchronized(LogIn.class) {
+			synchronized(LogInController.class) {
 				if(instance == null) {
-					instance = new LogIn();
+					instance = new LogInController();
 				}
 			}
 		}
