@@ -67,7 +67,7 @@ public class DatabaseTester {
 		
 		databaseTables();
 		for (Workout x : entered) {
-			wc.add("benji", x.getDuration(), x.getName(), x.getType(), x.getUserWeight(), x.getWorkoutWeights());
+			wc.add("benji", new Workout(x.getDuration(), x.getName(), x.getType(), x.getUserWeight(), x.getWorkoutWeights()));
 		}
 		for (Meal x : entered2) {
 			mc.add("benji", x.getCalories(), x.getName(), x.getCarbs(), x.getFat(), x.getProtein(), x.getHydration());
