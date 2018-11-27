@@ -18,6 +18,7 @@ public class WindowManager {
 
 	private static final LogInController login = LogInController.getInstance();
 	private static final AcctCreator acctCreator = AcctCreator.getInstance();
+	private static final ForgetPasswordController forgetPassword = ForgetPasswordController.getInstance();
 	private static final CalendarController calendarWindow = CalendarController.getInstance();
 	private static final HomePageController home = HomePageController.getInstance();
 	private static final WorkoutDialog workoutSelectionWindow = WorkoutDialog.getInstance();
@@ -74,6 +75,11 @@ public class WindowManager {
 		// same stuff for calendar window
 		calendarWindow.makeWindow();
 
+	}
+	
+	// makes forget password window
+	public void toForgetPassword() {
+		forgetPassword.makeWindow();
 	}
 
 
