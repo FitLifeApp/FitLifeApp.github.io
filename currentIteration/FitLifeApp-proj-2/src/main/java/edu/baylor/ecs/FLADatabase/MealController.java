@@ -1,10 +1,12 @@
 package edu.baylor.ecs.FLADatabase;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.baylor.ecs.FitLifeApp.Meal;
@@ -35,7 +37,7 @@ public final class MealController extends DatabaseController {
 	public void createTable() {
 		String createTableSQL = "CREATE TABLE Meal(" + "userName VARCHAR(255) NOT NULL, " + "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
 				+ "calories INT NOT NULL, " + "name VARCHAR(255) NOT NULL, "
-				+ " carbs INT NOT NULL, "+ "fat INT NOT NULL, " + "protein INT NOT NULL, " + "hydration INT NOT NULL, " + "PRIMARY KEY (id) " + ")";
+				+ " carbs INT NOT NULL, "+ "fat INT NOT NULL, " + "protein INT NOT NULL, " + "hydration INT NOT NULL, " + "day DATE NOT NULL, " + "PRIMARY KEY (id) " + ")";
 		try (Connection dbConnection = super.getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			
@@ -50,14 +52,15 @@ public final class MealController extends DatabaseController {
 	
 	/* Inserts a record into the Meal table
 	 * */
-	public void add(String username, Integer calories, String name, Integer carbs, Integer fat, Integer protein, Integer hydration) {
-		String insertTableSQL = "INSERT INTO Meal" + "(userName, calories, name, carbs, fat, protein, hydration) " + "VALUES"
-				+ "('"+ username + "'," + calories.intValue() + ",'" + name + "'," + carbs.intValue() + "," + fat.intValue() + "," + protein.intValue() + ", " + hydration.intValue() +  ")";
+	public void add(String username, Meal aMeal, Date day) {
+		String insertTableSQL = "INSERT INTO Meal" + "(userName, calories, name, carbs, fat, protein, hydration, day) " + "VALUES"
+				+ "('"+ username + "'," + aMeal.getCalories().intValue() + ",'" + aMeal.getName() + "'," + aMeal.getCarbs().intValue() + "," + aMeal.getFat().intValue() + "," + aMeal.getProtein().intValue() + "," + aMeal.getHydration().intValue() +",?" + ")";
 		try (Connection dbConnection = getDBConnection();
-				Statement statement = dbConnection.createStatement();){
+				PreparedStatement statement = dbConnection.prepareStatement(insertTableSQL);){
 			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
 			System.out.println(insertTableSQL);
-			statement.executeUpdate(insertTableSQL);
+			statement.executeUpdate();
 			System.out.println("Record is inserted into Meal table!");
 			
 		} catch (SQLException e) {

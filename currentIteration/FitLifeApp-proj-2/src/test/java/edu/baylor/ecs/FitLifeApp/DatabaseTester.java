@@ -73,7 +73,7 @@ public class DatabaseTester {
 			wc.add(username, x, day);
 		}
 		for (Meal x : entered2) {
-			mc.add("benji", x.getCalories(), x.getName(), x.getCarbs(), x.getFat(), x.getProtein(), x.getHydration());
+			mc.add(username, x, day);
 		}
 		for(Sleep x : entered3) {
 			sc.add(username, x, day);

@@ -5,14 +5,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import edu.baylor.ecs.FLADatabase.MealController;
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.FitLifeApp.Meal;
+
 public class NutritionDialog {
 	private static volatile NutritionDialog instance = null;
 	private JFrame window;	
+	private MealController mc = MealController.getInstance();
 	private NutritionDialog() {}
 	
 	public static NutritionDialog getInstance() {
@@ -52,18 +56,17 @@ public class NutritionDialog {
 			Integer protein = Integer.valueOf(field4.getText());
 			Integer hydration = Integer.valueOf(field5.getText());
 			
-			// Creates a meal which can use the add method of NutritionController to enter it
-			// into the database
-			// We need to store the username somewhere though
-			//Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
+			
+			Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
+			mc.add(Account.getuName(), aMeal, day);
 			
 	
 			FileWriter w = new FileWriter(file, true);
 			PrintWriter p = new PrintWriter(w);
 	
-			p.write("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
+			p.write(Account.getuName() + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
 					+ protein.toString() + "," + hydration.toString() +"\n");
-			System.out.println("fu" + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
+			System.out.println(Account.getuName() + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
 					+ protein.toString() + "," + hydration.toString() +"\n");
 	
 			w.close();
