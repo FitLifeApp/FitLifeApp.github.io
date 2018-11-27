@@ -1,7 +1,5 @@
 package edu.baylor.ecs.Controllers;
 
-
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +33,7 @@ public final class SleepDialog {
 	private final String ex8 = "7";
 	private final String ex9 = "8";
 	private final String ex10 = "9";
-	
+
 	private SleepDialog() {
 	}
 
@@ -60,65 +58,62 @@ public final class SleepDialog {
 		File file = new File("Sleep.csv");
 		JTextField field1 = new JTextField();
 
-		/*Sets up a JSpinner for time*/
+		/* Sets up a JSpinner for time */
 		SpinnerDateModel sdm = new SpinnerDateModel();
 		JSpinner timeSpinner = new JSpinner(sdm);
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
 		timeSpinner.setEditor(timeEditor);
-		
-		/*Setup a JComboBox for the */
+
+		/* Setup a JComboBox for the */
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
 		setRating(String.valueOf(cb.getSelectedItem()));
 		cb.setEditable(false);
-	
-		Object[] message = { "Duration", field1, "Rating", cb, "Start Time", timeSpinner};
-		
+
+		Object[] message = { "Duration", field1, "Rating", cb, "Start Time", timeSpinner };
+
 		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
-		
-		
-		
-		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
-			
-			//convert date and time to just time
+
+		if (opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
+
+			// convert date and time to just time
 			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
 			sdf.setTimeZone(TimeZone.getDefault());
 			String da = sdf.format(timeSpinner.getValue());
 			Double duration = null;
-			
-			
+
 			try {
-				/*create sleep object and add it to the database*/
+				/* create sleep object and add it to the database */
 				Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
-				Integer.valueOf(cb.getSelectedItem().toString()), Time.valueOf(da));
-				
-				/*test integrity of the entered value*/
+						Integer.valueOf(cb.getSelectedItem().toString()), Time.valueOf(da));
+
+				/* test integrity of the entered value */
 				duration = Double.valueOf(field1.getText());
-				if(duration.compareTo(Double.valueOf("0.1")) < 0 || duration.compareTo(Double.valueOf("23.9")) > 0) {
+				if (duration.compareTo(Double.valueOf("0.1")) < 0 || duration.compareTo(Double.valueOf("23.9")) > 0) {
 					throw new NumberFormatException();
 				}
-				
+
 				sc.add(Account.getuName(), aSleep, day);
-			}catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid entry for Duration.\nMust be a number from 0.1 to 23.9", "Failed",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			
+
 			Integer rating = Integer.valueOf(cb.getSelectedItem().toString());
 			Time startTime = Time.valueOf(da);
-	
+
 			FileWriter w = new FileWriter(file, true);
 			PrintWriter p = new PrintWriter(w);
-	
+
 			p.write("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
 					+ day.toString() + "\n");
-			System.out.println("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString() + ","
-					+ day.toString() + "\n");
-	
+			System.out.println("fu" + "," + duration.toString() + "," + rating.toString() + "," + startTime.toString()
+					+ "," + day.toString() + "\n");
+
 			w.close();
 			p.close();
 		}
@@ -131,5 +126,5 @@ public final class SleepDialog {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
-	
+
 }
