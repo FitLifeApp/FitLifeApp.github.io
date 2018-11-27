@@ -35,7 +35,7 @@ public final class SleepController extends DatabaseController{
 	 * */
 	public void createTable() {
 		String createTableSQL = "CREATE TABLE Sleep(" + "userName VARCHAR(255) NOT NULL, " + "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
-				+ "duration FLOAT NOT NULL, " + " rating INT NOT NULL, "+ "startTime BIGINT NOT NULL," + "day DATE NOT NULL," + "PRIMARY KEY (id) " + ")";
+				+ "duration FLOAT NOT NULL, " + " rating INT NOT NULL, "+ "startTime TIME NOT NULL," + "day DATE NOT NULL," + "PRIMARY KEY (id) " + ")";
 		try (Connection dbConnection = super.getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			
@@ -52,11 +52,12 @@ public final class SleepController extends DatabaseController{
 	 * */
 	public void add(String username, Sleep aSleep, Date day) {
 		String insertTableSQL = "INSERT INTO Sleep" + "(userName, duration, rating, startTime, day) " + "VALUES"
-				+ "('"+ username + "'," + aSleep.getDuration().doubleValue() + ", " + aSleep.getRating().intValue() + ", " + aSleep.getStartTime().getTime() + ", ?" + ")";
+				+ "('"+ username + "'," + aSleep.getDuration().doubleValue() + ", " + aSleep.getRating().intValue() + ", ?" + ", ?" + ")";
 		try (Connection dbConnection = getDBConnection();
 				PreparedStatement statement = dbConnection.prepareStatement(insertTableSQL);){
 			
-			statement.setDate(1, new java.sql.Date(day.getTime()));
+			statement.setDate(2, new java.sql.Date(day.getTime()));
+			statement.setTime(1,aSleep.getStartTime());
 			System.out.println(insertTableSQL);
 			statement.executeUpdate();
 			System.out.println("Record is inserted into Sleep table!");
@@ -134,6 +135,36 @@ public final class SleepController extends DatabaseController{
 			System.out.println(deleteTableSQL);
 			ResultSet rs = statement.executeQuery(deleteTableSQL);
 			System.out.println("Record selected from Sleep table!");
+			
+			//loops through and return as a list of strings
+			if(rs.next() == false) {
+				System.out.println("No results from Sleep table");
+			}else {
+				do {
+					Sleep aSleep= new Sleep(Integer.valueOf(rs.getInt("id")), Double.valueOf(rs.getDouble("duration")), Integer.valueOf(rs.getString("rating")), 
+							rs.getTime("startTime"));
+					
+					row.add(aSleep);
+				}while(rs.next());	
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return row;
+	}
+	
+	
+	public List<Sleep> select(String username, Date day){
+		String selectTableSQL = "SELECT * FROM Sleep WHERE userName = '" + username + "' AND day = ?";
+		List<Sleep> row = new ArrayList<Sleep>();
+		try ( Connection dbConnection = getDBConnection();
+			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
+			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
+			System.out.println(selectTableSQL);
+			ResultSet rs = statement.executeQuery();
+			System.out.println("Records selected from Sleep table!");
 			
 			//loops through and return as a list of strings
 			if(rs.next() == false) {

@@ -129,14 +129,44 @@ public final class MealController extends DatabaseController {
 	 * 
 	 */
 	public List<Meal> selectAll() {
-		String deleteTableSQL = "SELECT * FROM Meal";
+		String selectAllTableSQL = "SELECT * FROM Meal";
 		List<Meal> row = new ArrayList<Meal>();
 		try ( Connection dbConnection = getDBConnection();
 			  Statement statement = dbConnection.createStatement();){
 			
-			System.out.println(deleteTableSQL);
-			ResultSet rs = statement.executeQuery(deleteTableSQL);
+			System.out.println(selectAllTableSQL);
+			ResultSet rs = statement.executeQuery(selectAllTableSQL);
 			System.out.println("Record selected from Meal table!");
+			
+			//loops through and return as a list of strings
+			if(rs.next() == false) {
+				System.out.println("No results from Meal table");
+			}else {
+				do {
+					Meal aMeal= new Meal(Integer.valueOf(rs.getInt("id")), Integer.valueOf(rs.getInt("carbs")), Integer.valueOf(rs.getString("fat")), 
+							Integer.valueOf(rs.getString("hydration")), rs.getString("name"), Integer.valueOf(rs.getInt("protein")));
+					
+					row.add(aMeal);
+				}while(rs.next());	
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return row;
+	}
+	
+	
+	public List<Meal> select(String username, Date day){
+		String selectTableSQL = "SELECT * FROM Meal WHERE userName = '" + username + "' AND day = ?";
+		List<Meal> row = new ArrayList<Meal>();
+		try ( Connection dbConnection = getDBConnection();
+			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
+			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
+			System.out.println(selectTableSQL);
+			ResultSet rs = statement.executeQuery();
+			System.out.println("Records selected from Meal table!");
 			
 			//loops through and return as a list of strings
 			if(rs.next() == false) {
