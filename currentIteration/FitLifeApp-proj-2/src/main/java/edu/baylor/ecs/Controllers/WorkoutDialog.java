@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.baylor.ecs.FLADatabase.WorkoutController;
+import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.Workout;
 import edu.baylor.ecs.Listeners.WorkoutDialogListener;
 
@@ -68,7 +69,7 @@ public final class WorkoutDialog {
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
-		type = String.valueOf(cb.getSelectedItem());
+		setType(String.valueOf(cb.getSelectedItem()));
 		cb.setEditable(false);
 		cb.addItemListener(new BasicItemListener());
 		comboBoxPane.add(cb);
@@ -113,24 +114,24 @@ public final class WorkoutDialog {
 				field4 };
 		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
-			// Creates a workout which can use the add method or WorkoutController to enter
-			// it into the database
-			// We need to store the username somewhere though
-			// Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
-			// field1.getText(), type, Double.valueOf(field3.getText()),
-			// Double.valueOf(field4.getText()));
+			
+			//creates a workout and adds it to the database
+			Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
+			field1.getText(), type, Double.valueOf(field3.getText()),
+			Double.valueOf(field4.getText()));
+			wc.add(Account.getuName(), aWorkout, day);
 	
 			String exercise = field1.getText();
 			Integer duration = Integer.valueOf(field2.getText());
 			String weight = field3.getText();
-			// Integer weightUsed = Integer.valueOf(field4.getText());
+			Integer weightUsed = Integer.valueOf(field4.getText());
 	
 			FileWriter w = new FileWriter(file, true);
 			PrintWriter p = new PrintWriter(w);
 	
-			p.write("fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
+			p.write( Account.getuName() + "," + getType() + "," + exercise + "," + weight + "," + weightUsed + "," +  duration + "," + day.toString() + "\n");
 			System.out.println(
-					"fu" + "," + exercise + "," + "160" + "," + weight + "," + duration + "," + day.toString() + "\n");
+					Account.getuName() + "," + getType() + "," + exercise + "," + weight + "," + weightUsed + "," +  duration + "," + day.toString() + "\n");
 	
 			w.close();
 			p.close();
@@ -139,6 +140,14 @@ public final class WorkoutDialog {
 
 	public void destroy() {
 		window.dispose();
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

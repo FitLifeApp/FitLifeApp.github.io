@@ -30,6 +30,7 @@ public class WindowManager {
 
 	private Account acct;
 
+
 	private static volatile WindowManager instance = null;
 
 	/* singleton constructor */
@@ -182,6 +183,12 @@ public class WindowManager {
 		System.out.println(src.toString());
 		acct = src;
 	}
+	
+	public Account getAcct() {
+		return acct;
+	}
+	
+	
 
 	public CalendarController getCalendarWindow() {
 		return calendarWindow;
