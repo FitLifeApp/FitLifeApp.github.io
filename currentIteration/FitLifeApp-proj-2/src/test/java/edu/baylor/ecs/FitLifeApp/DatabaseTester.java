@@ -25,7 +25,7 @@ public class DatabaseTester {
 	private Meal m1 = new Meal(Integer.valueOf(50), Integer.valueOf(10), Integer.valueOf(35), "Chicken and Rice", Integer.valueOf(32));
 	private Meal m2 = new Meal(Integer.valueOf(100), Integer.valueOf(20), Integer.valueOf(40), "Steak and Potatoes", Integer.valueOf(64));
 	private Meal m3 = new Meal(Integer.valueOf(25), Integer.valueOf(60), Integer.valueOf(15), "Spaghetti", Integer.valueOf(128));
-	private Sleep s1 = new Sleep(Double.valueOf(480), Integer.valueOf(5), new Time(9000));
+	private Sleep s1 = new Sleep(Double.valueOf(480), Integer.valueOf(5), new Time(10000));
 	private Sleep s2 = new Sleep(Double.valueOf(510), Integer.valueOf(9), new Time(10000));
 	private Sleep s3 = new Sleep(Double.valueOf(450), Integer.valueOf(3), new Time(8000000));
 	private String username = "benji";
@@ -33,20 +33,25 @@ public class DatabaseTester {
 	
 	@Test
 	public void databaseCreateAndConnect() {
+		System.out.println("databaseCreateAndConnect");
 		mc.connectAndCreate();
 		sc.connectAndCreate();
 		wc.connectAndCreate();
+		System.out.println("");
 	}
 	
 	@Test
 	public void databaseTables() {
+		System.out.println("databaseTables");
 		wc.createTable();
 		sc.createTable();
 		mc.createTable();
+		System.out.println("");
 	}
 	
 	@Test
 	public void addAndRemoveWorkout() {
+		System.out.println("addAndRemoveWorkout");
 		List<Workout> entered = new ArrayList<Workout>();
 		List<Workout> returned;
 		List<Meal> entered2 = new ArrayList<Meal>();
@@ -110,10 +115,12 @@ public class DatabaseTester {
 		wc.deleteAll();
 		mc.deleteAll();
 		sc.deleteAll();
+		System.out.println("");
 	}
 	
 	@Test
 	public void deleteAll() {
+		System.out.println("deleteAll\n");
 		List<Workout> returned = new ArrayList<Workout>();
 		List<Meal> returned2 = new ArrayList<Meal>();
 		List<Sleep> returned3 = new ArrayList<Sleep>();
@@ -133,10 +140,97 @@ public class DatabaseTester {
 	
 	@Test
 	public void deleteDatabases() {
+		System.out.println("deleteDatabases\n");
 		mc.dropTable();
 		sc.dropTable();
 		wc.dropTable();
 	}
+	
+	
+	@Test
+	public void selectSpecificMeal() {
+		
+		System.out.println("selectSpecificMeal");
+		
+		List<Meal> entered2 = new ArrayList<Meal>();
+		List<Meal> returned2;
+		
+		
+		
+		
+		
+		entered2.add(m1);
+		entered2.add(m2);
+		entered2.add(m3);
+		
+		
+		
+		
+		databaseTables();
+		
+		for (Meal x : entered2) {
+			mc.add(username, x, day);
+		}
+		
+		
+		
+		returned2 = mc.select(username, day);
+		
+	
+		for(int i = 0; i < returned2.size(); i++) {
+			assertEquals(entered2.get(i).getCalories().intValue(), returned2.get(i).getCalories().intValue());
+			assertEquals(entered2.get(i).getCarbs().intValue(), returned2.get(i).getCarbs().intValue());
+			assertEquals(entered2.get(i).getFat().intValue(), returned2.get(i).getFat().intValue());
+			assertEquals(entered2.get(i).getHydration().intValue(), returned2.get(i).getHydration().intValue());
+			assertEquals(entered2.get(i).getName(), returned2.get(i).getName());
+			assertEquals(entered2.get(i).getProtein().intValue(), returned2.get(i).getProtein().intValue());
+		}
+	
+		
+		
+		//get all from 
+		mc.deleteAll();
+		System.out.println("");
+	}
+	
+	@Test
+	public void selectSpecificSleep() {
+		
+		System.out.println("selectSpecificSleep");
+		
+		List<Sleep> entered3 = new ArrayList<Sleep>();
+		List<Sleep> returned3;
+		
+		entered3.add(s1);
+		entered3.add(s2);
+		entered3.add(s3);
+		
+		databaseTables();
+		
+		for(Sleep x : entered3) {
+			sc.add(username, x, day);
+		}
+		
+		
+		
+		returned3 = sc.select(username, day);
+		
+	
+		for(int i = 0; i < returned3.size(); i++) {
+			assertEquals(entered3.get(i).getDuration().toString(), returned3.get(i).getDuration().toString());
+			assertEquals(entered3.get(i).getRating().intValue(), returned3.get(i).getRating().intValue());
+			assertEquals(entered3.get(i).getStartTime().getTime(), returned3.get(i).getStartTime().getTime());
+		}
+		
+	
+		
+		
+		//get all from 
+		mc.deleteAll();
+		System.out.println("");
+	}
+	
+	
 	
 	@Test
 	public void databaseEditWorkout() {

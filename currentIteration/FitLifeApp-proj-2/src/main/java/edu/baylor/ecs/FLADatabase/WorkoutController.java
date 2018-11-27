@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import edu.baylor.ecs.FitLifeApp.Workout;
 
 //make singleton
@@ -142,6 +141,38 @@ public final class WorkoutController extends DatabaseController{
 			//loops through and return as a list of strings
 			if(rs.next() == false) {
 				System.out.print("No results from Workout table");
+			}else {
+				do {
+					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 
+							Integer.valueOf(rs.getInt("duration")), rs.getString("name"), 
+							rs.getString("type"), Double.valueOf(rs.getDouble("userWeight")), 
+							Double.valueOf(rs.getDouble("workoutWeight")));
+					
+					row.add(aWorkout);
+				}while(rs.next());	
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return row;
+	}
+	
+	
+	public List<Workout> select(String username, Date day){
+		String selectTableSQL = "SELECT * FROM Workout WHERE userName = '" + username + "' AND day = ?";
+		List<Workout> row = new ArrayList<Workout>();
+		try ( Connection dbConnection = getDBConnection();
+			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
+			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
+			System.out.println(selectTableSQL);
+			ResultSet rs = statement.executeQuery();
+			System.out.println("Records selected from Workout table!");
+			
+			//loops through and return as a list of strings
+			if(rs.next() == false) {
+				System.out.print("No results from Meal table");
 			}else {
 				do {
 					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 
