@@ -33,7 +33,7 @@ import edu.baylor.ecs.Controllers.LogInController;
 				login.toAcctCreation();
 			} else if (e.getActionCommand().equals("Forgot Password")) {
 				login.destroyWindow();
-				login.toAcctCreation();
+				login.toForgetPassword();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Somehow you pressed a non-existent button?", "Failed",
 						JOptionPane.ERROR_MESSAGE);
