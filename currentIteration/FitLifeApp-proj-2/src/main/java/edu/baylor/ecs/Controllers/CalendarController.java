@@ -178,6 +178,7 @@ public final class CalendarController extends WindowManager{
 					temp[0] = x.getDuration().toString();
 					temp[1] = x.getRating().toString();
 					temp[2] = x.getStartTime().toString();
+					arr.add(temp);
 				}
 				row = arr.size();
 				break;
@@ -232,11 +233,6 @@ public final class CalendarController extends WindowManager{
 		window.setVisible(true);
 	}
 	
-	
-	
-	
-	
-
 	public void showAddWorkoutDialog() throws Exception {
 		addworkout.addWorkout(day);
 	}
