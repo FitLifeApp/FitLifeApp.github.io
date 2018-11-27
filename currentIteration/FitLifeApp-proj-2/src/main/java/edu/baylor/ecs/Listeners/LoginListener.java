@@ -13,7 +13,7 @@ import edu.baylor.ecs.Controllers.LogInController;
 //Listener used for buttons in LogIn window
 	//maybe this can be removed to another class
 	//can this just bubble up?
-	public class LoginListener implements ActionListener {
+	public class LoginListener implements ActionListener  {
 		LogInController login = LogInController.getInstance();
 		@Override
 		public void actionPerformed(ActionEvent e) {

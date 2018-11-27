@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import edu.baylor.ecs.Controllers.CalendarController;
 import edu.baylor.ecs.Controllers.HomePageController;
 
-public class HomeListener implements ActionListener {
+public class HomeListener implements ActionListener  {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

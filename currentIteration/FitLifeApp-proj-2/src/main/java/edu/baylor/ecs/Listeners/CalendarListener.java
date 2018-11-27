@@ -9,7 +9,7 @@ import edu.baylor.ecs.Controllers.CalendarController;
 //Listener for Calendar specific buttons
 //Like the home listener, I might have missed some
 //Because I'm not familiar with this part of the code
-public class CalendarListener implements ActionListener {
+public class CalendarListener implements ActionListener  {
 
 	CalendarController calendarWindow = CalendarController.getInstance();
 
@@ -50,17 +50,16 @@ public class CalendarListener implements ActionListener {
 						}
 					//Sleep mode	
 					} else if (calendarWindow.getMode().intValue() == 2) {
-							try {
-								calendarWindow.showAddSleepDialog();
-							} catch (Exception e1) {
+						try {
+							calendarWindow.showAddSleepDialog();
+						} catch (Exception e1) {
 								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+							e1.printStackTrace();
+						}
 					}
 					
 				//we're in review mode	
 				} else {
-
 					calendarWindow.toDay((Date) calendarWindow.getDatePanel().getModel().getValue());
 				}
 			}

@@ -51,7 +51,6 @@ public class DatabaseTester {
 		List<Sleep> entered3 = new ArrayList<Sleep>();
 		List<Sleep> returned3;
 		
-		
 		entered.add(w1);
 		entered.add(w2);
 		entered.add(w3);

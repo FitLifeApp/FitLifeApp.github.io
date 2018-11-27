@@ -1,14 +1,21 @@
 package edu.baylor.ecs.Controllers;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 public class NutritionDialog {
 	private static volatile NutritionDialog instance = null;
@@ -31,6 +38,13 @@ public class NutritionDialog {
 	 * function opens the window to get sleep information from the user
 	 */
 	public void addMeal(Date day) throws IOException {
+		
+		Box b1 = new Box(BoxLayout.Y_AXIS);
+		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
+		UIManager.put("OptionPane.background", new Color(174, 214, 241));
+		UIManager.put("Panel.background", new Color(174, 214, 241));
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,15))); 
 
 		window = new JFrame("Add Meal");
 
@@ -71,7 +85,7 @@ public class NutritionDialog {
 		}
 	}
 	
-	
-	
-
+	public void destroy() {
+		window.dispose();
+	}
 }

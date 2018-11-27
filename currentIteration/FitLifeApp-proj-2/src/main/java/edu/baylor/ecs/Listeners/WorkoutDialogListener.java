@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import edu.baylor.ecs.Controllers.CalendarController;
 
-public class WorkoutDialogListener implements ActionListener{
+public class WorkoutDialogListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -18,7 +18,5 @@ public class WorkoutDialogListener implements ActionListener{
 				e1.printStackTrace();
 			}
 		}
-		
 	}
-
 }

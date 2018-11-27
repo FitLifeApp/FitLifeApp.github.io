@@ -88,7 +88,6 @@ public final class CalendarController extends WindowManager{
 		window.dispose();
 	}
 	
-	
 
 	public void showAddWorkoutDialog() throws Exception {
 		addworkout.addWorkout(day);

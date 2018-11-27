@@ -171,4 +171,10 @@ public final class WorkoutController extends DatabaseController{
 		
 	}
 
+	public void add(String string, Integer duration, String name, String type, Double userWeight,
+			Double workoutWeights) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -25,6 +25,9 @@ public class WindowManager {
 	private static final AcctCreator acctCreator = AcctCreator.getInstance();
 	private static final CalendarController calendarWindow = CalendarController.getInstance();
 	private static final HomePageController home = HomePageController.getInstance();
+	private static final WorkoutDialog workoutSelectionWindow = WorkoutDialog.getInstance();
+	private static final SleepDialog sleepDialog = SleepDialog.getInstance();
+	private static final NutritionDialog nutritionDialog = NutritionDialog.getInstance();
 
 	// -----------------------------------------
 	private JFrame window;
@@ -183,6 +186,20 @@ public class WindowManager {
 	public CalendarController getCalendarWindow() {
 		return calendarWindow;
 	}
+	
+	//------------>for dispose workoutWindow (Yufan Xu)
+	public WorkoutDialog getWorkoutSelectionWindow() {
+		return workoutSelectionWindow;
+	}
+	
+	public static SleepDialog getSleepdialog() {
+		return sleepDialog;
+	}
+
+	public static NutritionDialog getNutritiondialog() {
+		return nutritionDialog;
+	}
+
 
 	public JFrame getWindow() {
 		return window;

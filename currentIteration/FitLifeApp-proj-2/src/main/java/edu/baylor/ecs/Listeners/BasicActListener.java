@@ -40,6 +40,15 @@ class BasicActListener implements ActionListener {
 		} else if (e.getActionCommand().equals("Plan Workout")) {
 			// addWorkoutWindow();
 			System.out.println("Planning Workout");
+		} else if (e.getActionCommand().equals("Confirm")) {
+			// addWorkoutWindow();
+			wm.getCalendarWindow().destroyWindow();
+			wm.getWorkoutSelectionWindow().destroy();
+			
+		} else if (e.getActionCommand().equals("Cancel")) {
+			// addWorkoutWindow();
+			wm.getCalendarWindow().destroyWindow();
+			wm.getWorkoutSelectionWindow().destroy();
 		} else {
 			System.err.println("Unhandled Action Command: " + e.getActionCommand());
 		}

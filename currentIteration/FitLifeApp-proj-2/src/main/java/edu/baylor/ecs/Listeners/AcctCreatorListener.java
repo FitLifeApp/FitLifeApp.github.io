@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 import edu.baylor.ecs.Controllers.AcctCreator;
 
-public class AcctCreatorListener implements ActionListener {
+public class AcctCreatorListener implements ActionListener  {
 
 	AcctCreator acct = AcctCreator.getInstance();
 	
