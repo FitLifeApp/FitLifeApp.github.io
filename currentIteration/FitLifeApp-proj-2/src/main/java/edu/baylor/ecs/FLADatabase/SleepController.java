@@ -1,11 +1,13 @@
 package edu.baylor.ecs.FLADatabase;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import edu.baylor.ecs.FitLifeApp.Sleep;
 
@@ -33,7 +35,7 @@ public final class SleepController extends DatabaseController{
 	 * */
 	public void createTable() {
 		String createTableSQL = "CREATE TABLE Sleep(" + "userName VARCHAR(255) NOT NULL, " + "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
-				+ "duration FLOAT NOT NULL, " + " rating INT NOT NULL, "+ "startTime BIGINT NOT NULL," + "PRIMARY KEY (id) " + ")";
+				+ "duration FLOAT NOT NULL, " + " rating INT NOT NULL, "+ "startTime BIGINT NOT NULL," + "day DATE NOT NULL," + "PRIMARY KEY (id) " + ")";
 		try (Connection dbConnection = super.getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			
@@ -48,14 +50,15 @@ public final class SleepController extends DatabaseController{
 	
 	/* Inserts a record into the Sleep table
 	 * */
-	public void add(String username, Double duration, Integer rating, Time startTime) {
-		String insertTableSQL = "INSERT INTO Sleep" + "(userName, duration, rating, startTime) " + "VALUES"
-				+ "('"+ username + "'," + duration.doubleValue() + ", " + rating.intValue() + ", " + startTime.getTime() + ")";
+	public void add(String username, Sleep aSleep, Date day) {
+		String insertTableSQL = "INSERT INTO Sleep" + "(userName, duration, rating, startTime, day) " + "VALUES"
+				+ "('"+ username + "'," + aSleep.getDuration().doubleValue() + ", " + aSleep.getRating().intValue() + ", " + aSleep.getStartTime().getTime() + ", ?" + ")";
 		try (Connection dbConnection = getDBConnection();
-				Statement statement = dbConnection.createStatement();){
+				PreparedStatement statement = dbConnection.prepareStatement(insertTableSQL);){
 			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
 			System.out.println(insertTableSQL);
-			statement.executeUpdate(insertTableSQL);
+			statement.executeUpdate();
 			System.out.println("Record is inserted into Sleep table!");
 			
 		} catch (SQLException e) {

@@ -75,7 +75,7 @@ public class DatabaseTester {
 			mc.add("benji", x.getCalories(), x.getName(), x.getCarbs(), x.getFat(), x.getProtein(), x.getHydration());
 		}
 		for(Sleep x : entered3) {
-			sc.add("benji", x.getDuration(), x.getRating(), x.getStartTime());
+			sc.add(username, x, day);
 		}
 		
 		returned = wc.selectAll();

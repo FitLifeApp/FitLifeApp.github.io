@@ -7,21 +7,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
+import edu.baylor.ecs.FLADatabase.SleepController;
+import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.FitLifeApp.Sleep;
 
 public final class SleepDialog {
 	private static volatile SleepDialog instance = null;
 	private JFrame window;
-
+	private SleepController sc = SleepController.getInstance();
+	
 	private SleepDialog() {
 	}
 
@@ -52,21 +60,33 @@ public final class SleepDialog {
 		File file = new File("Sleep.csv");
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
-		JTextField field3 = new JTextField();
 
-		Object[] message = { "Duration", field1, "Rating", field2, "Start Time", field3 };
+		/*Sets up a JSpinner for time*/
+		SpinnerDateModel sdm = new SpinnerDateModel();
+		JSpinner timeSpinner = new JSpinner(sdm);
+		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
+		timeSpinner.setEditor(timeEditor);
+		
+		Object[] message = { "Duration", field1, "Rating", field2, "Start Time", timeSpinner};
+		
 		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
-
+		
+		
+		
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
-			// Creates a sleep which can use the add method of SleepController to enter it
-			// into the database
-			// We need to store the username somewhere though
-			// Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
-			// Integer.valueOf(field2.getText()), Time.valueOf(field3.getText()));
+			//convert date and time to just time
+			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
+			sdf.setTimeZone(TimeZone.getDefault());
+			String da = sdf.format(timeSpinner.getValue());
+			System.out.println(timeSpinner.getValue().toString());
+			Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
+			Integer.valueOf(field2.getText()), Time.valueOf(da));
+			
+			sc.add(Account.getuName(), aSleep, day);
 	
 			Double duration = Double.valueOf(field1.getText());
 			Integer rating = Integer.valueOf(field2.getText());
-			Time startTime = Time.valueOf(field3.getText());
+			Time startTime = Time.valueOf(da);
 	
 			FileWriter w = new FileWriter(file, true);
 			PrintWriter p = new PrintWriter(w);
