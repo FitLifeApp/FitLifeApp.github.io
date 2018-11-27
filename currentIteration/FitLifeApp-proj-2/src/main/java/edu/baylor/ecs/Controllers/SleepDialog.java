@@ -1,5 +1,7 @@
 package edu.baylor.ecs.Controllers;
 
+
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,13 +10,12 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
-
 import edu.baylor.ecs.FLADatabase.SleepController;
 import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.Sleep;
@@ -23,6 +24,17 @@ public final class SleepDialog {
 	private static volatile SleepDialog instance = null;
 	private JFrame window;
 	private SleepController sc = SleepController.getInstance();
+	private String rating = null;
+	private final String ex1 = "0";
+	private final String ex2 = "1";
+	private final String ex3 = "2";
+	private final String ex4 = "3";
+	private final String ex5 = "4";
+	private final String ex6 = "5";
+	private final String ex7 = "6";
+	private final String ex8 = "7";
+	private final String ex9 = "8";
+	private final String ex10 = "9";
 	
 	private SleepDialog() {
 	}
@@ -47,7 +59,6 @@ public final class SleepDialog {
 
 		File file = new File("Sleep.csv");
 		JTextField field1 = new JTextField();
-		JTextField field2 = new JTextField();
 
 		/*Sets up a JSpinner for time*/
 		SpinnerDateModel sdm = new SpinnerDateModel();
@@ -55,7 +66,14 @@ public final class SleepDialog {
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
 		timeSpinner.setEditor(timeEditor);
 		
-		Object[] message = { "Duration", field1, "Rating", field2, "Start Time", timeSpinner};
+		/*Setup a JComboBox for the */
+		String comboBoxItems[] = { ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10 };
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		JComboBox cb = new JComboBox(comboBoxItems);
+		setRating(String.valueOf(cb.getSelectedItem()));
+		cb.setEditable(false);
+	
+		Object[] message = { "Duration", field1, "Rating", cb, "Start Time", timeSpinner};
 		
 		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		
@@ -68,12 +86,12 @@ public final class SleepDialog {
 			String da = sdf.format(timeSpinner.getValue());
 			System.out.println(timeSpinner.getValue().toString());
 			Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
-			Integer.valueOf(field2.getText()), Time.valueOf(da));
+			Integer.valueOf(cb.getSelectedItem().toString()), Time.valueOf(da));
 			
 			sc.add(Account.getuName(), aSleep, day);
 	
 			Double duration = Double.valueOf(field1.getText());
-			Integer rating = Integer.valueOf(field2.getText());
+			Integer rating = Integer.valueOf(cb.getSelectedItem().toString());
 			Time startTime = Time.valueOf(da);
 	
 			FileWriter w = new FileWriter(file, true);
@@ -89,4 +107,12 @@ public final class SleepDialog {
 		}
 	}
 
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
+	
 }
