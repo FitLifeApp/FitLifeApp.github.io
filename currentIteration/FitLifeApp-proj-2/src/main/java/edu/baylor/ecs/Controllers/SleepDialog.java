@@ -80,17 +80,34 @@ public final class SleepDialog {
 		
 		
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
+			
 			//convert date and time to just time
 			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
 			sdf.setTimeZone(TimeZone.getDefault());
 			String da = sdf.format(timeSpinner.getValue());
-			System.out.println(timeSpinner.getValue().toString());
-			Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
-			Integer.valueOf(cb.getSelectedItem().toString()), Time.valueOf(da));
+			Double duration = null;
 			
-			sc.add(Account.getuName(), aSleep, day);
-	
-			Double duration = Double.valueOf(field1.getText());
+			
+			try {
+				/*create sleep object and add it to the database*/
+				Sleep aSleep = new Sleep(Double.valueOf(field1.getText()),
+				Integer.valueOf(cb.getSelectedItem().toString()), Time.valueOf(da));
+				
+				/*test integrity of the entered value*/
+				duration = Double.valueOf(field1.getText());
+				if(duration.compareTo(Double.valueOf("0.1")) < 0 || duration.compareTo(Double.valueOf("23.9")) > 0) {
+					throw new NumberFormatException();
+				}
+				
+				sc.add(Account.getuName(), aSleep, day);
+			}catch(NumberFormatException e) {
+				window.dispose();
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid entry for Duration.\nMust be a number from 0.1 to 23.9", "Failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			Integer rating = Integer.valueOf(cb.getSelectedItem().toString());
 			Time startTime = Time.valueOf(da);
 	
