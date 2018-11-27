@@ -273,6 +273,7 @@ public final class LogInController extends WindowManager{
 				JAXBContext jaxbContext = JAXBContext.newInstance(Account.class);
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				a = (Account) jaxbUnmarshaller.unmarshal(strReader);
+				a.setuName(uName.getText());
 				strReader.close();
 			} catch (JAXBException e) {
 				e.printStackTrace();

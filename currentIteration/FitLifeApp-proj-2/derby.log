@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Fri Nov 23 16:50:44 CST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0167-42c4-a942-000007180d78 
-on database directory C:\Users\Benjamin\OneDrive\Baylor\2018-2019\Java\JAVA\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2\FitLifeApp with class loader sun.misc.Launcher$AppClassLoader@23fc625e 
+Mon Nov 26 23:43:19 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0167-53b1-7b34-0000045b1b38 
+on database directory C:\Users\Benjamin\OneDrive\Baylor\2018-2019\Java\JAVA\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2\FitLifeApp with class loader sun.misc.Launcher$AppClassLoader@2a139a55 
 Loaded from file:/C:/Users/Benjamin/.m2/repository/org/apache/derby/derby/10.14.1.0/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_111-b14

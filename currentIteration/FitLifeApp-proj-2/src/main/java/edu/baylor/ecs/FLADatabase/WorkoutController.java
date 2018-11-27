@@ -1,10 +1,12 @@
 package edu.baylor.ecs.FLADatabase;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.baylor.ecs.FitLifeApp.Workout;
@@ -34,7 +36,7 @@ public final class WorkoutController extends DatabaseController{
 	public void createTable() {
 		String createTableSQL = "CREATE TABLE Workout(" + "userName VARCHAR(255) NOT NULL, " + "id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), "
 				+ "duration INT NOT NULL, " + "name VARCHAR(255) NOT NULL, "
-				+ "type VARCHAR(255) NOT NULL, "+ "userWeight FLOAT NOT NULL, " + "workoutWeight FLOAT NOT NULL, " + "PRIMARY KEY (id) " + ")";
+				+ "type VARCHAR(255) NOT NULL, "+ "userWeight FLOAT NOT NULL, " + "workoutWeight FLOAT NOT NULL, " + "day DATE NOT NULL, " + "PRIMARY KEY (id) " + ")";
 		try (Connection dbConnection = super.getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			
@@ -50,16 +52,17 @@ public final class WorkoutController extends DatabaseController{
 	
 	/* Inserts a record into the Workout table
 	 * */
-	public void add(String username, Workout aWorkout) {
-		String insertTableSQL = "INSERT INTO Workout" + "(userName, duration, name, type, userWeight, workoutWeight) " + "VALUES"
+	public void add(String username, Workout aWorkout, Date day) {
+		String insertTableSQL = "INSERT INTO Workout" + "(userName, duration, name, type, userWeight, workoutWeight, day) " + "VALUES"
 				+ "('"+ username + "'," + aWorkout.getDuration().intValue() + ",'" + aWorkout.getName() + "','" + aWorkout.getType() + 
-				"'," + aWorkout.getUserWeight().doubleValue() + "," + aWorkout.getWorkoutWeights().doubleValue() + ")";
+				"'," + aWorkout.getUserWeight().doubleValue() + "," + aWorkout.getWorkoutWeights().doubleValue() + ",?" + ")";
 		
 		try (Connection dbConnection = getDBConnection();
-				Statement statement = dbConnection.createStatement();){
+				PreparedStatement statement = dbConnection.prepareStatement(insertTableSQL);){
 			
+			statement.setDate(1, new java.sql.Date(day.getTime()));
 			System.out.println(insertTableSQL);
-			statement.executeUpdate(insertTableSQL);
+			statement.executeUpdate();
 			System.out.println("Record is inserted into Workout table!");
 			
 		} catch (SQLException e) {

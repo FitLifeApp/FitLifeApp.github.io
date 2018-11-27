@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -27,6 +28,8 @@ public class DatabaseTester {
 	private Sleep s1 = new Sleep(Double.valueOf(480), Integer.valueOf(5), new Time(9000));
 	private Sleep s2 = new Sleep(Double.valueOf(510), Integer.valueOf(9), new Time(10000));
 	private Sleep s3 = new Sleep(Double.valueOf(450), Integer.valueOf(3), new Time(8000000));
+	private String username = "benji";
+	Date day = new Date(871264037);
 	
 	@Test
 	public void databaseCreateAndConnect() {
@@ -66,7 +69,7 @@ public class DatabaseTester {
 		
 		databaseTables();
 		for (Workout x : entered) {
-			wc.add("benji", x.getDuration(), x.getName(), x.getType(), x.getUserWeight(), x.getWorkoutWeights());
+			wc.add(username, x, day);
 		}
 		for (Meal x : entered2) {
 			mc.add("benji", x.getCalories(), x.getName(), x.getCarbs(), x.getFat(), x.getProtein(), x.getHydration());

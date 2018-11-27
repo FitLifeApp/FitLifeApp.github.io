@@ -41,12 +41,13 @@ public class Account {
 	 * //Account class doen't hold username and password so that it isn't marshalled
 	 * into XML // private String uName; private String email; private String pWord;
 	 */
+	private static String uName = null;
 	private int fileID;
 
 	@XmlElementWrapper(name = "workouts")
 	@XmlElement(name = "workout")
 	private List<String> workouts;
-
+	
 	public List<String> getWorkouts() {
 		return this.workouts;
 	}
@@ -120,6 +121,15 @@ public class Account {
 	public Color getColorTrim2() {
 		return colorTrim2;
 	}
+	
+	public static String getuName() {
+		return uName;
+	}
+
+	public void setuName(String uName) {
+		Account.uName = uName;
+	}
+	
 
 	Account() {
 		this.colorBase1 = new Color(72, 201, 176);
