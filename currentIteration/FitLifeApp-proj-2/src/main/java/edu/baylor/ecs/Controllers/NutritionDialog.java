@@ -17,6 +17,8 @@ public class NutritionDialog {
 	private static volatile NutritionDialog instance = null;
 	private JFrame window;	
 	private MealController mc = MealController.getInstance();
+	private final Integer LOWER = new Integer(0);
+	private final Integer UPPER = new Integer(99999);
 	private NutritionDialog() {}
 	
 	public static NutritionDialog getInstance() {
@@ -44,17 +46,48 @@ public class NutritionDialog {
 		JTextField field3 = new JTextField();
 		JTextField field4 = new JTextField();
 		JTextField field5 = new JTextField();
+		
+		
 
 		Object[] message = { "Name", field1, "Carbs", field2, "Fat", field3, "Protein", field4, "Hydration", field5};
 		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
-
-			String name = field1.getText();
-			Integer carbs = Integer.valueOf(field2.getText());
-			Integer fat = Integer.valueOf(field3.getText());
-			Integer protein = Integer.valueOf(field4.getText());
-			Integer hydration = Integer.valueOf(field5.getText());
+			String name;
+			Integer carbs; 
+			Integer fat;
+			Integer protein;
+			Integer hydration;
+			
+			try {
+				name = field1.getText();
+				carbs = Integer.valueOf(field2.getText());
+				fat = Integer.valueOf(field3.getText());
+				protein = Integer.valueOf(field4.getText());
+				hydration = Integer.valueOf(field5.getText());
+				
+				if(name.length() < 4) {
+					throw new IllegalArgumentException();
+				}else if(carbs.compareTo(LOWER) < 0 || carbs.compareTo(UPPER) > 0 ||
+						fat.compareTo(LOWER) < 0 || fat.compareTo(UPPER) > 0 ||
+						protein.compareTo(LOWER) < 0 || protein.compareTo(UPPER) > 0 || 
+						hydration.compareTo(LOWER) < 0 || hydration.compareTo(UPPER) > 0) {
+					
+					throw new NumberFormatException();
+				}
+			}catch (NumberFormatException e) {
+				window.dispose();
+				JOptionPane.showMessageDialog(new JFrame(),
+						"That's not a valid number!.\n All macros must be from 1 to 99999.", "Failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			} catch (IllegalArgumentException e) {
+				window.dispose();
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid Name!\nName field must be at least 4 characters.", "Failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			
 			
 			Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
