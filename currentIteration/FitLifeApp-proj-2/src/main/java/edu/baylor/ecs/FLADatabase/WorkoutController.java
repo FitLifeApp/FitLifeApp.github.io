@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import edu.baylor.ecs.FitLifeApp.LogItem;
 import edu.baylor.ecs.FitLifeApp.Workout;
 
 //make singleton
@@ -74,11 +76,10 @@ public final class WorkoutController extends DatabaseController{
 	 * edits a workout already existing in the workout table by the given id
 	 * Doesn't change the username
 	 * */
-	public void edit(Integer id, Integer duration, String name, String type, Double userWeight, Double workoutWeight) {
-			//update the table
-			String updateTableSQL = "UPDATE Workout" + " SET duration = "  + duration.intValue() + ", name = '" + name + 
-					"', type = '" + type + "', userWeight = " + userWeight.doubleValue() + ", workoutWeight = " + workoutWeight.doubleValue() + 
-					" WHERE id = " + id.intValue();
+	public void edit(Workout aWorkout) {
+			String updateTableSQL = "UPDATE Workout" + " SET duration = "  + aWorkout.getDuration().intValue() + ", name = '" + aWorkout.getName() + 
+					"', type = '" + aWorkout.getType() + "', userWeight = " + aWorkout.getUserWeight().doubleValue() + ", workoutWeight = " + aWorkout.getWorkoutWeights().doubleValue() + 
+					" WHERE id = " + aWorkout.getId().intValue();
 			try (Connection dbConnection = getDBConnection();
 					Statement statement = dbConnection.createStatement();){
 				
@@ -159,9 +160,9 @@ public final class WorkoutController extends DatabaseController{
 	}
 	
 	
-	public List<Workout> select(String username, Date day){
+	public List<LogItem> select(String username, Date day){
 		String selectTableSQL = "SELECT * FROM Workout WHERE userName = '" + username + "' AND day = ?";
-		List<Workout> row = new ArrayList<Workout>();
+		List<LogItem> row = new ArrayList<LogItem>();
 		try ( Connection dbConnection = getDBConnection();
 			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
 			
@@ -172,7 +173,7 @@ public final class WorkoutController extends DatabaseController{
 			
 			//loops through and return as a list of strings
 			if(rs.next() == false) {
-				System.out.print("No results from Meal table");
+				System.out.print("No results from Workout table");
 			}else {
 				do {
 					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 

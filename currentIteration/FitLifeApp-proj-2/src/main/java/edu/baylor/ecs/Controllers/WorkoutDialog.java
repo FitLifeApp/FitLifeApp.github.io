@@ -1,10 +1,8 @@
 package edu.baylor.ecs.Controllers;
 
 
-import java.io.File;
-import java.io.FileWriter;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -43,7 +41,6 @@ public final class WorkoutDialog {
 		
 		window = new JFrame("Enter Workout");
 		
-		File file = new File("workout.csv");
 		JTextField field1 = new JTextField();
 		JTextField field2 = new JTextField();
 		JTextField field3 = new JTextField();
@@ -82,11 +79,6 @@ public final class WorkoutDialog {
 					throw new IllegalArgumentException();
 				}
 				
-			
-				Workout aWorkout = new Workout(Integer.valueOf(field2.getText()),
-						field1.getText(), cb.getSelectedItem().toString(), Double.valueOf(field3.getText()),
-						Double.valueOf(field4.getText()));
-				wc.add(Account.getuName(), aWorkout, day);
 			}catch(NumberFormatException e){
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
@@ -100,19 +92,89 @@ public final class WorkoutDialog {
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			
+			
+			Workout aWorkout = new Workout(duration,
+					exercise, type, weight,
+					weightUsed);
+			wc.add(Account.getuName(), aWorkout, day);
 	
-			FileWriter w = new FileWriter(file, true);
-			PrintWriter p = new PrintWriter(w);
+		}
+	}
 	
-			p.write( Account.getuName() + "," + type + "," + exercise + "," + weight + "," + weightUsed + "," +  duration + "," + day.toString() + "\n");
-			System.out.println(
-					Account.getuName() + "," + type + "," + exercise + "," + weight + "," + weightUsed + "," +  duration + "," + day.toString() + "\n");
+	public void editWorkout(Workout aWorkout){
+		window = new JFrame("Edit Workout");
+		
+		JTextField field1 = new JTextField(aWorkout.getName());
+		JTextField field2 = new JTextField(aWorkout.getDuration().toString());
+		JTextField field3 = new JTextField(aWorkout.getUserWeight().toString());
+		JTextField field4 = new JTextField(aWorkout.getWorkoutWeights().toString());
+		
+		
+		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		JComboBox cb = new JComboBox(comboBoxItems);
+		cb.setEditable(false);
+		
+		
+
+		Object[] message = { "Workout Type", cb, "Name of Workout", field1, "Duration", field2, "Your Weight", field3, "Weight Used",
+				field4 };
+		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
+			
+			//creates a workout and adds it to the database
+			String type = null, exercise = null;
+			Integer duration = null;
+			Double weight = null, weightUsed = null;
+			try {
+				
+				type = cb.getSelectedItem().toString();
+				exercise = field1.getText();
+				duration = Integer.valueOf(field2.getText());
+				weight = Double.valueOf(field3.getText());
+				weightUsed = Double.valueOf(field4.getText());
+				
+				if(duration.compareTo(Integer.valueOf(1)) < 0 || duration.compareTo(Integer.valueOf(1440)) > 0 || 
+						weight.compareTo(Double.valueOf("4.0")) < 0 || weight.compareTo(Double.valueOf("1400.0")) > 0 || 
+						weightUsed.compareTo(Double.valueOf("4.0")) < 0 || weight.compareTo(Double.valueOf("1400.0")) > 0) {
+					throw new NumberFormatException();
+				}else if(exercise.length() < 4) {
+					throw new IllegalArgumentException();
+				}
+				
+			}catch(NumberFormatException e){
+				window.dispose();
+				JOptionPane.showMessageDialog(new JFrame(),
+						"That's not a valid number!.\nYour Weight and Weight Used must be a number from 4.0 to 1400.0\nDuration must be an integer from 1 to 1440.", "Failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}catch(IllegalArgumentException e) {
+				window.dispose();
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Not a valid exercise name!.\nMust be 4 or more characters", "Failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			aWorkout = new Workout(aWorkout.getId(), duration, exercise, type, weight, weightUsed);
+			
+			wc.edit(aWorkout);
 	
-			w.close();
-			p.close();
 		}
 	}
 
+	public void deleteWorkout(Workout aWorkout) {
+		window = new JFrame("Delete Workout");
+		
+		int opt = JOptionPane.showConfirmDialog(window, "Warning!\nYou are about to delete the selected Workout.\nIs this what you want?", "Enter Information", JOptionPane.YES_NO_CANCEL_OPTION);
+		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.NO_OPTION) {
+			
+			wc.delete(aWorkout.getId());
+	
+		}
+	}
+	
 	public void destroy() {
 		window.dispose();
 	}

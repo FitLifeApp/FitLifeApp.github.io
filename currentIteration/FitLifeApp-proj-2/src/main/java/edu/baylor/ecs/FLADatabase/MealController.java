@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import edu.baylor.ecs.FitLifeApp.LogItem;
 import edu.baylor.ecs.FitLifeApp.Meal;
 
 //make singleton
@@ -73,11 +74,11 @@ public final class MealController extends DatabaseController {
 	 * edits a meal already existing in the Meal table by the given id
 	 * Doesn't change the username
 	 * */
-	public void edit(Integer id, Integer calories, String name, Integer carbs, Integer fat, Integer protein, Integer hydration) {
+	public void edit(Meal aMeal) {
 			//update the table
-			String updateTableSQL = "UPDATE Meal" + " SET calories = "  + calories.intValue() + ", name = '" + name + 
-					"', carbs = " + carbs.intValue() + ", fat = " + fat.intValue() + ", protein = " + protein.intValue() + ", hydration = " + hydration.intValue() +
-					" WHERE id = " + id.intValue();
+			String updateTableSQL = "UPDATE Meal" + " SET calories = "  + aMeal.getCalories().intValue() + ", name = '" + aMeal.getName() + 
+					"', carbs = " + aMeal.getCarbs().intValue() + ", fat = " + aMeal.getFat().intValue() + ", protein = " + aMeal.getProtein().intValue() + ", hydration = " + aMeal.getHydration().intValue() +
+					" WHERE id = " + aMeal.getId().intValue();
 			try (Connection dbConnection = getDBConnection();
 					Statement statement = dbConnection.createStatement();){
 				
@@ -157,9 +158,9 @@ public final class MealController extends DatabaseController {
 	}
 	
 	
-	public List<Meal> select(String username, Date day){
+	public List<LogItem> select(String username, Date day){
 		String selectTableSQL = "SELECT * FROM Meal WHERE userName = '" + username + "' AND day = ?";
-		List<Meal> row = new ArrayList<Meal>();
+		List<LogItem> row = new ArrayList<LogItem>();
 		try ( Connection dbConnection = getDBConnection();
 			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
 			

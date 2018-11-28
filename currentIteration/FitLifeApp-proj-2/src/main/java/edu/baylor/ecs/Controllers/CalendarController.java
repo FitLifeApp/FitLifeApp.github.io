@@ -27,10 +27,12 @@ import edu.baylor.ecs.FLADatabase.MealController;
 import edu.baylor.ecs.FLADatabase.SleepController;
 import edu.baylor.ecs.FLADatabase.WorkoutController;
 import edu.baylor.ecs.FitLifeApp.Account;
+import edu.baylor.ecs.FitLifeApp.LogItem;
 import edu.baylor.ecs.FitLifeApp.Meal;
 import edu.baylor.ecs.FitLifeApp.Sleep;
 import edu.baylor.ecs.FitLifeApp.Workout;
 import edu.baylor.ecs.Listeners.CalendarListener;
+import edu.baylor.ecs.Listeners.ReviewTableListener;
 
 //Not sure where exactly, but there is the issue of also showing the menu when opening the calendar
 //So you could swap to another screen while looking at the calendar.
@@ -123,57 +125,59 @@ public final class CalendarController extends WindowManager{
 		window = new JFrame("Review Workout");
 		
 
-		ArrayList<String[]> arr = new ArrayList<String[]>();
-		String[] temp;
+		List<String[]> arr = new ArrayList<String[]>();
+		List<LogItem> logItems;
+		String[] temp = null;
 		int row;
 		switch(getMode().intValue()) {
 			
 			case 0: 
 				//Query from Workout table
-				List<Workout> workouts = new ArrayList<Workout>();
-				workouts = wc.select(Account.getuName(), day);
+				logItems = wc.select(Account.getuName(), day);
 				String[] header1 = {"Name", "Type", "User Weight", "Workout Weight", "Duration"};
 				arr.add(header1);
 				temp = new String[5];
-				for(Workout x : workouts) {
-					temp[0] = x.getName();
-					temp[1] = x.getType();
-					temp[2] = x.getUserWeight().toString();
-					temp[3] = x.getWorkoutWeights().toString();
-					temp[4] = x.getDuration().toString();
+				for(LogItem x : logItems) {
+					temp = new String[5];
+					temp[0] = ((Workout) x).getName();
+					temp[1] = ((Workout) x).getType();
+					temp[2] = ((Workout) x).getUserWeight().toString();
+					temp[3] = ((Workout) x).getWorkoutWeights().toString();
+					temp[4] = ((Workout) x).getDuration().toString();
 					arr.add(temp);
 				}
 				row = arr.size();
 				break;
 			case 1: 
 				//Query from Meal table
-				List<Meal> meals = new ArrayList<Meal>();
 				String[] header2 = {"Name", "Carbs", "Protein", "Fat", "Calories", "Hydration"};
 				arr.add(header2);
-				meals = mc.select(Account.getuName(), day);
+				logItems = mc.select(Account.getuName(), day);
 				temp = new String[6];
-				for(Meal x: meals) {
-					temp[0] = x.getName();
-					temp[1] = x.getCarbs().toString();
-					temp[2] = x.getProtein().toString();
-					temp[3] = x.getFat().toString();
-					temp[4] = x.getCalories().toString();
-					temp[5] = x.getHydration().toString();
+				for(LogItem x: logItems) {
+					temp = new String[6];
+					temp[0] = ((Meal) x).getName();
+					temp[1] = ((Meal) x).getCarbs().toString();
+					temp[2] = ((Meal) x).getProtein().toString();
+					temp[3] = ((Meal) x).getFat().toString();
+					temp[4] = ((Meal) x).getCalories().toString();
+					temp[5] = ((Meal) x).getHydration().toString();
 					arr.add(temp);
 				}
 				row = arr.size();
 				break;
 			case 2: 
 				//Query from Sleep table
-				List<Sleep> sleeps = new ArrayList<Sleep>();
-				sleeps = sc.select(Account.getuName(), day);
+				logItems = sc.select(Account.getuName(), day);
 				String[] header3 = {"Duration", "Rating", "Start Time"};
 				arr.add(header3);
 				temp = new String[3];
-				for(Sleep x : sleeps) {
-					temp[0] = x.getDuration().toString();
-					temp[1] = x.getRating().toString();
-					temp[2] = x.getStartTime().toString();
+				for(LogItem x : logItems) {
+					temp = new String[3];
+					temp[0] = ((Sleep) x).getDuration().toString();
+					temp[1] = ((Sleep) x).getRating().toString();
+					temp[2] = ((Sleep) x).getStartTime().toString();
+					arr.add(temp);
 				}
 				row = arr.size();
 				break;
@@ -186,10 +190,11 @@ public final class CalendarController extends WindowManager{
 		// Not use header yet
 		// String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, temp.length);
-
+		data.setEditingRow(1);
+		data.addMouseListener(new ReviewTableListener(logItems));
 		// Only add the corresponding data to the table (No more write space caused by
 		// hiding part of the data)
-		for (int i = 0; i < arr.size(); i++) {
+		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < data.getColumnCount(); j++) {
 				data.setValueAt(arr.get(i)[j], i, j);
 			}
@@ -220,6 +225,7 @@ public final class CalendarController extends WindowManager{
 			}
 		});
 
+		
 		window.add(data, BorderLayout.CENTER);
 		window.add(filter, BorderLayout.SOUTH);
 		window.pack();
@@ -237,12 +243,35 @@ public final class CalendarController extends WindowManager{
 		addworkout.addWorkout(day);
 	}
 	
+	public void showEditWorkoutDialog(Workout aWorkout) throws Exception {
+		addworkout.editWorkout(aWorkout);
+	}
+	
+	public void showDeleteWorkout(Workout aWorkout) {
+		addworkout.deleteWorkout(aWorkout);
+	}
 	public void showAddSleepDialog() throws Exception {
 		addSleep.addSleep(day);
 	}
 	
+	public void showEditSleepDialog(Sleep aSleep) throws Exception {
+		addSleep.editSleep(aSleep);
+	}
+	
+	public void showDeleteSleep(Sleep aSleep) {
+		addSleep.deleteSleep(aSleep);
+	}
+	
 	public void showAddMealDialog() throws Exception {
 		addMeal.addMeal(day);
+	}
+	
+	public void showEditMealDialog(Meal aMeal) throws Exception {
+		addMeal.editMeal(aMeal);
+	}
+	
+	public void showDeleteMeal(Meal aMeal) {
+		addMeal.deleteMeal(aMeal);
 	}
 
 	public JDatePanelImpl getDatePanel() {
