@@ -1,6 +1,6 @@
 package edu.baylor.ecs.FitLifeApp;
 
-public class Meal {
+public class Meal extends LogItem{
 	private Integer id = null;
 	private Integer calories = null;
 	private Integer carbs = null;

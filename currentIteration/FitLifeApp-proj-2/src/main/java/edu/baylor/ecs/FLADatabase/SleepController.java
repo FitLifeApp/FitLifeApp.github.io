@@ -5,10 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import edu.baylor.ecs.FitLifeApp.LogItem;
 import edu.baylor.ecs.FitLifeApp.Sleep;
 
 public final class SleepController extends DatabaseController{
@@ -72,15 +73,16 @@ public final class SleepController extends DatabaseController{
 	 * edits a meal already existing in the Sleep table by the given id
 	 * Doesn't change the username
 	 * */
-	public void edit(Integer id, Double duration, Integer rating, Time startTime) {
+	public void edit(Sleep aSleep) {
 			//update the table
-			String updateTableSQL = "UPDATE Sleep" + " SET duration = "  + duration.doubleValue() + ", rating = '" + rating.intValue() + 
-					"', startTime = " + startTime + " WHERE id = " + id.intValue();
+			String updateTableSQL = "UPDATE Sleep" + " SET duration = "  + aSleep.getDuration().doubleValue() + ", rating = " + aSleep.getRating().intValue() + 
+					", startTime = ?" + " WHERE id = " + aSleep.getId().intValue();
 			try (Connection dbConnection = getDBConnection();
-					Statement statement = dbConnection.createStatement();){
+					PreparedStatement statement = dbConnection.prepareStatement(updateTableSQL);){
 				
+				statement.setTime(1,aSleep.getStartTime());
 				System.out.println(updateTableSQL);
-				statement.execute(updateTableSQL);
+				statement.execute();
 				System.out.println("Record is updated to Sleep table!");
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
@@ -155,9 +157,9 @@ public final class SleepController extends DatabaseController{
 	}
 	
 	
-	public List<Sleep> select(String username, Date day){
+	public List<LogItem> select(String username, Date day){
 		String selectTableSQL = "SELECT * FROM Sleep WHERE userName = '" + username + "' AND day = ?";
-		List<Sleep> row = new ArrayList<Sleep>();
+		List<LogItem> row = new ArrayList<LogItem>();
 		try ( Connection dbConnection = getDBConnection();
 			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
 			

@@ -1,6 +1,6 @@
 package edu.baylor.ecs.FitLifeApp;
 
-public class Workout{
+public class Workout extends LogItem{
 	private Integer duration = null;
 	private String name = null;
 	private String type = null;

@@ -2,7 +2,7 @@ package edu.baylor.ecs.FitLifeApp;
 
 import java.sql.Time;
 
-public class Sleep {
+public class Sleep extends LogItem{
 	private Integer id;
 	private Double duration;
 	private Integer rating;
