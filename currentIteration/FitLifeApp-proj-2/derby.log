@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Tue Nov 27 16:20:51 CST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0167-5742-bf03-00001ea18968 
-on database directory H:\0csi3471\0gpNew\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2\FitLifeApp with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@41906a77 
-Loaded from file:/C:/Users/XUYU/.m2/repository/org/apache/derby/derby/10.14.1.0/derby-10.14.1.0.jar
+Tue Nov 27 16:44:43 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0167-5758-972c-00000414c168 
+on database directory C:\Users\Benjamin\OneDrive\Baylor\2018-2019\Java\JAVA\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2\FitLifeApp with class loader sun.misc.Launcher$AppClassLoader@2a139a55 
+Loaded from file:/C:/Users/Benjamin/.m2/repository/org/apache/derby/derby/10.14.1.0/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=10.0.2+13
-user.dir=H:\0csi3471\0gpNew\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2
+java.runtime.version=1.8.0_111-b14
+user.dir=C:\Users\Benjamin\OneDrive\Baylor\2018-2019\Java\JAVA\FitLifeApp.github.io\currentIteration\FitLifeApp-proj-2
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
