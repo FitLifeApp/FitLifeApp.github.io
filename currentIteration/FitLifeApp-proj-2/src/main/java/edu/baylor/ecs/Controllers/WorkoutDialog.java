@@ -2,6 +2,7 @@ package edu.baylor.ecs.Controllers;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,11 +11,14 @@ import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
@@ -46,50 +50,114 @@ public final class WorkoutDialog {
 	}
 
 	public void addWorkout(Date day) throws Exception {
+	
 		Box b1 = new Box(BoxLayout.Y_AXIS);
-		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);		
+		//b1.setMaximumSize(new Dimension(500,500));
+	//	b1.setMinimumSize(new Dimension(500,500));
+		//b1.setSize(new Dimension(500,500));
+		b1.setPreferredSize(new Dimension(500,500));
 		
 		UIManager.put("OptionPane.background", new Color(174, 214, 241));
 		UIManager.put("Panel.background", new Color(174, 214, 241));
-		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,15))); 
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20))); 
 		
 		window = new JFrame("Enter Workout");
+		
+		FlowLayout flowLayout = new FlowLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		window.setLayout(flowLayout);
 
 		File file = new File("workout.csv");
+		
 		JTextField field1 = new JTextField();
-		JTextField field2 = new JTextField();
-		JTextField field3 = new JTextField();
-		JTextField field4 = new JTextField();
+		field1.setMaximumSize(new Dimension(2000,30));
+		field1.setBackground(new Color(232, 248, 245));
+		field1.setFont(new Font(null, Font.PLAIN, 20));
 
+		JTextField field2 = new JTextField();
+		field2.setMaximumSize(new Dimension(2000,30));
+		field2.setBackground(new Color(232, 248, 245));
+		field2.setFont(new Font(null, Font.PLAIN, 20));
+
+		JTextField field3 = new JTextField();
+		field3.setMaximumSize(new Dimension(2000,30));
+		field3.setBackground(new Color(232, 248, 245));
+		field3.setFont(new Font(null, Font.PLAIN, 20));
+
+		JTextField field4 = new JTextField();
+		field4.setMaximumSize(new Dimension(2000,30));
+		field4.setBackground(new Color(232, 248, 245));
+		field4.setFont(new Font(null, Font.PLAIN, 20));
 
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
+		cb.setBackground(new Color(232, 248, 245));
 		cb.setEditable(false);
 		
 		JLabel l1 = new JLabel("Workout Type");
-		l1.setMaximumSize(new Dimension(2000,30));
-		l1.setFont(new Font("Workout Type", Font.PLAIN, 15));
+		l1.setFont(new Font("Workout Type", Font.PLAIN, 20));
 		
 		JLabel l2 = new JLabel("Name of Workout");
-		l2.setMaximumSize(new Dimension(2000,30));
-		l2.setFont(new Font("Name of Workout", Font.PLAIN, 15));
+		l2.setFont(new Font("Name of Workout", Font.PLAIN, 20));
 		
 		JLabel l3 = new JLabel("Duration");
-		l3.setMaximumSize(new Dimension(2000,30));
-		l3.setFont(new Font("Duration", Font.PLAIN, 15));
+		l3.setFont(new Font("Duration", Font.PLAIN, 20));
 		
 		JLabel l4 = new JLabel("Your Weight");
-		l4.setMaximumSize(new Dimension(2000,30));
-		l4.setFont(new Font("Your Weight", Font.PLAIN, 15));
+		l4.setFont(new Font("Your Weight", Font.PLAIN, 20));
 		
 		JLabel l5 = new JLabel("Weight Used");
-		l5.setMaximumSize(new Dimension(2000,30));
-		l5.setFont(new Font("Weight Used", Font.PLAIN, 15));
-
-		Object[] message = { l1, cb, l2, field1, l3, field2, l4, field3, l5, field4 };
+		l5.setFont(new Font("Weight Used", Font.PLAIN, 20));
 		
-		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JPanel p1 = new JPanel();
+		p1.setLayout(flowLayout);
+		
+		JPanel p2 = new JPanel();
+		p2.setLayout(flowLayout);
+		
+		JPanel p3 = new JPanel();
+		p3.setLayout(flowLayout);
+		
+		JPanel p4 = new JPanel();
+		p4.setLayout(flowLayout);
+		
+		JPanel p5 = new JPanel();
+		p5.setLayout(flowLayout);
+		
+		p1.add(l1);
+		p2.add(l2);
+		p3.add(l3);
+		p4.add(l4);
+		p5.add(l5);
+		
+		JLabel title = new JLabel("New Workout");
+		title.setFont(new Font("New Workout", Font.PLAIN, 40));
+		
+		JPanel tt = new JPanel(); // use FlowLayout
+		tt.setBackground(new Color(174, 214, 241));
+		tt.add(title);
+		
+		b1.add(Box.createVerticalStrut(50));
+		b1.add(tt);
+		b1.add(p1);
+		b1.add(cb);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p2);
+		b1.add(field1);
+	    b1.add(Box.createVerticalStrut(10));
+		b1.add(p3);
+		b1.add(field2);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p4);
+		b1.add(field3);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p5);
+		b1.add(field4);
+		b1.add(Box.createVerticalStrut(50));
+		
+		int opt = JOptionPane.showConfirmDialog(null, b1, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
 
 			//creates a workout and adds it to the database
