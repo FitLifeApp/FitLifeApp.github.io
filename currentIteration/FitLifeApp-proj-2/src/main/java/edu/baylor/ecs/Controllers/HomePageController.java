@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -176,22 +177,26 @@ public final class HomePageController extends WindowManager {
 		// Left to right component orientation is selected by default
 		p1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		p2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		
+		String userName = LogInController.getuName().getText();
 
-		JTextField jtf1 = new JTextField("Welcome Home");
+		JTextField jtf1 = new JTextField("Welcome Home, " + userName);
 		jtf1.setEnabled(false);
 		jtf1.setHorizontalAlignment(JTextField.CENTER);
 		jtf1.setFont(new Font("Welcome Home", Font.PLAIN, 30));
 		jtf1.setBackground(acct.getColorBase2());
 		
-		JTextField jtf2 = new JTextField("FitLife");
-		jtf2.setEnabled(false);
-		jtf2.setHorizontalAlignment(JTextField.CENTER);
-		jtf2.setFont(new Font("FitLife", Font.PLAIN, 80));
-		//jtf2.setBackground(new Color(174, 214, 241));
-		jtf2.setBackground(acct.getColorTrim2());
+		JLabel title = new JLabel("FitLife");
+		title.setHorizontalAlignment(JTextField.CENTER);
+		title.setFont(new Font("FitLife", Font.PLAIN, 100));
+		title.setForeground(Color.white);
+		
+		JPanel titlePane = new JPanel();
+		titlePane.setBackground(acct.getColorTrim1());
+		titlePane.add(title);
 
 		board.add(Box.createVerticalStrut(40));
-		board.add(jtf2);
+		board.add(titlePane);
 		board.add(Box.createVerticalStrut(40));
 		board.add(p1);
 		board.add(p2);

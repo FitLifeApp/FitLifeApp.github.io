@@ -28,7 +28,7 @@ public final class LogInController extends WindowManager{
 
 	// Used for encryption. Guaranteed unpredictable
 
-	private JTextField uName; // Used to hold username inputs
+	private static JTextField uName; // Used to hold username inputs
 	private JPasswordField pWord; // Used to hold password inputs
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int screenWidth = screenSize.width-100;
@@ -294,5 +294,11 @@ public final class LogInController extends WindowManager{
 			window.dispose();
 	}
 	
-	
+	public static JTextField getuName() {
+		return uName;
+	}
+
+	public JPasswordField getpWord() {
+		return pWord;
+	}
 }
