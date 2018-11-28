@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import edu.baylor.ecs.FLADatabase.MealController;
 import edu.baylor.ecs.FLADatabase.SleepController;
@@ -31,7 +32,7 @@ public class DatabaseTester {
 	private String username = "benji";
 	Date day = new Date(871264037);
 	
-	@Test
+	@BeforeEach
 	public void databaseCreateAndConnect() {
 		System.out.println("databaseCreateAndConnect");
 		mc.connectAndCreate();
@@ -39,6 +40,8 @@ public class DatabaseTester {
 		wc.connectAndCreate();
 		System.out.println("");
 	}
+	
+	
 	
 	@Test
 	public void databaseTables() {
@@ -118,7 +121,7 @@ public class DatabaseTester {
 		System.out.println("");
 	}
 	
-	@Test
+    @Test
 	public void deleteAll() {
 		System.out.println("deleteAll\n");
 		List<Workout> returned = new ArrayList<Workout>();
@@ -146,7 +149,6 @@ public class DatabaseTester {
 		wc.dropTable();
 	}
 	
-	
 	@Test
 	public void selectSpecificMeal() {
 		
@@ -154,17 +156,10 @@ public class DatabaseTester {
 		
 		List<Meal> entered2 = new ArrayList<Meal>();
 		List<Meal> returned2;
-		
-		
-		
-		
-		
+			
 		entered2.add(m1);
 		entered2.add(m2);
 		entered2.add(m3);
-		
-		
-		
 		
 		databaseTables();
 		
@@ -222,16 +217,11 @@ public class DatabaseTester {
 			assertEquals(entered3.get(i).getStartTime().getTime(), returned3.get(i).getStartTime().getTime());
 		}
 		*/
-		
-	
-		
-		
+
 		//get all from 
 		mc.deleteAll();
 		System.out.println("");
 	}
-	
-	
 	
 	@Test
 	public void databaseEditWorkout() {

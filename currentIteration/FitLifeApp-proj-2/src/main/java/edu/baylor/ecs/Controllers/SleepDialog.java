@@ -2,6 +2,8 @@ package edu.baylor.ecs.Controllers;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.IOException;
 import java.sql.Time;
@@ -13,7 +15,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
@@ -57,16 +61,27 @@ public final class SleepDialog{
 	 * function opens the window to get sleep information from the user
 	 */
 	public void addSleep(Date day) throws IOException {
+		//------------------------------------------------------------------>
+		//new add sleep window
+		//------------------------------------------------------------------>
+		
+		window = new JFrame("Enter Sleep");
 		Box b1 = new Box(BoxLayout.Y_AXIS);
-		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);		
+		b1.setPreferredSize(new Dimension(500,500));
 
 		UIManager.put("OptionPane.background", new Color(174, 214, 241));
 		UIManager.put("Panel.background", new Color(174, 214, 241));
-		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,15))); 
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20))); 
 
-		window = new JFrame("Add Sleep");
+		FlowLayout flowLayout = new FlowLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		window.setLayout(flowLayout);
 
 		JTextField field1 = new JTextField();
+		field1.setMaximumSize(new Dimension(2000,30));
+		field1.setBackground(new Color(232, 248, 245));
+		field1.setFont(new Font(null, Font.PLAIN, 20));
 
 		/* Sets up a JSpinner for time */
 		SpinnerDateModel sdm = new SpinnerDateModel();
@@ -81,9 +96,49 @@ public final class SleepDialog{
 		setRating(String.valueOf(cb.getSelectedItem()));
 		cb.setEditable(false);
 
-		Object[] message = { "Duration", field1, "Rating", cb, "Start Time", timeSpinner };
+		JLabel l1 = new JLabel("Duration");
+		l1.setFont(new Font("Duration", Font.PLAIN, 20));
 
-		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JLabel l2 = new JLabel("Rating");
+		l2.setFont(new Font("Rating", Font.PLAIN, 20));
+
+		JLabel l3 = new JLabel("Start Time");
+		l3.setFont(new Font("Start Time", Font.PLAIN, 20));
+
+		JPanel p1 = new JPanel();
+		p1.setLayout(flowLayout);
+
+		JPanel p2 = new JPanel();
+		p2.setLayout(flowLayout);
+
+		JPanel p3 = new JPanel();
+		p3.setLayout(flowLayout);
+
+		p1.add(l1);
+		p2.add(l2);
+		p3.add(l3);
+
+		JLabel title = new JLabel("New Sleep");
+		title.setFont(new Font("New Sleep", Font.PLAIN, 40));
+
+		JPanel tt = new JPanel(); // use FlowLayout
+		tt.setBackground(new Color(174, 214, 241));
+		tt.add(title);
+
+		b1.add(Box.createVerticalStrut(50));
+		b1.add(tt);
+		b1.add(Box.createVerticalStrut(30));
+		b1.add(p1);
+		b1.add(field1);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p2);
+		b1.add(cb);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p3);
+		b1.add(timeSpinner);
+		b1.add(Box.createVerticalStrut(100));
+
+		int opt = JOptionPane.showConfirmDialog(null, b1, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 
 		if (opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
 
@@ -116,26 +171,88 @@ public final class SleepDialog{
 	}
 
 	public void editSleep(Sleep aSleep) {
+
+		//------------------------------------------------------------------>
+		//new edit sleep window
+		//------------------------------------------------------------------>
 		window = new JFrame("Edit Sleep");
 
 		JTextField field1 = new JTextField(aSleep.getDuration().toString());
+		field1.setMaximumSize(new Dimension(2000,30));
+		field1.setBackground(new Color(232, 248, 245));
+		field1.setFont(new Font(aSleep.getDuration().toString(), Font.PLAIN, 20));
 
+		Box b1 = new Box(BoxLayout.Y_AXIS);
+		b1.setAlignmentX(JComponent.CENTER_ALIGNMENT);		
+		b1.setPreferredSize(new Dimension(500,500));
+
+		UIManager.put("OptionPane.background", new Color(174, 214, 241));
+		UIManager.put("Panel.background", new Color(174, 214, 241));
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20))); 
+
+
+		FlowLayout flowLayout = new FlowLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		window.setLayout(flowLayout);
+		
 		/* Sets up a JSpinner for time */
 		SpinnerDateModel sdm = new SpinnerDateModel();
 		JSpinner timeSpinner = new JSpinner(sdm);
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
 		timeSpinner.setEditor(timeEditor);
+		timeSpinner.setBackground(new Color(232, 248, 245));
 
 		/* Setup a JComboBox for the */
 		String comboBoxItems[] = { ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10 };
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox cb = new JComboBox(comboBoxItems);
+		cb.setBackground(new Color(232, 248, 245));
 		setRating(String.valueOf(cb.getSelectedItem()));
 		cb.setEditable(false);
 
-		Object[] message = { "Duration", field1, "Rating", cb, "Start Time", timeSpinner };
+		JLabel l1 = new JLabel("Duration");
+		l1.setFont(new Font("Duration", Font.PLAIN, 20));
 
-		int opt = JOptionPane.showConfirmDialog(window, message, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
+		JLabel l2 = new JLabel("Rating");
+		l2.setFont(new Font("Rating", Font.PLAIN, 20));
+
+		JLabel l3 = new JLabel("Start Time");
+		l3.setFont(new Font("Start Time", Font.PLAIN, 20));
+
+		JPanel p1 = new JPanel();
+		p1.setLayout(flowLayout);
+
+		JPanel p2 = new JPanel();
+		p2.setLayout(flowLayout);
+
+		JPanel p3 = new JPanel();
+		p3.setLayout(flowLayout);
+
+		p1.add(l1);
+		p2.add(l2);
+		p3.add(l3);
+
+		JLabel title = new JLabel("Edit Sleep");
+		title.setFont(new Font("Edit Sleep", Font.PLAIN, 40));
+
+		JPanel tt = new JPanel(); // use FlowLayout
+		tt.setBackground(new Color(174, 214, 241));
+		tt.add(title);
+
+		b1.add(Box.createVerticalStrut(50));
+		b1.add(tt);
+		b1.add(Box.createVerticalStrut(30));
+		b1.add(p1);
+		b1.add(field1);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p2);
+		b1.add(cb);
+		b1.add(Box.createVerticalStrut(10));
+		b1.add(p3);
+		b1.add(timeSpinner);
+		b1.add(Box.createVerticalStrut(100));
+
+		int opt = JOptionPane.showConfirmDialog(null, b1, "Enter Information", JOptionPane.OK_CANCEL_OPTION);
 
 		if (opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.CLOSED_OPTION) {
 
@@ -166,7 +283,7 @@ public final class SleepDialog{
 			}
 		}
 	}
-	
+
 
 	public void destroy() {
 		window.dispose();
@@ -175,15 +292,15 @@ public final class SleepDialog{
 
 	public void deleteSleep(Sleep aSleep) {
 		window = new JFrame("Delete Sleep");
-		
+
 		int opt = JOptionPane.showConfirmDialog(window, "Warning!\nYou are about to delete the selected Sleep.\nIs this what you want?", "Enter Information", JOptionPane.YES_NO_CANCEL_OPTION);
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.NO_OPTION) {
-			
+
 			sc.delete(aSleep.getId());
-	
+
 		}
 	}
-	
+
 	public String getRating() {
 		return rating;
 	}

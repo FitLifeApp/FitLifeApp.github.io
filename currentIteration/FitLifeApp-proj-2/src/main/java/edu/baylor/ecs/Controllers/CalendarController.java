@@ -1,8 +1,9 @@
 package edu.baylor.ecs.Controllers;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -82,13 +85,11 @@ public final class CalendarController extends WindowManager{
 	//Copied from toCalendar
 	public void makeWindow() {
 		
-
 		/*if window already exists, destroy it*/
 
 		if(window != null) {
 			window.dispose();
 		}
-		
 		
 		window = new JFrame("Calendar");
 		
@@ -103,12 +104,21 @@ public final class CalendarController extends WindowManager{
 		getDatePanel().setFocusable(true);
 		getDatePanel().addActionListener(new CalendarListener());
 		//This listener is larger than it needs to be because I don't know what is checked
-
+		
+		//add a calendar label
+		JLabel calLab = new JLabel("Select a Date");	
+		calLab.setFont(new Font("Select a Date", Font.PLAIN, 30));
+		
+		JPanel calPane = new JPanel();
+		calPane.setBackground(new Color(174, 214, 241));
+		calPane.add(calLab);
+		
+		window.add(calPane,  BorderLayout.NORTH);
 		window.add(getDatePanel(), BorderLayout.CENTER);	
 
-		window.setMaximumSize(new Dimension(500,250));
-		window.setPreferredSize(new Dimension(500,250));
-		window.setMinimumSize(new Dimension(500,250));
+		window.setMaximumSize(new Dimension(500,300));
+		window.setPreferredSize(new Dimension(500,300));
+		window.setMinimumSize(new Dimension(500,300));
 		window.setLocationRelativeTo(null);
 
 		window.pack();
@@ -121,13 +131,19 @@ public final class CalendarController extends WindowManager{
 	
 	
 	public void toDay(Date day) {
+		JLabel title = null;		
+		JLabel lab = null;
+		
+		//-------------------------------------------------->
+		//New Review window
+		//-------------------------------------------------->
+		UIManager.put("OptionPane.background", new Color(174, 214, 241));
+		UIManager.put("Panel.background", new Color(174, 214, 241));
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20))); 
 		
 		if(window != null) {
 			window.dispose();
 		}
-		
-		window = new JFrame("Review Workout");
-		
 
 		List<String[]> arr = new ArrayList<String[]>();
 		List<LogItem> logItems;
@@ -136,6 +152,13 @@ public final class CalendarController extends WindowManager{
 		switch(getMode().intValue()) {
 			
 			case 0: 
+				window = new JFrame("Review Exercise");
+				title = new JLabel("Review Exercise");
+				title.setFont(new Font("Review Exercise", Font.PLAIN, 35));
+				
+				lab = new JLabel("Enter the name of exercise ");
+				lab.setFont(new Font("Enter the name of exercise ", Font.PLAIN, 20));
+
 				//Query from Workout table
 				logItems = wc.select(Account.getuName(), day);
 				String[] header1 = {"Name", "Type", "User Weight", "Workout Weight", "Duration"};
@@ -153,6 +176,13 @@ public final class CalendarController extends WindowManager{
 				row = arr.size();
 				break;
 			case 1: 
+				window = new JFrame("Review Nutrition");
+				title = new JLabel("Review Nutrition");
+				title.setFont(new Font("Review Nutrition", Font.PLAIN, 35));
+				
+				lab = new JLabel("Enter the name of meal ");
+				lab.setFont(new Font("Enter the name of meal ", Font.PLAIN, 20));
+
 				//Query from Meal table
 				String[] header2 = {"Name", "Carbs", "Protein", "Fat", "Calories", "Hydration"};
 				arr.add(header2);
@@ -170,7 +200,14 @@ public final class CalendarController extends WindowManager{
 				}
 				row = arr.size();
 				break;
-			case 2: 
+			case 2: 				
+				window = new JFrame("Review Sleep");
+				title = new JLabel("Review Sleep");
+				title.setFont(new Font("Review Sleep", Font.PLAIN, 35));
+				
+				lab = new JLabel("Enter the name of sleep ");
+				lab.setFont(new Font("Enter the name of sleep ", Font.PLAIN, 20));
+
 				//Query from Sleep table
 				logItems = sc.select(Account.getuName(), day);
 				String[] header3 = {"Duration", "Rating", "Start Time"};
@@ -189,12 +226,15 @@ public final class CalendarController extends WindowManager{
 		}
 		
 		
-		
-
 		// Not use header yet
 		// String header[] = {"Name","Your weight","Lift weight","Duration"};
 		JTable data = new JTable(row, temp.length);
+		data.setBackground(new Color(214, 234, 248));
+		data.setForeground(Color.DARK_GRAY);
+		data.setFont(new Font(null, Font.PLAIN, 20));
 		data.addMouseListener(new ReviewTableListener(logItems));
+		data.setRowHeight(30);
+		data.setPreferredSize(new Dimension(900, data.getRowHeight() * row * 2));
 		
 		// Only add the corresponding data to the table (No more write space caused by
 		// hiding part of the data)
@@ -210,13 +250,20 @@ public final class CalendarController extends WindowManager{
 
 		// Add filter for user search specific data they interested
 		JPanel filter = new JPanel();
-		filter.setLayout(new FlowLayout());
-		JLabel lab = new JLabel("Enter the work out name: ");
+		
 		filter.add(lab);
 		JTextField TF = new JTextField("");
 		TF.setPreferredSize(new Dimension(150, 30));
-		filter.add(TF);
+		TF.setBackground(new Color(214, 234, 248));
+				
 		JButton BF = new JButton("Search");
+		BF.setFont(new Font("Search", Font.PLAIN, 15));
+		
+		BF.setForeground(Color.white);
+		BF.setBackground(new Color(44, 62, 80));
+		BF.setMaximumSize(new Dimension(2000,20));
+		
+		filter.add(TF);
 		filter.add(BF);
 		BF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -228,13 +275,18 @@ public final class CalendarController extends WindowManager{
 				}
 			}
 		});
-
 		
-		window.add(data, BorderLayout.CENTER);
+		JPanel p1 = new JPanel();	
+		
+		p1.add(title);	
+		p1.add(data);
+		
+		window.getContentPane().setBackground(new Color(174, 214, 241));
+		window.add(p1, BorderLayout.CENTER);
 		window.add(filter, BorderLayout.SOUTH);
 		window.pack();
+		window.setSize(new Dimension(1000, 500));
 		window.setLocationRelativeTo(null);
-		window.setSize((int) window.getSize().getWidth() + 50, (int) window.getSize().getHeight() + 50);
 		window.setVisible(true);
 	}
 	
