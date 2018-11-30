@@ -35,9 +35,7 @@ public class Meal extends LogItem{
 		
 		/*calculate calories*/
 		setCalories((fat) * 9 + (carbs * 4) + (protein * 4));
-		
 	}
-	
 	
 	public Integer getId() {
 		return id;
@@ -51,61 +49,47 @@ public class Meal extends LogItem{
 		return calories;
 	}
 
-
 	private void setCalories(int calories) {
 		this.calories = calories;
 	}
-
 
 	public Integer getCarbs() {
 		return carbs;
 	}
 
-
 	private void setCarbs(int carbs) {
 		this.carbs = carbs;
 	}
-
 
 	public Integer getFat() {
 		return fat;
 	}
 
-
 	private void setFat(int fat) {
 		this.fat = fat;
 	}
-
 
 	public Integer getHydration() {
 		return hydration;
 	}
 
-
 	private void setHydration(int hydration) {
 		this.hydration = hydration;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	private void setName(String name) {
 		this.name = name;
 	}
-
 
 	public Integer getProtein() {
 		return protein;
 	}
 
-
 	private void setProtein(Integer protein) {
 		this.protein = protein;
 	}
-
-	
-	
 }

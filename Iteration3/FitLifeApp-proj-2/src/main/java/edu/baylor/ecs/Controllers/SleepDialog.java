@@ -10,6 +10,9 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -27,7 +30,7 @@ import edu.baylor.ecs.FLADatabase.SleepController;
 import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.Sleep;
 
-public final class SleepDialog{
+public final class SleepDialog {
 	private static volatile SleepDialog instance = null;
 	private JFrame window;
 	private SleepController sc = SleepController.getInstance();
@@ -42,6 +45,14 @@ public final class SleepDialog{
 	private final String ex8 = "7";
 	private final String ex9 = "8";
 	private final String ex10 = "9";
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(SleepDialog.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 
 	private SleepDialog() {
 	}
@@ -165,6 +176,9 @@ public final class SleepDialog{
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid entry for Duration.\nMust be a number from 0.1 to 23.9", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+				
 				return;
 			}
 		}
@@ -189,7 +203,6 @@ public final class SleepDialog{
 		UIManager.put("OptionPane.background", new Color(174, 214, 241));
 		UIManager.put("Panel.background", new Color(174, 214, 241));
 		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20))); 
-
 
 		FlowLayout flowLayout = new FlowLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
@@ -272,13 +285,15 @@ public final class SleepDialog{
 				if (duration.compareTo(Double.valueOf("0.1")) < 0 || duration.compareTo(Double.valueOf("23.9")) > 0) {
 					throw new NumberFormatException();
 				}
-
 				sc.edit(aSleep);
 			} catch (NumberFormatException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid entry for Duration.\nMust be a number from 0.1 to 23.9", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}
 		}
@@ -295,9 +310,7 @@ public final class SleepDialog{
 
 		int opt = JOptionPane.showConfirmDialog(window, "Warning!\nYou are about to delete the selected Sleep.\nIs this what you want?", "Enter Information", JOptionPane.YES_NO_CANCEL_OPTION);
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.NO_OPTION) {
-
 			sc.delete(aSleep.getId());
-
 		}
 	}
 
@@ -308,5 +321,4 @@ public final class SleepDialog{
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
-
 }

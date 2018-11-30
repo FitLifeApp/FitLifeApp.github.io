@@ -1,6 +1,9 @@
 
 package edu.baylor.ecs.Controllers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /*
  * File:		WindowManager.java
  * Description: Handles the base creation of windows while logged in
@@ -10,12 +13,9 @@ package edu.baylor.ecs.Controllers;
 import javax.swing.*;
 import edu.baylor.ecs.FitLifeApp.Account;
 
-
 public class WindowManager {
 
 	// -----------------------------------------
-
-
 	private static final LogInController login = LogInController.getInstance();
 	private static final AcctCreator acctCreator = AcctCreator.getInstance();
 	private static final ForgetPasswordController forgetPassword = ForgetPasswordController.getInstance();
@@ -24,14 +24,20 @@ public class WindowManager {
 	private static final WorkoutDialog workoutSelectionWindow = WorkoutDialog.getInstance();
 	private static final SleepDialog sleepDialog = SleepDialog.getInstance();
 	private static final NutritionDialog nutritionDialog = NutritionDialog.getInstance();
-
 	// -----------------------------------------
+	
 	private JFrame window;
-
 	private Account acct;
-
-
 	private static volatile WindowManager instance = null;
+	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(WindowManager.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 
 	/* singleton constructor */
 	protected WindowManager() {
@@ -82,19 +88,15 @@ public class WindowManager {
 		forgetPassword.makeWindow();
 	}
 
-
-
 	public void setAcct(Account src) {
 		// TODO Auto-generated method stub
-		System.out.println(src.toString());
+		logger.info(src.toString());
 		acct = src;
 	}
 	
 	public Account getAcct() {
 		return acct;
 	}
-	
-	
 
 	public CalendarController getCalendarWindow() {
 		return calendarWindow;
@@ -112,7 +114,6 @@ public class WindowManager {
 	public static NutritionDialog getNutritiondialog() {
 		return nutritionDialog;
 	}
-
 
 	public JFrame getWindow() {
 		return window;

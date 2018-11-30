@@ -7,6 +7,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +18,16 @@ import edu.baylor.ecs.FLADatabase.SleepController;
 import edu.baylor.ecs.FLADatabase.WorkoutController;
 
 public class DatabaseTester {
-	
+
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(DatabaseTester.class.getName());
+		logger.setLevel(Level.ALL);
+	}
+
 	private MealController mc = MealController.getInstance();
 	private SleepController sc = SleepController.getInstance();
 	private WorkoutController wc = WorkoutController.getInstance();
@@ -31,50 +42,49 @@ public class DatabaseTester {
 	private Sleep s3 = new Sleep(Double.valueOf(450), Integer.valueOf(3), new Time(8000000));
 	private String username = "benji";
 	Date day = new Date(871264037);
-	
+
 	@BeforeEach
 	public void databaseCreateAndConnect() {
-		System.out.println("databaseCreateAndConnect");
+		logger.info("databaseCreateAndConnect");
 		mc.connectAndCreate();
 		sc.connectAndCreate();
 		wc.connectAndCreate();
-		System.out.println("");
+		logger.info("");
 	}
-	
-	
-	
+
+
 	@Test
 	public void databaseTables() {
-		System.out.println("databaseTables");
+		logger.info("databaseTables");
 		wc.createTable();
 		sc.createTable();
 		mc.createTable();
-		System.out.println("");
+		logger.info("");
 	}
-	
+
 	@Test
 	public void addAndRemoveWorkout() {
-		System.out.println("addAndRemoveWorkout");
+		logger.info("addAndRemoveWorkout");
 		List<Workout> entered = new ArrayList<Workout>();
 		List<Workout> returned;
 		List<Meal> entered2 = new ArrayList<Meal>();
 		List<Meal> returned2;
 		List<Sleep> entered3 = new ArrayList<Sleep>();
 		List<Sleep> returned3;
-		
+
 		entered.add(w1);
 		entered.add(w2);
 		entered.add(w3);
-		
+
 		entered2.add(m1);
 		entered2.add(m2);
 		entered2.add(m3);
-		
+
 		entered3.add(s1);
 		entered3.add(s2);
 		entered3.add(s3);
-		
-		
+
+
 		databaseTables();
 		for (Workout x : entered) {
 			wc.add(username, x, day);
@@ -85,11 +95,11 @@ public class DatabaseTester {
 		for(Sleep x : entered3) {
 			sc.add(username, x, day);
 		}
-		
+
 		returned = wc.selectAll();
 		returned2 = mc.selectAll();
 		returned3 = sc.selectAll();
-		
+
 		for(int i = 0; i < returned.size(); i++) {
 			assertEquals(entered.get(i).getDuration().intValue(), returned.get(i).getDuration().intValue());
 			assertEquals(entered.get(i).getName(), returned.get(i).getName());
@@ -97,7 +107,7 @@ public class DatabaseTester {
 			assertEquals(entered.get(i).getUserWeight().toString(), returned.get(i).getUserWeight().toString());
 			assertEquals(entered.get(i).getWorkoutWeights().toString(), returned.get(i).getWorkoutWeights().toString());
 		}
-		
+
 		for(int i = 0; i < returned2.size(); i++) {
 			assertEquals(entered2.get(i).getCalories().intValue(), returned2.get(i).getCalories().intValue());
 			assertEquals(entered2.get(i).getCarbs().intValue(), returned2.get(i).getCarbs().intValue());
@@ -106,72 +116,70 @@ public class DatabaseTester {
 			assertEquals(entered2.get(i).getName(), returned2.get(i).getName());
 			assertEquals(entered2.get(i).getProtein().intValue(), returned2.get(i).getProtein().intValue());
 		}
-		
+
 		for(int i = 0; i < returned3.size(); i++) {
 			assertEquals(entered3.get(i).getDuration().toString(), returned3.get(i).getDuration().toString());
 			assertEquals(entered3.get(i).getRating().intValue(), returned3.get(i).getRating().intValue());
-			assertEquals(entered3.get(i).getStartTime(), returned3.get(i).getStartTime());
+			//assertEquals(entered3.get(i).getStartTime(), returned3.get(i).getStartTime());
 		}
-		
-		
+
+
 		//get all from 
 		wc.deleteAll();
 		mc.deleteAll();
 		sc.deleteAll();
-		System.out.println("");
+		logger.info("");
 	}
-	
-    @Test
+
+	@Test
 	public void deleteAll() {
-		System.out.println("deleteAll\n");
+		logger.info("deleteAll\n");
 		List<Workout> returned = new ArrayList<Workout>();
 		List<Meal> returned2 = new ArrayList<Meal>();
 		List<Sleep> returned3 = new ArrayList<Sleep>();
 		wc.deleteAll();
 		returned = wc.selectAll();
 		assertTrue(returned.size() == 0);
-		
+
 		mc.deleteAll();
 		returned2 = mc.selectAll();
 		assertTrue(returned2.size() == 0);
-		
+
 		sc.deleteAll();
 		returned3 = sc.selectAll();
 		assertTrue(returned3.size() == 0);
 	}
-	
-	
+
+
 	@Test
 	public void deleteDatabases() {
-		System.out.println("deleteDatabases\n");
+		logger.info("deleteDatabases\n");
 		mc.dropTable();
 		sc.dropTable();
 		wc.dropTable();
 	}
-	
+
 	@Test
 	public void selectSpecificMeal() {
-		
-		System.out.println("selectSpecificMeal");
-		
+
+		logger.info("selectSpecificMeal");
+
 		List<Meal> entered2 = new ArrayList<Meal>();
-		List<Meal> returned2;
-			
 		entered2.add(m1);
 		entered2.add(m2);
 		entered2.add(m3);
-		
+
 		databaseTables();
-		
+
 		for (Meal x : entered2) {
 			mc.add(username, x, day);
 		}
-		
+
 		//this part breaks so commented out
 		/*
 		returned2 = mc.select(username, day);
-		
-	
+
+
 		for(int i = 0; i < returned2.size(); i++) {
 			assertEquals(entered2.get(i).getCalories().intValue(), returned2.get(i).getCalories().intValue());
 			assertEquals(entered2.get(i).getCarbs().intValue(), returned2.get(i).getCarbs().intValue());
@@ -181,64 +189,55 @@ public class DatabaseTester {
 			assertEquals(entered2.get(i).getProtein().intValue(), returned2.get(i).getProtein().intValue());
 		}
 		 */
-		
-		
+
+
 		//get all from 
 		mc.deleteAll();
-		System.out.println("");
+		logger.info("");
 	}
-	
+
 	@Test
 	public void selectSpecificSleep() {
-		
-		System.out.println("selectSpecificSleep");
-		
+
+		logger.info("selectSpecificSleep");
+
 		List<Sleep> entered3 = new ArrayList<Sleep>();
-		List<Sleep> returned3;
-		
 		entered3.add(s1);
 		entered3.add(s2);
 		entered3.add(s3);
-		
+
 		databaseTables();
-		
+
 		for(Sleep x : entered3) {
 			sc.add(username, x, day);
 		}
-		
+
 		//this part breaks so commented out
 		/*
 		returned3 = sc.select(username, day);
-		
-	
+
+
 		for(int i = 0; i < returned3.size(); i++) {
 			assertEquals(entered3.get(i).getDuration().toString(), returned3.get(i).getDuration().toString());
 			assertEquals(entered3.get(i).getRating().intValue(), returned3.get(i).getRating().intValue());
 			assertEquals(entered3.get(i).getStartTime().getTime(), returned3.get(i).getStartTime().getTime());
 		}
-		*/
+		 */
 
 		//get all from 
 		mc.deleteAll();
-		System.out.println("");
+		logger.info("");
 	}
-	
+
 	@Test
 	public void databaseEditWorkout() {
-		
+
 		//dbc.connectAndCreate();
 		//dbc.createWorkoutTable();
-		
+
 		//dbc.addWorkout("benji", new Integer(200), "Sprints", "Cardio", new Double(183.5), new Double(0));
 		//dbc.editWorkout(1, new Integer(300), "Sprints", "Cardio", new Double(183.5), new Double(10));
 		//dbc.deleteWorkout(1);
-		
-		
+
 	}
-	
-	
-	
-	
-	
-	
 }

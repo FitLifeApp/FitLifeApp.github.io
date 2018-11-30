@@ -17,5 +17,4 @@ public final class ColorAdapter extends XmlAdapter<String, Color> {
 	public String marshal(Color v) throws Exception {
 		return Integer.toString(v.getRGB());
 	}
-
 }

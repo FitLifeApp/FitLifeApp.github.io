@@ -14,6 +14,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.xml.bind.JAXBContext;
@@ -34,6 +36,15 @@ public final class LogInController extends WindowManager{
 	private int screenWidth = screenSize.width-100;
 	private int screenHeight = screenSize.height-100;
 	private JFrame window;
+	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(LogInController.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 	
 	/*The singleton code*/
 	private static volatile LogInController instance = null;
@@ -163,7 +174,6 @@ public final class LogInController extends WindowManager{
 		
 		return window;
 	}
-
 	
 	//Validates the accounts existence
 	public boolean validate() {
@@ -179,12 +189,17 @@ public final class LogInController extends WindowManager{
 			scnr.close();
 		} catch (FileNotFoundException e1) {
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found", "Dialog", JOptionPane.ERROR_MESSAGE);
+			
+			logger.log(Level.SEVERE, e1.getMessage(), e1);
+
 			return false;
 		}
 		
-		System.out.println("ENC LOGIN: " + fileContents);
+		logger.info("ENCRYPTED LOGIN: " + fileContents);
+		
 		fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
-		System.out.println("DEC LOGIN: " + fileContents);
+		
+		logger.info("DECRYPTED LOGIN: " + fileContents);
 		
 		ArrayList<String> lines = new ArrayList<String>(Arrays.asList(fileContents.split("\n")));
 
@@ -209,12 +224,11 @@ public final class LogInController extends WindowManager{
 
 		boolean gotID = false;
 		int id = -1;
-		Account a = null;
-
-		
+		Account a = null;	
 		BufferedReader br = null;
 		Scanner scnr = null;
 		String fileContents = null;
+		
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream("Accounts.FIT")));
 			scnr = new Scanner(br);
@@ -222,19 +236,22 @@ public final class LogInController extends WindowManager{
 			fileContents = scnr.next();
 			scnr.close();
 		} catch (FileNotFoundException e1) {
-
 			JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This shouldn't happen",
 					"Dialog", JOptionPane.ERROR_MESSAGE);
+			
+			logger.log(Level.SEVERE, e1.getMessage(), e1);
+			
 			return null;
 		}
 		
-		System.out.println("ENC getAcct: " + fileContents);
+		logger.info("ENCRYPTED getAcct: " + fileContents);
+		
 		fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
-		System.out.println("DEC getAcct: " + fileContents);
+		
+		logger.info("DECRYPTED getAcct: " + fileContents);
 		
 		ArrayList<String> lines = new ArrayList<String>(Arrays.asList(fileContents.split("\n")));
-
-		
+	
 		for(int i = 0; i < lines.size() && !gotID; i++) {
 			String[] line;
 			line = lines.get(i).split(",");
@@ -261,6 +278,8 @@ public final class LogInController extends WindowManager{
 					JOptionPane.showMessageDialog(new JFrame(), "No accounts were found. This "
 							+ " REALLY shouldn't happen",
 							"Dialog", JOptionPane.ERROR_MESSAGE);
+					
+					logger.log(Level.SEVERE, e1.getMessage(), e1);
 
 					return null;
 
@@ -276,8 +295,10 @@ public final class LogInController extends WindowManager{
 				a.setuName(uName.getText());
 				strReader.close();
 			} catch (JAXBException e) {
-				e.printStackTrace();
 				JOptionPane.showMessageDialog(new JFrame(), "Error unmarshalling", "Dialog", JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return null;
 			}
 		} else {

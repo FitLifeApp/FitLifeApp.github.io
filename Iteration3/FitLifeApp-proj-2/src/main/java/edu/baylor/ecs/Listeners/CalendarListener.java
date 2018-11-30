@@ -3,6 +3,8 @@ package edu.baylor.ecs.Listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.baylor.ecs.Controllers.CalendarController;
 
@@ -13,15 +15,24 @@ public class CalendarListener implements ActionListener  {
 
 	CalendarController calendarWindow = CalendarController.getInstance();
 
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(CalendarListener.class.getName());
+		logger.setLevel(Level.ALL);
+	}
+
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getActionCommand().equals("View Calendar")) {
 
 			calendarWindow.toCalendar();
-			System.out.println("View Cal");
+			logger.info("View Calendar");
 		} else if (e.getActionCommand().equals("Date selected")) {
 
-			System.out.println((Date) calendarWindow.getDatePanel().getModel().getValue());
+			//logger.info((Supplier<String>) calendarWindow.getDatePanel().getModel().getValue());
 			// Call toDay if the selected day already has been selected. (or the selected
 			// day is today)
 			if (calendarWindow.getDay().equals((Date) calendarWindow.getDatePanel().getModel().getValue())) {
@@ -37,7 +48,7 @@ public class CalendarListener implements ActionListener  {
 						try {
 							calendarWindow.showAddWorkoutDialog();
 						} catch (Exception e1) {
-							e1.printStackTrace();
+							logger.severe(e1.getMessage());
 						}
 						
 					//Nutrition Mode
@@ -45,16 +56,14 @@ public class CalendarListener implements ActionListener  {
 						try {
 							calendarWindow.showAddMealDialog();
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.severe(e1.getMessage());
 						}
 					//Sleep mode	
 					} else if (calendarWindow.getMode().intValue() == 2) {
 						try {
 							calendarWindow.showAddSleepDialog();
 						} catch (Exception e1) {
-								// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.severe(e1.getMessage());
 						}
 					}
 					
@@ -67,10 +76,10 @@ public class CalendarListener implements ActionListener  {
 		} else if (e.getActionCommand().equals("Plan Workout")) {
 
 			// addWorkoutWindow();
-			System.out.println("Planning Workout");
+			logger.info("Planning Workout");
 		} else {
 
-			System.err.println("Unhandled Action Command: " + e.getActionCommand());
+			logger.severe("Unhandled Action Command: " + e.getActionCommand());
 		}
 	}
 }

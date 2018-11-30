@@ -8,7 +8,6 @@ public class Workout extends LogItem{
 	private Double workoutWeights = null;
 	private Integer id = null; 
 	
-	
 	public Workout() {
 		
 	}
@@ -34,71 +33,47 @@ public class Workout extends LogItem{
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public Integer getDuration() {
 		return duration;
 	}
 
-
-
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-
-
 
 	public String getName() {
 		return name;
 	}
 
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
 
 	public String getType() {
 		return type;
 	}
 
-
-
 	public void setType(String type) {
 		this.type = type;
 	}
-
-
 
 	public Double getUserWeight() {
 		return userWeight;
 	}
 
-
-
 	public void setUserWeight(Double userWeight) {
 		this.userWeight = userWeight;
 	}
-
-
 
 	public Double getWorkoutWeights() {
 		return workoutWeights;
 	}
 
-
-
 	public void setWorkoutWeights(Double workoutWeights) {
 		this.workoutWeights = workoutWeights;
 	}
-	
-	
-	
-	
 }

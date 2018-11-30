@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -39,6 +41,15 @@ public final class ForgetPasswordController extends WindowManager {
 	
 	private ForgetPasswordController() {}
 	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(ForgetPasswordController.class.getName());
+		logger.setLevel(Level.ALL);
+	}
+	
 	public static ForgetPasswordController getInstance() {
 		if(instance == null) {
 			synchronized(ForgetPasswordController.class) {
@@ -49,9 +60,6 @@ public final class ForgetPasswordController extends WindowManager {
 		}
 		return instance;
 	}
-	
-
-	
 
 	public void makeWindow() {
 
@@ -131,9 +139,9 @@ public final class ForgetPasswordController extends WindowManager {
 
 				JOptionPane.showMessageDialog(new JFrame(), "Account file exists but not found", "Failed Creation",
 						JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
+				
 				return false;
-
 			}
 
 			fileContents = AcctCipher.decrypt(fileContents, "UnGuEsSaBlEkEyke");
@@ -152,16 +160,13 @@ public final class ForgetPasswordController extends WindowManager {
 							accountCount = Integer.parseInt(acct[2]);
 						}
 					} catch (NumberFormatException e) {
-						JOptionPane
-								.showMessageDialog(
-										new JFrame(), "Invalid Account ID found.\nAccount Causing "
+						JOptionPane.showMessageDialog(new JFrame(), "Invalid Account ID found.\nAccount Causing "
 												+ "problems has ID '" + acct[2] + "' in Accounts.FIT",
 										"Failed Creation", JOptionPane.ERROR_MESSAGE);
 						return false;
 					}
 				}
 			}
-
 		}
 
 		if (alreadyExists) {

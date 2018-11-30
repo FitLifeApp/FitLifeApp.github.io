@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -30,8 +33,15 @@ public final class WorkoutDialog {
 	private final String ex3 = "Balance Exercise";
 	private final String ex4 = "Flexibility Exercise";
 	private WorkoutController wc = WorkoutController.getInstance();
-
 	private WorkoutDialog() {}
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(WorkoutDialog.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 
 	public static WorkoutDialog getInstance() {
 		if (instance == null) {
@@ -177,12 +187,18 @@ public final class WorkoutDialog {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"That's not a valid number!.\nYour Weight and Weight Used must be a number from 4.0 to 1400.0\nDuration must be an integer from 1 to 1440.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}catch(IllegalArgumentException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Not a valid exercise name!.\nMust be 4 or more characters", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}
 
@@ -190,7 +206,6 @@ public final class WorkoutDialog {
 					exercise, type, weight,
 					weightUsed);
 			wc.add(Account.getuName(), aWorkout, day);
-
 		}
 	}
 
@@ -331,15 +346,20 @@ public final class WorkoutDialog {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"That's not a valid number!.\nYour Weight and Weight Used must be a number from 4.0 to 1400.0\nDuration must be an integer from 1 to 1440.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}catch(IllegalArgumentException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Not a valid exercise name!.\nMust be 4 or more characters", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}
-
 			aWorkout = new Workout(aWorkout.getId(), duration, exercise, type, weight, weightUsed);
 
 			wc.edit(aWorkout);
@@ -353,12 +373,10 @@ public final class WorkoutDialog {
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.NO_OPTION) {
 
 			wc.delete(aWorkout.getId());
-
 		}
 	}
 
 	public void destroy() {
 		window.dispose();
 	}
-
 }

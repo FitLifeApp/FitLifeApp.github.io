@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +17,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,7 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.xml.bind.JAXBContext;
@@ -48,6 +47,15 @@ public final class AcctCreator extends WindowManager {
 	private int screenWidth = screenSize.width-100;
 	private int screenHeight = screenSize.height-100;
 	private JFrame window = null;
+	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(AcctCreator.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 	
 	/*The singleton code*/
 	private static volatile AcctCreator instance = null;
@@ -169,7 +177,7 @@ public final class AcctCreator extends WindowManager {
 
 				JOptionPane.showMessageDialog(new JFrame(), "Account file exists but not found", "Failed Creation",
 						JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
 				return false;
 
 			}
@@ -190,8 +198,7 @@ public final class AcctCreator extends WindowManager {
 							accountCount = Integer.parseInt(acct[2]);
 						}
 					} catch (NumberFormatException e) {
-						JOptionPane
-								.showMessageDialog(
+						JOptionPane.showMessageDialog(
 										new JFrame(), "Invalid Account ID found.\nAccount Causing "
 												+ "problems has ID '" + acct[2] + "' in Accounts.FIT",
 										"Failed Creation", JOptionPane.ERROR_MESSAGE);
@@ -210,9 +217,8 @@ public final class AcctCreator extends WindowManager {
 
 		fileContents += "\n" + uName.getText() + "," + new String(pWord.getPassword()) + ","
 				+ Integer.toString(accountCount);
-		//System.out.println("PlainText acctCreator: " + fileContents);
 		fileContents = AcctCipher.encrypt(fileContents, "UnGuEsSaBlEkEyke");
-		//System.out.println("encrypted acctCreator: " + fileContents);
+		
 		BufferedWriter bw;
 		try {
 			accts = new File("ACCT" + Integer.toString(accountCount));
@@ -233,12 +239,12 @@ public final class AcctCreator extends WindowManager {
 				m.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 				m.marshal(new Account(accountCount), strWriter);
-				// m.marshal(new Account(accountCount), System.out);
-				System.out.println(strWriter.toString());
+				
+				logger.info(strWriter.toString());
 				marshed = AcctCipher.encrypt(strWriter.toString(), "UnGuEsSaBlEkEyke");
 				bw.write(marshed);
-
-				System.out.println(marshed);
+				
+				logger.info(marshed);
 				bw.close();
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(),

@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,6 +24,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "Account")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Account {
+	
 
 	/*
 	 * c1 -> Base1 c2 -> Base2 c3 -> Trim1 c4 -> Trim2 I don't really know proper
@@ -47,6 +50,15 @@ public class Account {
 	@XmlElementWrapper(name = "workouts")
 	@XmlElement(name = "workout")
 	private List<String> workouts;
+	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(Account.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 	
 	public List<String> getWorkouts() {
 		return this.workouts;
@@ -152,7 +164,6 @@ public class Account {
 	 * uName; this.pWord = pWord; this.email = email; }
 	 */
 
-	@Override
 	public String toString() {
 		String s = new String();
 		s += Integer.toString(fileID) + "\n";
@@ -165,7 +176,6 @@ public class Account {
 		for (int i = 0; i < this.workouts.size(); i++) {
 			s += this.workouts.get(i) + "\n";
 		}
-
 		return s;
 	}
 
@@ -192,9 +202,9 @@ public class Account {
 			bw.close();
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			logger.log(Level.SEVERE, e1.getMessage(), e1);
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

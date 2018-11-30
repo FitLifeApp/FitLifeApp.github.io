@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.baylor.ecs.FitLifeApp.LogItem;
 import edu.baylor.ecs.FitLifeApp.Workout;
@@ -17,6 +19,15 @@ public final class WorkoutController extends DatabaseController{
 	 private static volatile WorkoutController instance = null;
 	
 	 private WorkoutController(){}
+	 
+	 private static Logger logger = null;
+
+		static {
+			System.setProperty("java.util.logging.SimpleFormatter.format",
+					"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+			logger = Logger.getLogger(WorkoutController.class.getName());
+			logger.setLevel(Level.ALL);
+		}
 	 
 	 public static WorkoutController getInstance() {
 		 if(instance == null) {
@@ -41,12 +52,12 @@ public final class WorkoutController extends DatabaseController{
 		try (Connection dbConnection = super.getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 			
-			System.out.println(createTableSQL);
+			logger.info(createTableSQL);
 			// execute the SQL statement
-			statement.execute(createTableSQL);
-			System.out.println("Table \"Workout\" is created!");
+			logger.info(createTableSQL);
+			logger.info("Table \"Workout\" is created!");
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 	}
 	
@@ -62,12 +73,12 @@ public final class WorkoutController extends DatabaseController{
 				PreparedStatement statement = dbConnection.prepareStatement(insertTableSQL);){
 			
 			statement.setDate(1, new java.sql.Date(day.getTime()));
-			System.out.println(insertTableSQL);
+			logger.info(insertTableSQL);
 			statement.executeUpdate();
-			System.out.println("Record is inserted into Workout table!");
+			logger.info("Record is inserted into Workout table!");
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 	}
 	
@@ -83,11 +94,11 @@ public final class WorkoutController extends DatabaseController{
 			try (Connection dbConnection = getDBConnection();
 					Statement statement = dbConnection.createStatement();){
 				
-				System.out.println(updateTableSQL);
+				logger.info(updateTableSQL);
 				statement.execute(updateTableSQL);
-				System.out.println("Record is updated to Workout table!");
+				logger.info("Record is updated to Workout table!");
 			} catch (SQLException e) {
-				System.out.println(e.getMessage());
+				logger.severe(e.getMessage());
 			}
 	}
 	
@@ -101,12 +112,12 @@ public final class WorkoutController extends DatabaseController{
 		try ( Connection dbConnection = getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 		
-			System.out.println(deleteTableSQL);
+			logger.info(deleteTableSQL);
 			statement.execute(deleteTableSQL);
-			System.out.println("Record is deleted from Workout table!");
+			logger.info("Record is deleted from Workout table!");
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 	}
 	
@@ -116,12 +127,12 @@ public final class WorkoutController extends DatabaseController{
 		try ( Connection dbConnection = getDBConnection();
 				Statement statement = dbConnection.createStatement();){
 		
-			System.out.println(deleteTableSQL);
+			logger.info(deleteTableSQL);
 			statement.execute(deleteTableSQL);
-			System.out.println("All Records deleted from Workout table!");
+			logger.info("All Records deleted from Workout table!");
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 	}
 	
@@ -135,13 +146,13 @@ public final class WorkoutController extends DatabaseController{
 		try ( Connection dbConnection = getDBConnection();
 			  Statement statement = dbConnection.createStatement();){
 			
-			System.out.println(deleteTableSQL);
+			logger.info(deleteTableSQL);
 			ResultSet rs = statement.executeQuery(deleteTableSQL);
-			System.out.println("Record selected from Workout table!");
+			logger.info("Record selected from Workout table!");
 			
 			//loops through and return as a list of strings
 			if(rs.next() == false) {
-				System.out.print("No results from Workout table");
+				logger.info("No results from Workout table");
 			}else {
 				do {
 					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 
@@ -153,7 +164,7 @@ public final class WorkoutController extends DatabaseController{
 				}while(rs.next());	
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		
 		return row;
@@ -167,13 +178,13 @@ public final class WorkoutController extends DatabaseController{
 			  PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
 			
 			statement.setDate(1, new java.sql.Date(day.getTime()));
-			System.out.println(selectTableSQL);
+			logger.info(selectTableSQL);
 			ResultSet rs = statement.executeQuery();
-			System.out.println("Records selected from Workout table!");
+			logger.info("Records selected from Workout table!");
 			
 			//loops through and return as a list of strings
 			if(rs.next() == false) {
-				System.out.print("No results from Workout table");
+				logger.info("No results from Workout table");
 			}else {
 				do {
 					Workout aWorkout = new Workout(Integer.valueOf(rs.getInt("id")), 
@@ -185,7 +196,7 @@ public final class WorkoutController extends DatabaseController{
 				}while(rs.next());	
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		
 		return row;
@@ -196,12 +207,12 @@ public final class WorkoutController extends DatabaseController{
 		try ( Connection dbConnection = getDBConnection();
 			  Statement statement = dbConnection.createStatement();){
 			
-			System.out.println(dropTableSQL);
+			logger.info(dropTableSQL);
 			statement.execute(dropTableSQL);
-			System.out.println("Dropped Workout table!");
+			logger.info("Dropped Workout table!");
 			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.severe(e.getMessage());
 		}
 		
 	}
@@ -209,7 +220,5 @@ public final class WorkoutController extends DatabaseController{
 	public void add(String string, Integer duration, String name, String type, Double userWeight,
 			Double workoutWeights) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

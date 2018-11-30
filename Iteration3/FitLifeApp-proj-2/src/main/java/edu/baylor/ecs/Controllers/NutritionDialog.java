@@ -6,6 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -21,13 +24,23 @@ import edu.baylor.ecs.FLADatabase.MealController;
 import edu.baylor.ecs.FitLifeApp.Account;
 import edu.baylor.ecs.FitLifeApp.Meal;
 
-public class NutritionDialog{
+public class NutritionDialog {
 	private static volatile NutritionDialog instance = null;
 	private JFrame window;	
 	private MealController mc = MealController.getInstance();
+	@SuppressWarnings("deprecation")
 	private final Integer LOWER = new Integer(0);
+	@SuppressWarnings("deprecation")
 	private final Integer UPPER = new Integer(99999);
 	private NutritionDialog() {}
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(NutritionDialog.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 
 	public static NutritionDialog getInstance() {
 		if(instance == null) {
@@ -39,7 +52,6 @@ public class NutritionDialog{
 		}
 		return instance;
 	}
-
 
 	/*
 	 * function opens the window to get sleep information from the user
@@ -179,12 +191,18 @@ public class NutritionDialog{
 				JOptionPane.showMessageDialog(new JFrame(),
 						"That's not a valid number!.\n All macros must be from 1 to 99999.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			} catch (IllegalArgumentException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid Name!\nName field must be at least 4 characters.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}
 
@@ -192,9 +210,11 @@ public class NutritionDialog{
 			Meal aMeal = new Meal(carbs, fat, hydration, name, protein);
 			mc.add(Account.getuName(), aMeal, day);
 
-			System.out.println(Account.getuName() + "," + name + "," + carbs.toString() + "," + fat.toString() + ","
-					+ protein.toString() + "," + hydration.toString() +"\n");
-
+			logger.info(Account.getuName() + "," + name + "," + 
+						carbs.toString() + "," + 
+						fat.toString() + ","+ 
+						protein.toString() + "," + 
+						hydration.toString() +"\n");
 		}
 	}
 
@@ -338,15 +358,20 @@ public class NutritionDialog{
 				JOptionPane.showMessageDialog(new JFrame(),
 						"That's not a valid number!.\n All macros must be from 1 to 99999.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			} catch (IllegalArgumentException e) {
 				window.dispose();
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid Name!\nName field must be at least 4 characters.", "Failed",
 						JOptionPane.ERROR_MESSAGE);
+				
+				logger.log(Level.SEVERE, e.getMessage(), e);
+
 				return;
 			}
-
 
 			aMeal = new Meal(aMeal.getId(), carbs, fat, hydration, name, protein);
 			mc.edit(aMeal);
@@ -364,10 +389,7 @@ public class NutritionDialog{
 
 		int opt = JOptionPane.showConfirmDialog(window, "Warning!\nYou are about to delete the selected Meal.\nIs this what you want?", "Enter Information", JOptionPane.YES_NO_CANCEL_OPTION);
 		if(opt != JOptionPane.CANCEL_OPTION && opt != JOptionPane.NO_OPTION) {
-
 			mc.delete(aMeal.getId());
-
 		}
 	}
-
 }

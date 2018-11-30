@@ -3,14 +3,23 @@ package edu.baylor.ecs.FLADatabase;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.derby.iapi.error.StandardException;
-
 
 public class DatabaseController {
 	protected static final String DB_CONNECTION = "jdbc:derby:FitLifeApp;";
 	protected static final String DB_USER = null;
 	protected static final String DB_PASSWORD = null;
+	
+	private static Logger logger = null;
+
+	static {
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"[%1$tF %1$tT] [%4$-7s] %5$s %n");
+		logger = Logger.getLogger(DatabaseController.class.getName());
+		logger.setLevel(Level.ALL);
+	}
 	
 	
 	/* method is used to connect to and create a database
@@ -18,27 +27,29 @@ public class DatabaseController {
 	 * beginning of execution before any login or account creation can be done
 	 */
 	public void connectAndCreate() {
+		logger.info("-------- Derby JDBC Connection Testing ------------");
 		
-		System.out.println("-------- Derby JDBC Connection Testing ------------");
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Where is your Derby JDBC Driver?");
-			e.printStackTrace();
+			logger.severe("Where is your Derby JDBC Driver?");
+			logger.severe(e.getMessage());
+			
 			return;
 		}
-		System.out.println("Derby JDBC Driver Registered!");
+		logger.info("Derby JDBC Driver Registered!");
 		
 		try (Connection connection = DriverManager.getConnection("jdbc:derby:FitLifeApp;create=true", "", "");){
 			
 			if (connection != null) {
-				System.out.println("All good!");
+				logger.info("All good!");
 			} else {
-				System.out.println("Failed to make connection!");
+				logger.severe("Failed to make connection!");
 			}
 		} catch (SQLException e) {
-			System.out.println("Connection Failed! Check output console");
-			e.printStackTrace();
+			logger.severe("Connection Failed! Check output console");
+			logger.severe(e.getMessage());
+			
 			return;
 		}
 		
@@ -49,26 +60,29 @@ public class DatabaseController {
 	 * 
 	 */
 	public void connect() {
-		System.out.println("-------- Derby JDBC Connection Testing ------------");
+		logger.info("-------- Derby JDBC Connection Testing ------------");
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Where is your Derby JDBC Driver?");
-			e.printStackTrace();
+			logger.severe("Where is your Derby JDBC Driver?");
+			logger.severe(e.getMessage());
+			
 			return;
 		}
-		System.out.println("Derby JDBC Driver Registered!");
+		logger.info("Derby JDBC Driver Registered!");
+		
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection("jdbc:derby:FitLifeApp;", "", "");
 			if (connection != null) {
-				System.out.println("You made it, take control your database now!");
+				logger.info("You made it, take control your database now!");
 			} else {
-				System.out.println("Failed to make connection!");
+				logger.severe("Failed to make connection!");
 			}
 		} catch (SQLException e) {
-			System.out.println("Connection Failed! Check output console");
-			e.printStackTrace();
+			logger.severe("Connection Failed! Check output console");
+			logger.severe(e.getMessage());
+			
 			return;
 		} finally {
 			if (connection != null) {
@@ -77,7 +91,7 @@ public class DatabaseController {
 						connection.close();
 					}
 				} catch (SQLException e) {
-					e.printStackTrace();
+					logger.severe(e.getMessage());
 				}
 			}
 		}
@@ -93,22 +107,21 @@ public class DatabaseController {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 		} catch (ClassNotFoundException e) {
-			System.err.println(e.getMessage());
+			logger.severe(e.getMessage());
 			System.exit(0);
 		}
 		try {
 			dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
 			return dbConnection;
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			logger.severe(e.getMessage());
+			
 			if(e.getCause() instanceof StandardException) {
-				System.err.println(e.getCause());
-				System.err.println("Most likely connection open already (and new cannot be opened)");
-				
+				logger.severe(e.getCause().toString());
+				logger.severe("Most likely connection open already (and new cannot be opened)");
 			}
 			System.exit(0);
 		}
 		return dbConnection;
 	}
-	
 }

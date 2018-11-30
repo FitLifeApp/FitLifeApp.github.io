@@ -56,5 +56,4 @@ public class Sleep extends LogItem{
 	private void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
-
 }
