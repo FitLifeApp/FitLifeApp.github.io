@@ -6,7 +6,8 @@
   Debugging shows the problem lies in line 169 of Main.java
     dbConnection = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Digby1097");
     throws SQLException
-Note: After installing MySQL
+Note: After installing MySQL, the error changed from not being able to connect to access being denied when starting.
+    Still doesn't work though
 3. Planned tests:
   a. Selecting the same player for multiple places on the team
   b. If above works, have player toss frisbee to themselves
