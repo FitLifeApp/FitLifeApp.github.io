@@ -1,0 +1,51 @@
+1. .jar does not run on it's own
+  Tested on lab computer and personal computer
+2. .jar file does not run in the folder it was created in
+  Tested on lab computer and personal computer
+  Errors say the issue is that the database can't be connected to
+  Debugging shows the problem lies in line 169 of Main.java
+    dbConnection = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=Digby1097");
+    throws SQLException
+Note: After installing MySQL
+3. Planned tests:
+  a. Selecting the same player for multiple places on the team
+  b. If above works, have player toss frisbee to themselves
+  c. Account creation
+  d. Use cases from Iteration 1
+    I     Log In
+            Test incorrect username, correct password
+            Test correct username, incorrect password
+    II    Log Out
+    III   Create Account
+            Try to create account with blank username/password
+            Try to create account with code injection
+                Username something like ; DROP TABLE theprojectdata
+                Same with password
+    IV    Read Stats
+            Periodically check to make sure it works
+    V     Make Team
+            As stated above, try to make team with multiple occurences of the same person
+            If name team is allowed, then try more code injections
+    VI    Join Team
+            Similar to make team
+    VII   Enter Stats
+            Code injection
+            Put letters where numbers are supposed to be and vice versa
+    VIII  Sub Player
+            Try and sub player A with himself, or someone else on the team
+    IX    Remove Player
+            Make sure it works
+    X     Promote Player
+            Assumes that promote means promote account, player -> coach -> admin
+            Check if a player can be promoted to admin
+            try to promote past the highest level
+    XI    Demote Player
+            Assumes that demote means admin -> coach -> player
+            Check if an originally manager account can be demoted to a player
+                Not sure if that should happen...
+            Try and demote the admin account
+            Promote a player to an admin, then demote that player back to a player account
+            try to demote past the lowest level
+    XII   Enter Tournament Schedule
+            Try to schedule something in the past, for the next day, for the next week, and for the next month
+    
