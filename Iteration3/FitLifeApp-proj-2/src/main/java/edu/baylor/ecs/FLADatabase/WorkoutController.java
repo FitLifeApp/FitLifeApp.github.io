@@ -54,7 +54,7 @@ public final class WorkoutController extends DatabaseController{
 			
 			logger.info(createTableSQL);
 			// execute the SQL statement
-			logger.info(createTableSQL);
+			statement.execute(createTableSQL);
 			logger.info("Table \"Workout\" is created!");
 		} catch (SQLException e) {
 			logger.severe(e.getMessage());

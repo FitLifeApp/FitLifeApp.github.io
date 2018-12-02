@@ -171,9 +171,9 @@ public final class SleepController extends DatabaseController{
 				PreparedStatement statement = dbConnection.prepareStatement(selectTableSQL);){
 
 			statement.setDate(1, new java.sql.Date(day.getTime()));
-			System.out.println(selectTableSQL);
+			logger.info(selectTableSQL);
 			ResultSet rs = statement.executeQuery();
-			System.out.println("Records selected from Sleep table!");
+			logger.info("Records selected from Sleep table!");
 
 			//loops through and return as a list of strings
 			if(rs.next() == false) {

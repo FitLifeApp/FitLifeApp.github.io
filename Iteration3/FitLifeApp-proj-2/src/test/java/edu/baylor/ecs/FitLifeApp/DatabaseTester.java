@@ -43,7 +43,7 @@ public class DatabaseTester {
 	private String username = "benji";
 	Date day = new Date(871264037);
 
-	@BeforeEach
+	@Test
 	public void databaseCreateAndConnect() {
 		logger.info("databaseCreateAndConnect");
 		mc.connectAndCreate();
